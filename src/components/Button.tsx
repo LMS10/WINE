@@ -23,10 +23,8 @@ export default function Button({ type = 'button', onClick, href, text, disabled 
   const finalClassName = `${variantStyles} ${className}`;
 
   return href ? (
-    <Link href={href}>
-      <button type={type} onClick={onClick} disabled={disabled} className={finalClassName}>
-        {text}
-      </button>
+    <Link href={href} className={finalClassName}>
+      {text}
     </Link>
   ) : (
     <button type={type} onClick={onClick} disabled={disabled} className={finalClassName}>
