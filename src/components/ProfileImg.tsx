@@ -1,7 +1,6 @@
 'use client';
 
 import Image, { StaticImageData } from 'next/image';
-import profileDefault from '@/assets/images/banner_mobile.png';
 
 interface ProfileImgProps {
   src: StaticImageData;
@@ -11,7 +10,7 @@ interface ProfileImgProps {
   onClick?: () => void;
 }
 
-export default function ProfileImg({ src = profileDefault, width = 100, height = 100, isLine: isLine = false, onClick }: ProfileImgProps) {
+export default function ProfileImg({ src, width, height, isLine = false, onClick }: ProfileImgProps) {
   const borderRoundWidth = isLine ? width - 5 : width;
   const borderRoundheight = isLine ? height - 5 : height;
   const cursor = onClick ? 'pointer' : 'default';
