@@ -1,9 +1,13 @@
-## :writing_hand: Description
+## :hash: Issue
+
+<!-- 해당 PR이 특정 이슈를 해결하는 경우, 이슈 번호를 작성해 주세요. -->
+
+## :memo: Description
 
 <!-- 어떤 내용의 PR인지 작성해 주세요. (ex. 메인 페이지 레이아웃 작업) -->
 <!-- ⚠️ PR에는 해당 PR의 제목에 해당하는 내용만 들어가 있어야 합니다!  -->
 
-## :cyclone: PR 유형
+## :cyclone: PR Type
 어떤 변경 사항이 있나요?
 
 <!-- 해당 사항에 체크해 주세요. -->
