@@ -2,7 +2,7 @@ import Image from 'next/image';
 import elapsedTime from '@/utils/formatDate';
 import like from '@/assets/icons/star_hover.svg';
 import kebab from '@/assets/icons/dot.svg';
-import mockData from '@/app/myprofile/_components/mock.json';
+import myReviewMockData from '@/app/myprofile/_components/myReviewMockData.json';
 
 interface MyReviewProps {
   rating: number;
@@ -37,7 +37,7 @@ export function MyReviewItem({ rating, createdAt, wineName, content }: MyReviewP
 export default function MyReviewList() {
   return (
     <div className='flex flex-col gap-[8px] tablet:gap-[16px] mobile:gap-[16px]'>
-      {mockData.list.map((value) => (
+      {myReviewMockData.list.map((value) => (
         <MyReviewItem key={value.id} rating={value.rating} createdAt={value.createdAt} wineName={value.wine.name} content={value.content} />
       ))}
     </div>
