@@ -54,4 +54,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
   return <authContext.Provider value={{ isLoggedIn, profileImage, setIsLoggedIn, setProfileImage }}>{children}</authContext.Provider>;
-} // 확인 코드
+}

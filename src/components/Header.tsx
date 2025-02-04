@@ -34,7 +34,7 @@ function LoggedInHeader() {
           <Link href={'/'}>
             <Image src={logoWhite} width={52} height={15} alt='화이트 로고' />
           </Link>
-          <ProfileImg className='h-[45px] w-[45px] rounded-full mobile:h-[25px] mobile:w-[25px]' src={profileImage || profileDefault} isLine={true} onClick={() => {}} />
+          <ProfileImg size='small' src={profileImage || profileDefault} isLine onClick={() => {}} />
         </header>
       </div>
     </div>
