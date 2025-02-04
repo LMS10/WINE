@@ -15,7 +15,7 @@ export default function ProfileImg({ src, size, isLine = false, onClick }: Profi
       ? 'h-[164px] w-[164px] tablet:h-[80px] tablet:w-[80px] mobile:h-[60px] mobile:w-[60px]'
       : size === 'medium'
         ? 'h-[64px] w-[64px] mobile:h-[42px] mobile:w-[42px]'
-        : 'h-[45px] w-[45px] mobile:h-[20px] mobile:w-[20px]';
+        : 'h-[45px] w-[45px] mobile:h-[25px] mobile:w-[25px]';
 
   const borderRoundWidth = isLine ? `w-[calc(100%-3px)]` : `w-[calc(100%)]`;
   const borderRoundHeight = isLine ? `h-[calc(100%-3px)]` : `h-[calc(100%)]`;
