@@ -37,7 +37,7 @@ export default function Home() {
           </div>
         </div>
         <div className='flex flex-col items-center gap-[96px] pt-[160px] tablet:pt-[80px] mobile:gap-[48px] mobile:pt-[48px]'>
-          <div className='mx-auto flex w-[699px] flex-col items-center mobile:w-[343px]'>
+          <div className='flex w-[699px] flex-col items-center pl-[25px] tablet:pl-[32px] mobile:w-[343px] mobile:pl-[0]'>
             <div className='relative h-[320px] w-[699px] pc:block tablet:block mobile:hidden'>
               <Image src={section1Large} alt='데스크톱, 태블릿 섹션 이미지1' style={{ objectFit: 'cover' }} />
             </div>
@@ -45,17 +45,17 @@ export default function Home() {
               <Image src={section1Small} alt='모바일 섹션 이미지1' style={{ objectFit: 'cover' }} />
             </div>
           </div>
-          <div className='flex w-[699px] flex-col items-start mobile:w-[343px] mobile:items-center'>
-            <div className='relative h-[320px] w-[640px] pc:block tablet:block mobile:hidden'>
-              <Image src={section2Large} alt='데스크톱, 태블릿 섹션 이미지2' style={{ objectFit: 'cover' }} />
+          <div className='flex w-[665px] flex-col items-center mobile:w-[343px]'>
+            <div className='relative h-[320px] w-[665px] pc:block tablet:block mobile:hidden'>
+              <Image src={section2Large} alt='데스크톱, 태블릿 섹션 이미지2' fill style={{ objectFit: 'cover' }} />
             </div>
             <div className='relative h-[424px] w-[343px] pc:hidden tablet:hidden mobile:block'>
               <Image src={section2Small} alt='모바일 섹션 이미지2' style={{ objectFit: 'cover' }} />
             </div>
           </div>
-          <div className='flex w-[699px] flex-col items-start mobile:w-[343px] mobile:items-center'>
-            <div className='relative h-[320px] w-[640px] pc:block tablet:block mobile:hidden'>
-              <Image src={section3Large} alt='데스크톱, 태블릿 섹션 이미지3' style={{ objectFit: 'cover' }} />
+          <div className='flex w-[665px] flex-col items-center mobile:w-[343px]'>
+            <div className='relative h-[320px] w-[665px] pc:block tablet:block mobile:hidden'>
+              <Image src={section3Large} alt='데스크톱, 태블릿 섹션 이미지3' fill style={{ objectFit: 'cover' }} />
             </div>
             <div className='relative h-[424px] w-[343px] pc:hidden tablet:hidden mobile:block'>
               <Image src={section3Small} alt='모바일 섹션 이미지3' style={{ objectFit: 'cover' }} />
