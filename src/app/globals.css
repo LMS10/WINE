@@ -5,3 +5,7 @@
 :root {
   --font-pretendard: 'Pretendard', sans-serif;
 }
+
+body {
+  min-width: 375px;
+}
