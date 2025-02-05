@@ -1,0 +1,83 @@
+'use client';
+
+import { useState, useRef, useEffect, ReactNode } from 'react';
+
+interface DropdownOption {
+  value?: () => void;
+  label: string;
+}
+
+interface DropdownProps {
+  options: DropdownOption[];
+  onSelect: (option: DropdownOption) => void;
+  placeholder?: string;
+  children?: ReactNode;
+  changeButton?: boolean;
+}
+
+function Dropdown({ options, onSelect, placeholder, changeButton = false, children }: DropdownProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selected, setSelected] = useState<DropdownOption | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
+
+  const labelActive = selected ? 'text-black' : 'text-gray-500';
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setIsOpen(false);
+    }
+  };
+
+  const handleSelect = (option: DropdownOption) => {
+    setSelected(option);
+    onSelect(option);
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <div ref={dropdownRef} className='relative'>
+      <button
+        onClick={toggleDropdown}
+        className={
+          changeButton
+            ? `${labelActive} flex h-12 w-[412px] items-center justify-between rounded-2xl border border-gray-300 px-5 py-3 text-lg font-medium mobile:h-[42px] mobile:w-[327px] mobile:text-md`
+            : ``
+        }
+      >
+        {!changeButton ? <span>{children}</span> : <span>{selected ? selected.label : placeholder}</span>}
+      </button>
+      {isOpen && (
+        <ul
+          className={
+            changeButton
+              ? 'absolute mt-1 flex h-[156px] w-[412px] flex-col rounded-2xl border border-gray-300 bg-white font-medium mobile:h-[138px] mobile:w-[327px]'
+              : 'absolute -ml-[100px] mt-1 flex h-[104px] w-[126px] flex-col rounded-2xl border border-gray-300 bg-white text-lg font-medium mobile:-ml-20 mobile:h-[92px] mobile:w-[101px]'
+          }
+        >
+          {options.map((option) => (
+            <li
+              key={option.label}
+              onClick={() => handleSelect(option)}
+              className={
+                changeButton
+                  ? 'mx-[6px] my-[3px] flex flex-1 items-center rounded-lg pl-[14px] font-medium text-black hover:cursor-pointer hover:bg-purple-10 hover:text-purple-100 mobile:text-md'
+                  : 'mobile: mx-[6px] my-[3px] flex flex-1 items-center justify-center rounded-xl font-medium text-black hover:bg-purple-10 hover:text-purple-100 mobile:text-md'
+              }
+            >
+              {option.label}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export default Dropdown;
