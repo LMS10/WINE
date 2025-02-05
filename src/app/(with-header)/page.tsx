@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { Metadata } from 'next';
 import Button from '@/components/Button';
 import bannerDesktop from '@/assets/images/banner_desktop.png';
 import bannerTablet from '@/assets/images/banner_tablet.png';
@@ -9,7 +10,6 @@ import section2Large from '@/assets/images/section2_lg.png';
 import section2Small from '@/assets/images/section2_sm.png';
 import section3Large from '@/assets/images/section3_lg.png';
 import section3Small from '@/assets/images/section3_sm.png';
-import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'WINE - 나만의 와인 창고',
@@ -23,25 +23,43 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className='bg-gray-100'>
-      <div className='mx-auto min-h-[100vh] w-full max-w-[1200px] pb-[100px]'>
+    <div>
+      <div className='mx-auto min-h-[100vh] w-full max-w-[1200px] pb-[100px] pt-[94px] mobile:pt-[74px]'>
         <div className='flex justify-center pt-[80px] tablet:pt-[24px]'>
-          <Image className='h-auto w-full pc:block tablet:hidden mobile:hidden' src={bannerDesktop} alt='데스크톱 배너 이미지' width={1140} height={535} priority />
-          <Image className='w-fullpc:hidden h-auto tablet:block mobile:hidden' src={bannerTablet} alt='데스크톱 배너 이미지' width={704} height={394} priority />
-          <Image className='w-fullpc:hidden h-auto tablet:hidden mobile:block' src={bannerMobile} alt='데스크톱 배너 이미지' width={343} height={403} priority />
+          <div className='relative h-[535px] w-[1140px] pc:block tablet:hidden mobile:hidden'>
+            <Image src={bannerDesktop} alt='데스크톱 배너 이미지' style={{ objectFit: 'cover' }} priority />
+          </div>
+          <div className='relative h-[394px] w-[704px] pc:hidden tablet:block mobile:hidden'>
+            <Image src={bannerTablet} alt='태블릿 배너 이미지' style={{ objectFit: 'cover' }} priority />
+          </div>
+          <div className='relative h-[403px] w-[343px] pc:hidden tablet:hidden mobile:block'>
+            <Image src={bannerMobile} alt='모바일 배너 이미지' style={{ objectFit: 'cover' }} priority />
+          </div>
         </div>
-        <div className='mx-auto flex flex-col items-center justify-center gap-[96px] pt-[160px] tablet:pt-[80px] mobile:gap-[48px] mobile:pt-[48px]'>
-          <div className='m-0 flex flex-col items-center p-0'>
-            <Image className='h-auto w-full pc:block tablet:block mobile:hidden' src={section1Large} width={699} height={320} alt='데스크톱, 태블릿 섹션 이미지1' />
-            <Image className='h-auto w-full pc:hidden tablet:hidden mobile:block' src={section1Small} width={343} height={424} alt='모바일 섹션 이미지1' />
+        <div className='flex flex-col items-center gap-[96px] pt-[160px] tablet:pt-[80px] mobile:gap-[48px] mobile:pt-[48px]'>
+          <div className='mx-auto flex w-[699px] flex-col items-center mobile:w-[343px]'>
+            <div className='relative h-[320px] w-[699px] pc:block tablet:block mobile:hidden'>
+              <Image src={section1Large} alt='데스크톱, 태블릿 섹션 이미지1' style={{ objectFit: 'cover' }} />
+            </div>
+            <div className='relative h-[424px] w-[343px] pc:hidden tablet:hidden mobile:block'>
+              <Image src={section1Small} alt='모바일 섹션 이미지1' style={{ objectFit: 'cover' }} />
+            </div>
           </div>
-          <div className='flex flex-col items-center'>
-            <Image className='h-auto w-full pc:block tablet:block mobile:hidden' src={section2Large} width={699} height={320} alt='데스크톱, 태블릿 섹션 이미지2' />
-            <Image className='h-auto w-full pc:hidden tablet:hidden mobile:block' src={section2Small} width={343} height={424} alt='모바일 섹션 이미지2' />
+          <div className='flex w-[699px] flex-col items-start mobile:w-[343px] mobile:items-center'>
+            <div className='relative h-[320px] w-[640px] pc:block tablet:block mobile:hidden'>
+              <Image src={section2Large} alt='데스크톱, 태블릿 섹션 이미지2' style={{ objectFit: 'cover' }} />
+            </div>
+            <div className='relative h-[424px] w-[343px] pc:hidden tablet:hidden mobile:block'>
+              <Image src={section2Small} alt='모바일 섹션 이미지2' style={{ objectFit: 'cover' }} />
+            </div>
           </div>
-          <div className='flex flex-col items-center'>
-            <Image className='h-auto w-full pc:block tablet:block mobile:hidden' src={section3Large} width={699} height={320} alt='데스크톱, 태블릿 섹션 이미지2' />
-            <Image className='h-auto w-full pc:hidden tablet:hidden mobile:block' src={section3Small} width={343} height={424} alt='모바일 섹션 이미지3' />
+          <div className='flex w-[699px] flex-col items-start mobile:w-[343px] mobile:items-center'>
+            <div className='relative h-[320px] w-[640px] pc:block tablet:block mobile:hidden'>
+              <Image src={section3Large} alt='데스크톱, 태블릿 섹션 이미지3' style={{ objectFit: 'cover' }} />
+            </div>
+            <div className='relative h-[424px] w-[343px] pc:hidden tablet:hidden mobile:block'>
+              <Image src={section3Small} alt='모바일 섹션 이미지3' style={{ objectFit: 'cover' }} />
+            </div>
           </div>
         </div>
         <div className='mx-auto flex items-center justify-center pt-[104px] tablet:pt-[80px] mobile:pt-[64px]'>

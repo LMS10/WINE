@@ -8,8 +8,8 @@ import profileDefault from '@/assets/icons/profile_default.svg';
 
 function LoggedOutHeader() {
   return (
-    <div className='mt-[24px] flex w-full justify-center'>
-      <div className='box-border h-[70px] w-[1140px] rounded-xl bg-black tablet:w-[740px] mobile:h-[50px] mobile:w-[343px]'>
+    <div className='fixed z-50 mt-[24px] flex w-full justify-center'>
+      <div className='box-border h-[70px] w-[1140px] rounded-xl bg-black tablet:w-[704px] mobile:h-[50px] mobile:w-[343px]'>
         <header className='flex items-center justify-between px-[60px] py-[22.5px] mobile:px-[20px] mobile:py-[17.5px]'>
           <Link href={'/'}>
             <Image className='cursor-pointer' src={logoWhite} width={52} height={15} alt='화이트 로고' />
@@ -28,8 +28,8 @@ function LoggedInHeader() {
   const { profileImage } = useAuth();
 
   return (
-    <div className='mt-[24px] flex w-full justify-center'>
-      <div className='box-border h-[70px] w-[1140px] rounded-xl bg-black tablet:w-[740px] mobile:h-[50px] mobile:w-[343px]'>
+    <div className='fixed z-50 mt-[24px] flex w-full justify-center'>
+      <div className='box-border h-[70px] w-[1140px] rounded-xl bg-black tablet:w-[704px] mobile:h-[50px] mobile:w-[343px]'>
         <header className='flex items-center justify-between px-[60px] py-[12.5px] mobile:px-[20px] mobile:py-[12.5px]'>
           <Link href={'/'}>
             <Image src={logoWhite} width={52} height={15} alt='화이트 로고' />
