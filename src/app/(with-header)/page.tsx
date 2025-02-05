@@ -12,6 +12,7 @@ import section3Large from '@/assets/images/section3_lg.png';
 import section3Small from '@/assets/images/section3_sm.png';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://wine-lab.vercel.app/'),
   title: 'WINE - 나만의 와인 창고',
   description: '한 곳에서 관리하는 나만의 와인 창고',
   openGraph: {
@@ -24,32 +25,32 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <div>
-      <div className='mx-auto min-h-[100vh] w-full max-w-[1200px] pb-[100px] pt-[94px] mobile:pt-[74px]'>
+      <div className='mx-auto flex min-h-[100vh] w-full max-w-[1200px] flex-col pb-[100px] pt-[94px] mobile:pt-[74px]'>
         <div className='flex justify-center pt-[80px] tablet:pt-[24px]'>
           <div className='relative h-[535px] w-[1140px] pc:block tablet:hidden mobile:hidden'>
             <Image src={bannerDesktop} alt='데스크톱 배너 이미지' style={{ objectFit: 'cover' }} priority />
           </div>
-          <div className='relative h-[394px] w-[704px] pc:hidden tablet:block mobile:hidden'>
+          <div className='pc:hidden tablet:relative tablet:mx-[24px] tablet:block tablet:h-auto tablet:w-auto tablet:min-w-[704px] tablet:max-w-[1000px] mobile:hidden'>
             <Image src={bannerTablet} alt='태블릿 배너 이미지' style={{ objectFit: 'cover' }} priority />
           </div>
-          <div className='relative h-[403px] w-[343px] pc:hidden tablet:hidden mobile:block'>
+          <div className='pc:hidden tablet:hidden mobile:relative mobile:mx-5 mobile:block mobile:h-auto mobile:w-auto mobile:min-w-[343px] mobile:max-w-[700px]'>
             <Image src={bannerMobile} alt='모바일 배너 이미지' style={{ objectFit: 'cover' }} priority />
           </div>
         </div>
         <div className='flex flex-col items-center gap-[96px] pt-[160px] tablet:pt-[80px] mobile:gap-[48px] mobile:pt-[48px]'>
-          <div className='flex w-[699px] flex-col items-center pl-[25px] tablet:pl-[32px] mobile:w-[343px] mobile:pl-[0]'>
-            <div className='relative h-[320px] w-[699px] pc:block tablet:block mobile:hidden'>
+          <div className='flex max-w-[699px] flex-col items-center pl-[25px] tablet:max-w-[800px] tablet:pl-[32px] mobile:pl-[0]'>
+            <div className='relative h-[320px] max-w-[699px] pc:block tablet:block mobile:hidden'>
               <Image src={section1Large} alt='데스크톱, 태블릿 섹션 이미지1' style={{ objectFit: 'cover' }} />
             </div>
-            <div className='relative h-[424px] w-[343px] pc:hidden tablet:hidden mobile:block'>
+            <div className='relative h-auto w-auto pc:hidden tablet:hidden mobile:block mobile:min-w-[343px] mobile:max-w-[600px]'>
               <Image src={section1Small} alt='모바일 섹션 이미지1' style={{ objectFit: 'cover' }} />
             </div>
           </div>
-          <div className='flex w-[665px] flex-col items-center mobile:w-[343px]'>
+          <div className='flex w-[665px] flex-col items-center'>
             <div className='relative h-[320px] w-[665px] pc:block tablet:block mobile:hidden'>
               <Image src={section2Large} alt='데스크톱, 태블릿 섹션 이미지2' fill style={{ objectFit: 'cover' }} />
             </div>
-            <div className='relative h-[424px] w-[343px] pc:hidden tablet:hidden mobile:block'>
+            <div className='relative h-auto w-auto pc:hidden tablet:hidden tablet:min-w-[400px] tablet:max-w-[800px] mobile:block mobile:min-w-[343px]'>
               <Image src={section2Small} alt='모바일 섹션 이미지2' style={{ objectFit: 'cover' }} />
             </div>
           </div>
