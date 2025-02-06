@@ -1,4 +1,5 @@
 import localFont from 'next/font/local';
+import { AuthProvider } from '@/contexts/authContext';
 import './globals.css';
 
 const pretendard = localFont({
@@ -14,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko'>
-      <body className={pretendard.className}>{children}</body>
+      <body className={pretendard.className}>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

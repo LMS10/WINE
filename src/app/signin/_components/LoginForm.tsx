@@ -1,11 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import googleIcon from '@/assets/icons/google.svg';
 import kakaoIcon from '@/assets/icons/kakao.svg';
+import { useAuth } from '@/contexts/authContext';
 
 interface FormValues {
   email: string;
@@ -13,6 +13,8 @@ interface FormValues {
 }
 
 export default function LoginForm() {
+  const { login } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -20,25 +22,44 @@ export default function LoginForm() {
     setError,
   } = useForm<FormValues>();
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  let loginType: 'email' | 'google' | 'kakao' = 'email';
+
+  // 로그인 API 호출 함수
+  const handleLogin: SubmitHandler<FormValues> = async (data) => {
     const { email, password } = data;
-    if (email !== 'test@example.com' || password !== 'password123') {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/signIn`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('로그인 실패');
+      }
+
+      const responseData = await response.json();
+      login(responseData.accessToken, responseData.refreshToken);
+    } catch (error) {
+      console.error('로그인 에러:', error);
       setError('email', { message: '이메일 혹은 비밀번호를 확인해주세요.' });
-      return;
     }
-    console.log('로그인');
   };
 
-  const handleGoogleLogin = () => {
-    console.log('google 로그인버튼');
-  };
-
-  const handleKakaoLogin = () => {
-    console.log('kakao 로그인버튼');
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    if (loginType === 'email') {
+      handleLogin(data);
+    } else if (loginType === 'google') {
+      console.log('Google OAuth 로그인 실행');
+      // TODO: Google OAuth API 요청 추가
+    } else if (loginType === 'kakao') {
+      console.log('Kakao OAuth 로그인 실행');
+      // TODO: Kakao OAuth API 요청 추가
+    }
   };
 
   return (
-    <form action='' onSubmit={handleSubmit(onSubmit)} className=''>
+    <form onSubmit={handleSubmit(onSubmit)} className=''>
       <div className='flex flex-col pb-[12px] mobile:pb-4'>
         <label htmlFor='email' className='pb-[10px] font-normal leading-[26px] text-gray-800'>
           이메일
@@ -65,15 +86,20 @@ export default function LoginForm() {
       </div>
 
       <div className='flex w-full flex-col gap-[15px] pb-8 pt-14 mobile:pb-6 mobile:pt-10'>
-        <button type='submit' className='h-[50px] rounded-2xl border bg-purple-100 text-white'>
+        {/* 일반 로그인 */}
+        <button type='submit' onClick={() => (loginType = 'email')} className='h-[50px] rounded-2xl border bg-purple-100 text-white'>
           로그인
         </button>
-        <button type='submit' onSubmit={handleGoogleLogin} className='flex h-[50px] items-center justify-center gap-3 rounded-2xl border border-gray-300 bg-white'>
-          <Image src={googleIcon} alt='구글아이콘'></Image>
+
+        {/* Google 로그인 */}
+        <button type='submit' onClick={() => (loginType = 'google')} className='flex h-[50px] items-center justify-center gap-3 rounded-2xl border border-gray-300 bg-white'>
+          <Image src={googleIcon} alt='구글아이콘' />
           <p>Google로 시작하기</p>
         </button>
-        <button type='submit' onSubmit={handleKakaoLogin} className='flex h-[50px] items-center justify-center gap-3 rounded-2xl border border-gray-300 bg-white'>
-          <Image src={kakaoIcon} alt='카카오아이콘'></Image>
+
+        {/* Kakao 로그인 */}
+        <button type='submit' onClick={() => (loginType = 'kakao')} className='flex h-[50px] items-center justify-center gap-3 rounded-2xl border border-gray-300 bg-white'>
+          <Image src={kakaoIcon} alt='카카오아이콘' />
           <p>카카오로 시작하기</p>
         </button>
       </div>

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import logoBlack from '@/assets/icons/logo_black.svg';
 import LoginForm from './_components/LoginForm';
 
-export default function Login() {
+export default function Signin() {
   return (
     <section className='flex h-screen items-center justify-center bg-gray-100 tablet:pl-[124px] tablet:pr-[124px] mobile:pl-4 mobile:pr-4'>
       <div className='rounded-[16px] border border-gray-300 bg-white pb-[80px] pl-12 pr-12 pt-[80px] tablet:pb-16 tablet:pt-16 mobile:pb-14 mobile:pl-5 mobile:pr-5 mobile:pt-14'>
