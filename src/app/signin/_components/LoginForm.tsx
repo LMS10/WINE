@@ -59,7 +59,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className=''>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className='flex flex-col pb-[12px] mobile:pb-4'>
         <label htmlFor='email' className='pb-[10px] font-normal leading-[26px] text-gray-800'>
           이메일
@@ -67,7 +67,7 @@ export default function LoginForm() {
         <input
           type='text'
           placeholder='이메일 입력'
-          className='h-[48px] w-[400px] rounded-2xl border border-gray-300 pl-5 mobile:h-[42px] mobile:w-[303px]'
+          className='h-[48px] w-[400px] rounded-2xl border border-gray-300 pl-5 focus:outline-purple-100 mobile:h-[42px] mobile:w-[303px]'
           {...register('email', { required: '이메일은 필수 입력입니다.', pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: '이메일 형식으로 작성해 주세요.' } })}
         />
         <p className='h-[10px] pl-5 pt-1 text-sm text-purple-100'>{errors.email?.message}</p>
@@ -79,7 +79,7 @@ export default function LoginForm() {
         <input
           type='password'
           placeholder='비밀번호 입력'
-          className='h-[48px] w-[400px] rounded-2xl border border-gray-300 pl-5 mobile:h-[42px] mobile:w-[303px]'
+          className='h-[48px] w-[400px] rounded-2xl border border-gray-300 pl-5 focus:outline-purple-100 mobile:h-[42px] mobile:w-[303px]'
           {...register('password', { required: '비밀번호는 필수 입력입니다.' })}
         />
         <p className='h-[10px] pl-5 pt-1 text-sm text-purple-100'>{errors.password?.message}</p>
