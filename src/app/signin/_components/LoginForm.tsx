@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 
 import googleIcon from '@/assets/icons/google.svg';
 import kakaoIcon from '@/assets/icons/kakao.svg';
@@ -14,6 +15,7 @@ interface FormValues {
 
 export default function LoginForm() {
   const { login } = useAuth();
+  const router = useRouter();
 
   const {
     register,
@@ -40,6 +42,9 @@ export default function LoginForm() {
 
       const responseData = await response.json();
       login(responseData.accessToken, responseData.refreshToken);
+
+      // 로그인 성공 후 리다이렉션
+      router.push('/wines'); // /wines 주소로 리다이렉션
     } catch (error) {
       console.error('로그인 에러:', error);
       setError('email', { message: '이메일 혹은 비밀번호를 확인해주세요.' });
