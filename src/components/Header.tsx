@@ -15,7 +15,7 @@ function LoggedOutHeader() {
             <Image className='cursor-pointer' src={logoWhite} width={52} height={15} alt='화이트 로고' />
           </Link>
           <div className='flex cursor-pointer gap-[40px] text-base text-white mobile:gap-[20px] mobile:text-md mobile:leading-none'>
-            <Link href={'/login'}>로그인</Link>
+            <Link href={'/signin'}>로그인</Link>
             <Link href={'/signup'}>회원가입</Link>
           </div>
         </header>
