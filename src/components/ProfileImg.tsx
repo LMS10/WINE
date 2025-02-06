@@ -30,7 +30,7 @@ export default function ProfileImg({ src, size, isLine = false, onClick }: Profi
     <div onClick={onClickProfileImg} className={`relative rounded-full ${cursor} ${profileSize}`}>
       <Image fill className='rounded-[100] bg-black object-cover' src={src} alt='프로필 이미지' />
       <div
-        className={`absolute ${borderRoundWidth} ${borderRoundHeight} left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[100] border border-solid border-gray-300 mobile:h-[calc(100%)] mobile:w-[calc(100%)]`}
+        className={`absolute ${borderRoundWidth} ${borderRoundHeight} left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] rounded-full border border-solid border-gray-300 mobile:h-[calc(100%)] mobile:w-[calc(100%)]`}
       ></div>
     </div>
   );
