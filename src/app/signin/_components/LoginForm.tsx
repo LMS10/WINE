@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import googleIcon from '@/assets/icons/google.svg';
 import kakaoIcon from '@/assets/icons/kakao.svg';
 import { useAuth } from '@/contexts/authContext';
+import Button from '@/components/Button';
 
 interface FormValues {
   email: string;
@@ -65,44 +66,37 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className='flex flex-col pb-[12px] mobile:pb-4'>
-        <label htmlFor='email' className='pb-[10px] font-normal leading-[26px] text-gray-800'>
+      <div className='flex flex-col pb-[28px] mobile:pb-4'>
+        <label htmlFor='email' className='pb-[10px] text-[14px] font-medium leading-[26px] text-gray-800'>
           이메일
         </label>
         <input
           type='text'
           placeholder='이메일 입력'
-          className='h-[48px] w-[400px] rounded-2xl border border-gray-300 pl-5 focus:outline-purple-100 mobile:h-[42px] mobile:w-[303px]'
+          className='h-[48px] w-[400px] rounded-2xl border border-gray-300 pl-5 text-[14px] focus:outline-purple-100 mobile:h-[42px] mobile:w-[303px]'
           {...register('email', { required: '이메일은 필수 입력입니다.', pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: '이메일 형식으로 작성해 주세요.' } })}
         />
         <p className='h-[10px] pl-5 pt-1 text-sm text-purple-100'>{errors.email?.message}</p>
       </div>
       <div className='flex flex-col pb-[12px]'>
-        <label htmlFor='password' className='pb-[10px] font-normal leading-[26px] text-gray-800'>
+        <label htmlFor='password' className='pb-[10px] text-[14px] font-medium leading-[26px] text-gray-800'>
           비밀번호
         </label>
         <input
           type='password'
           placeholder='비밀번호 입력'
-          className='h-[48px] w-[400px] rounded-2xl border border-gray-300 pl-5 focus:outline-purple-100 mobile:h-[42px] mobile:w-[303px]'
+          className='h-[48px] w-[400px] rounded-2xl border border-gray-300 pl-5 text-[14px] focus:outline-purple-100 mobile:h-[42px] mobile:w-[303px]'
           {...register('password', { required: '비밀번호는 필수 입력입니다.' })}
         />
         <p className='h-[10px] pl-5 pt-1 text-sm text-purple-100'>{errors.password?.message}</p>
       </div>
 
       <div className='flex w-full flex-col gap-[15px] pb-8 pt-14 mobile:pb-6 mobile:pt-10'>
-        {/* 일반 로그인 */}
-        <button type='submit' onClick={() => (loginType = 'email')} className='h-[50px] rounded-2xl border bg-purple-100 text-white'>
-          로그인
-        </button>
-
-        {/* Google 로그인 */}
+        <Button type='submit' onClick={() => (loginType = 'email')} text='로그인' className='h-[50px] rounded-2xl border'></Button>
         <button type='submit' onClick={() => (loginType = 'google')} className='flex h-[50px] items-center justify-center gap-3 rounded-2xl border border-gray-300 bg-white'>
           <Image src={googleIcon} alt='구글아이콘' />
           <p>Google로 시작하기</p>
         </button>
-
-        {/* Kakao 로그인 */}
         <button type='submit' onClick={() => (loginType = 'kakao')} className='flex h-[50px] items-center justify-center gap-3 rounded-2xl border border-gray-300 bg-white'>
           <Image src={kakaoIcon} alt='카카오아이콘' />
           <p>카카오로 시작하기</p>
