@@ -14,14 +14,14 @@ export default function Signin() {
           </Link>
           <LoginForm></LoginForm>
           <div className='flex gap-[14px]'>
-            <p className='font-normal text-gray-500'>계정이 없으신가요?</p>
-            <Link href='/signup' className='font-medium text-purple-100 underline'>
+            <p className='font-normal text-gray-500 mobile:text-[14px]'>계정이 없으신가요?</p>
+            <Link href='/signup' className='font-medium text-purple-100 underline mobile:text-[14px]'>
               회원가입하기
             </Link>
           </div>
           <div className='flex gap-[14px]'>
-            <p className='font-normal text-gray-500'>암호를 잊으셨나요?</p>
-            <Link href='' className='font-medium text-purple-100 underline'>
+            <p className='font-normal text-gray-500 mobile:text-[14px]'>암호를 잊으셨나요?</p>
+            <Link href='' className='font-medium text-purple-100 underline mobile:text-[14px]'>
               비밀번호 찾기
             </Link>
           </div>
