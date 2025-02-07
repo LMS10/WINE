@@ -1,7 +1,7 @@
 'use client';
 import { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
-import { AuthProvider } from '../context/auth-context';
+import { AuthProvider } from '@/contexts/authContext';
 import Header from '@/components/Header';
 
 export default function Layout({ children }: { children: ReactNode }) {
