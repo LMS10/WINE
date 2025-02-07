@@ -1,3 +1,5 @@
-export default function Page() {
-  return <div>와인 목록 페이지입니다.</div>;
+import Wines from './Wines';
+
+export default function WinesPage() {
+  return <Wines />;
 }
