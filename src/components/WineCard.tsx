@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import KebabDropDown from '@/app/myprofile/_components/KebabDropDown';
 
-interface WineCardProps {
+export interface WineCardProps {
   id: number;
   name: string;
   region: string;
