@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/authContext';
-import { Wine } from '@/types/wine';
 import WineCard, { WineCardProps } from '@/components/WineCard';
 
 export default function WineDetail({ wineId }: { wineId: string }) {
   const { isLoggedIn } = useAuth();
-  const [wine, setWine] = useState<Wine | null>(null);
+  const [wine, setWine] = useState<WineCardProps | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,7 +35,7 @@ export default function WineDetail({ wineId }: { wineId: string }) {
           throw new Error(`Wine fetch failed: ${response.statusText}`);
         }
 
-        const data: Wine = await response.json();
+        const data: WineCardProps = await response.json();
         setWine(data);
         setLoading(false);
       } catch (error: unknown) {
