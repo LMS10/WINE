@@ -20,7 +20,7 @@ export default function ControlBar({ label, minLabel, maxLabel, value, isDraggab
         ? 'max-w-[540px] h-[25px] tablet:max-w-[704px]  mobile:max-w-[343px] mobile:h-[24px]'
         : 'max-w-[480px] h-[26px] mobile:max-w-[327px] mobile:h-[24px]';
 
-  const [dragging, setDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [dragValue, setDragValue] = useState(value);
   const controlBarRef = useRef<HTMLDivElement | null>(null);
   const initialX = useRef(0);
@@ -34,13 +34,13 @@ export default function ControlBar({ label, minLabel, maxLabel, value, isDraggab
     if (!isDraggable || !controlBarRef.current) return;
 
     e.stopPropagation();
-    setDragging(true);
+    setIsDragging(true);
     initialX.current = e.clientX;
     initialValue.current = dragValue;
   };
 
   useEffect(() => {
-    if (!dragging || !controlBarRef.current) return;
+    if (!isDragging || !controlBarRef.current) return;
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const deltaX = moveEvent.clientX - initialX.current;
@@ -53,7 +53,7 @@ export default function ControlBar({ label, minLabel, maxLabel, value, isDraggab
     };
 
     const handleMouseUp = () => {
-      setDragging(false);
+      setIsDragging(false);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
@@ -65,9 +65,7 @@ export default function ControlBar({ label, minLabel, maxLabel, value, isDraggab
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [dragging, dragValue, onChange, name]);
-
-  // const formattedValue = typeof dragValue === 'number' && !isNaN(dragValue) ? dragValue.toFixed(1) : '0';
+  }, [isDragging, dragValue, onChange, name]);
 
   return (
     <div className={`mb-[18px] mobile:mb-[12px] ${controlBarStyle}`}>
