@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const isHome = pathname === '/';
 
   return (
-    <div className='bg-gray-100'>
+    <div>
       <AuthProvider>
         <Header />
         <main className={isHome ? 'pt-0' : 'pt-[94px] mobile:pt-[74px]'}>{children}</main>
