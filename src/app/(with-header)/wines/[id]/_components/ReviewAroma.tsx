@@ -10,7 +10,7 @@ export default function ReviewAroma({ selectedAroma, count }: ReviewAromaProps) 
   return (
     <div>
       <div className='mb-[40px] flex w-[540px] items-center justify-between'>
-        <div className='text-xl font-bold'>어떤 맛이 나나요?</div>
+        <div className='text-xl font-bold'>어떤 향이 나나요?</div>
         <div className='text-md text-gray-500'>({count}명 참여)</div>
       </div>
       <div className='relative flex'>
