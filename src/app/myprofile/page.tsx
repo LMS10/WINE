@@ -1,4 +1,4 @@
-import MyProfile from './_components/MyProfile';
+import MyProfile from './_components/MyProfileContainer';
 
 export default function Page() {
   return (
