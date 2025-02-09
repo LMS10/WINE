@@ -1,4 +1,3 @@
-'use client';
 import ControlBar from '@/components/ControlBar';
 
 type ReviewTasteAverageProps = {

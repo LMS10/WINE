@@ -1,4 +1,5 @@
 export interface ReviewData {
+  avgRating: number;
   reviews: {
     id: number;
     rating: number;
@@ -15,6 +16,6 @@ export interface ReviewData {
       nickname: string;
       image: string;
     };
-    wineId: number;
+    likes: boolean[];
   }[];
 }

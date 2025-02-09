@@ -1,8 +1,11 @@
+'use client';
 import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { useAuth } from '@/contexts/authContext';
 import WineCard, { WineCardProps } from '@/components/WineCard';
 
-export default function WineDetail({ wineId }: { wineId: string }) {
+export default function WineContainer() {
+  const { id } = useParams();
   const { isLoggedIn } = useAuth();
   const [wine, setWine] = useState<WineCardProps | null>(null);
   const [loading, setLoading] = useState(true);
@@ -24,7 +27,7 @@ export default function WineDetail({ wineId }: { wineId: string }) {
           return;
         }
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/wines/${wineId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/wines/${id}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -37,19 +40,19 @@ export default function WineDetail({ wineId }: { wineId: string }) {
 
         const data: WineCardProps = await response.json();
         setWine(data);
-        setLoading(false);
       } catch (error: unknown) {
         if (error instanceof Error) setError(`Error fetching wine data: ${error.message}`);
+      } finally {
         setLoading(false);
       }
     };
 
-    if (isLoggedIn && wineId) {
+    if (isLoggedIn && id) {
       fetchWineData();
     } else {
       setLoading(false);
     }
-  }, [wineId, isLoggedIn]);
+  }, [id, isLoggedIn]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -59,23 +62,5 @@ export default function WineDetail({ wineId }: { wineId: string }) {
     return <div>{error}</div>;
   }
 
-  if (!wine) {
-    return <p>Wine not found</p>;
-  }
-
-  const { id, name, region, image, price } = wine;
-  const wineWithPrice: WineCardProps = {
-    id,
-    name,
-    region,
-    image,
-    price: price.toString(),
-    size: 'large',
-  };
-
-  return (
-    <div>
-      <WineCard {...wineWithPrice} />
-    </div>
-  );
+  return <div>{wine ? <WineCard {...wine} size='large' /> : <p>존재하지 않는 와인 데이터</p>}</div>;
 }

@@ -19,7 +19,7 @@ export default function ReviewAroma({ selectedAroma, count }: ReviewAromaProps) 
           const aromaName = aromaTraslations[aroma.toUpperCase()] || aroma;
 
           return (
-            <div key={index} className='mr-[20px] flex h-[154px] w-[170px] flex-col items-center justify-center gap-[15px] rounded-2xl border border-gray-300 shadow-sm'>
+            <div key={index} className='mr-[15px] flex h-[154px] w-[170px] flex-col items-center justify-center gap-[15px] rounded-2xl border border-gray-300 shadow-sm'>
               <Image src={imageSrc} alt={`Aroma ${aroma}`} width={45} height={45} />
               <span className='text-lg text-gray-500'>{aromaName}</span>
             </div>
