@@ -1,20 +1,50 @@
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import likeIcon from '@/assets/icons/like.svg';
+import likeFilledIcon from '@/assets/icons/like_filled.svg';
 import menuIcon from '@/assets/icons/menu.svg';
 import starIcon from '@/assets/icons/star_hover.svg';
 import lessIcon from '@/assets/icons/less.svg';
 import moreIcon from '@/assets/icons/more.svg';
+import { fetchWithAuth } from '@/lib/auth';
 import { ReviewData } from '@/types/review-data';
-import ReviewTasteItem from './ReviewTasteItem';
-import ProfileImg from '@/components/ProfileImg';
-import Image from 'next/image';
-import { useState } from 'react';
-import elapsedTime from '@/utils/formatDate';
 import { aromaTraslations } from '@/constants/aromaTranslation';
+import elapsedTime from '@/utils/formatDate';
+import ProfileImg from '@/components/ProfileImg';
+import ReviewTasteItem from './ReviewTasteItem';
 
 type ReviewItemProps = { review: ReviewData['reviews'][0] };
 
 export default function ReviewItem({ review }: ReviewItemProps) {
   const [isOpen, setIsOpen] = useState(true);
+  const [liked, setLiked] = useState(review.isLiked || false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLiked(review.isLiked);
+  }, [review.isLiked]);
+
+  const handleLikeToggle = async () => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      const method = liked ? 'DELETE' : 'POST';
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews/${review.id}/like`, {
+        method: method,
+      });
+
+      if (response && response.ok) {
+        setLiked((prevLiked) => !prevLiked);
+      } else {
+        console.log('좋아요 클릭');
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className='mb-[20px] min-h-[200px] w-[800px] rounded-2xl border-[1px] border-solid border-gray-300 pb-[20px] pl-[40px] pr-[40px] pt-[30px] hover:shadow-lg'>
@@ -28,7 +58,9 @@ export default function ReviewItem({ review }: ReviewItemProps) {
         </div>
         <div className='flex gap-[24px]'>
           <div>
-            <Image src={likeIcon} width={38} height={38} alt='좋아요' />
+            <button className='transform transition-transform duration-200 hover:scale-110' onClick={handleLikeToggle}>
+              <Image src={liked ? likeFilledIcon : likeIcon} width={38} height={38} alt={liked ? '좋아요 취소' : '좋아요'} />
+            </button>
           </div>
           <div>
             <Image src={menuIcon} width={38} height={38} alt='메뉴' />

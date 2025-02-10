@@ -16,6 +16,6 @@ export interface ReviewData {
       nickname: string;
       image: string;
     };
-    likes: boolean[];
+    isLiked: boolean;
   }[];
 }
