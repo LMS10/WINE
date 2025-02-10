@@ -15,7 +15,7 @@ export default function WineCard({ wine }: WineCardProps) {
     <Link href={`/wines/${wine.id}`} className='rounded-2xl border border-gray-300 hover:shadow-lg'>
       <div className='flex justify-between gap-[81px] tablet:gap-[47px] mobile:gap-9'>
         <div className='relative ml-[60px] mt-10 h-[208px] w-[60px] overflow-hidden tablet:ml-10 mobile:ml-5'>
-          <Image src={wine.image} alt={wine.name} fill className='absolute object-cover' />
+          <Image src={wine.image} alt={wine.name} sizes='30vw' fill className='absolute object-cover' />
         </div>
 
         <div className='mb-[24px] mr-[50px] mt-[36px] flex flex-1 flex-col justify-between gap-4 mobile:mb-[28px] mobile:mr-[30px] mobile:mt-[30px]'>
