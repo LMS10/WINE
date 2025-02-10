@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect, ReactNode } from 'react';
+import Image from 'next/image';
+import downIcon from '@/assets/icons/dropdown.svg';
 
 interface DropdownOption {
   value?: () => void;
@@ -13,9 +15,12 @@ interface DropdownProps {
   placeholder?: string;
   children?: ReactNode;
   changeButton?: boolean;
+  buttonClassName?: string;
+  ulClassName?: string;
+  liClassName?: string;
 }
 
-function Dropdown({ options, onSelect, placeholder, changeButton = false, children }: DropdownProps) {
+function Dropdown({ options, onSelect, placeholder, changeButton = false, children, buttonClassName, ulClassName, liClassName }: DropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<DropdownOption | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -44,21 +49,27 @@ function Dropdown({ options, onSelect, placeholder, changeButton = false, childr
   return (
     <div ref={dropdownRef} className='relative'>
       <button
+        type='button'
         onClick={toggleDropdown}
         className={
-          changeButton
-            ? `${labelActive} flex h-12 w-[412px] items-center justify-between rounded-2xl border border-gray-300 px-5 py-3 text-lg font-medium mobile:h-[42px] mobile:w-[327px] mobile:text-md`
-            : ``
+          changeButton ? `${buttonClassName} ${labelActive} h-12 w-[412px] rounded-2xl border border-gray-300 px-5 py-3 text-lg font-medium mobile:h-[42px] mobile:w-[327px] mobile:text-md` : ``
         }
       >
-        {!changeButton ? <span>{children}</span> : <span>{selected ? selected.label : placeholder}</span>}
+        {!changeButton ? (
+          <span>{children}</span>
+        ) : (
+          <div className='flex items-center justify-between'>
+            <span>{selected ? selected.label : placeholder}</span>
+            <Image src={downIcon} alt='downIcon' />
+          </div>
+        )}
       </button>
       {isOpen && (
         <ul
           className={
             changeButton
-              ? 'absolute mt-1 flex h-[156px] w-[412px] flex-col rounded-2xl border border-gray-300 bg-white font-medium mobile:h-[138px] mobile:w-[327px]'
-              : 'absolute -ml-[100px] mt-1 flex h-[104px] w-[126px] flex-col rounded-2xl border border-gray-300 bg-white text-lg font-medium mobile:-ml-20 mobile:h-[92px] mobile:w-[101px]'
+              ? `${ulClassName} absolute z-10 mt-1 flex h-[156px] w-[412px] flex-col rounded-2xl border border-gray-300 bg-white font-medium mobile:h-[138px] mobile:w-[327px]`
+              : `${ulClassName}absolute -ml-[100px] mt-1 flex h-[104px] w-[126px] flex-col rounded-2xl border border-gray-300 bg-white text-lg font-medium mobile:-ml-20 mobile:h-[92px] mobile:w-[101px]`
           }
         >
           {options.map((option) => (
@@ -67,8 +78,8 @@ function Dropdown({ options, onSelect, placeholder, changeButton = false, childr
               onClick={() => handleSelect(option)}
               className={
                 changeButton
-                  ? 'mx-[6px] my-[3px] flex flex-1 items-center rounded-lg pl-[14px] font-medium text-black hover:cursor-pointer hover:bg-purple-10 hover:text-purple-100 mobile:text-md'
-                  : 'mobile: mx-[6px] my-[3px] flex flex-1 items-center justify-center rounded-xl font-medium text-black hover:bg-purple-10 hover:text-purple-100 mobile:text-md'
+                  ? `${liClassName}mx-[6px] my-[3px] flex flex-1 items-center rounded-lg pl-[14px] font-medium text-black hover:cursor-pointer hover:bg-purple-10 hover:text-purple-100 mobile:text-md`
+                  : `${liClassName}mobile: mx-[6px] my-[3px] flex flex-1 items-center justify-center rounded-xl font-medium text-black hover:bg-purple-10 hover:text-purple-100 mobile:text-md`
               }
             >
               {option.label}
