@@ -29,8 +29,8 @@ export default function Searchbar({ onSearch }: SearchBarProps) {
   }, [debouncedSearch, onSearch]);
 
   return (
-    <div className='flex h-12 flex-1 gap-[15px] rounded-[50px] border border-gray-300 px-5 text-2lg text-gray-400 mobile:h-[38px] mobile:gap-[10px] mobile:pl-[15px] mobile:pr-[17px] mobile:text-lg mobile:font-medium'>
-      <Image src={searchIcon} alt='검색 아이콘' />
+    <div className='flex h-12 flex-1 items-center gap-[15px] rounded-[50px] border border-gray-300 px-5 text-2lg text-gray-400 mobile:h-[38px] mobile:gap-[10px] mobile:pl-[15px] mobile:pr-[17px] mobile:text-lg mobile:font-medium'>
+      <Image src={searchIcon} alt='검색 아이콘' width={20} height={20} className='h-[20px] w-[20px]' />
       <input type='text' className='flex-1 text-gray-800 focus:outline-none' placeholder='와인을 검색해 보세요' value={search} onChange={onChangeSearch} />
     </div>
   );
