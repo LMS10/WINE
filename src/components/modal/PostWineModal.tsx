@@ -105,7 +105,7 @@ export default function PostWineModal() {
                   type='text'
                   id='wineName'
                   placeholder='와인 이름 입력'
-                  className='mobile: h-[48px] w-[412px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-md mobile:h-[42px] mobile:w-[327px]'
+                  className='mobile: h-[48px] w-[412px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-md focus:outline-purple-100 mobile:h-[42px] mobile:w-[327px]'
                   {...register('name')}
                 />
               </div>
@@ -117,7 +117,7 @@ export default function PostWineModal() {
                   type='number'
                   id='price'
                   placeholder='가격 입력'
-                  className='mobile: h-[48px] w-[412px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-md mobile:h-[42px] mobile:w-[327px]'
+                  className='mobile: h-[48px] w-[412px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-md focus:outline-purple-100 mobile:h-[42px] mobile:w-[327px]'
                   {...register('price')}
                 />
               </div>
@@ -129,7 +129,7 @@ export default function PostWineModal() {
                   type='text'
                   id='origin'
                   placeholder='원산지 입력'
-                  className='mobile: h-[48px] w-[412px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-md mobile:h-[42px] mobile:w-[327px]'
+                  className='mobile: h-[48px] w-[412px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-md focus:outline-purple-100 mobile:h-[42px] mobile:w-[327px]'
                   {...register('region')}
                 />
               </div>
@@ -145,7 +145,6 @@ export default function PostWineModal() {
                   placeholder='Red'
                   changeButton
                 />
-                <input type='hidden' {...register('type')} />
               </div>
               <div className='items -my-[3px] flex h-[182px] w-[140px] flex-col justify-between mobile:h-[158px] mobile:w-[120px]'>
                 <label htmlFor='image' className='text-lg font-medium text-gray-800 mobile:text-md'>
@@ -165,7 +164,9 @@ export default function PostWineModal() {
               </div>
             </div>
             <div className='mt-10 flex h-[54px] w-[412px] justify-between mobile:w-[327px]'>
-              <Button text='취소' onClick={closeModal} variant='lightPurple' className='flex h-[54px] w-[108px] items-center justify-center px-0 py-0 mobile:w-[96px]' />
+              <button onClick={closeModal} className='flex h-[54px] w-[108px] items-center justify-center rounded-xl bg-purple-10 text-lg font-bold text-purple-100 mobile:w-[96px]'>
+                취소
+              </button>
               <Button text='와인 등록하기' type='submit' variant='primary' className='h-[54px] w-[294px] rounded-xl text-lg mobile:w-[223px]' />
             </div>
           </form>
