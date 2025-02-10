@@ -6,6 +6,7 @@ import photoIcon from '@/assets/icons/photo.svg';
 import ProfileImg from '@/components/ProfileImg';
 import Button from '@/components/Button';
 import { fetchWithAuth } from '@/lib/auth';
+import profileDefault from '@/assets/icons/profile_default.svg';
 
 interface MyProfileData {
   id: number;
@@ -76,10 +77,10 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
     <div className='flex h-[530px] w-[280px] flex-col items-center justify-between rounded-[16px] border border-gray-300 px-[20px] py-[39px] shadow-drop tablet:h-[247px] tablet:w-full tablet:px-[40px] tablet:py-[23px] mobile:h-[241px] mobile:p-[20px]'>
       <div className='flex w-full flex-col items-center justify-center gap-[32px] tablet:flex-row tablet:justify-start mobile:gap-[16px]'>
         {isDisableProfile ? (
-          <ProfileImg src={profileImg} size='large' />
+          <ProfileImg src={profileImg || profileDefault} size='large' />
         ) : (
           <label htmlFor='profileImg' className='relative h-[164px] w-[164px] cursor-pointer rounded-full tablet:h-[80px] tablet:w-[80px] mobile:h-[60px] mobile:w-[60px]'>
-            <ProfileImg src={profileImg} size='large' />
+            <ProfileImg src={profileImg || profileDefault} size='large' />
             <div className='absolute left-1/2 top-1/2 flex h-[164px] w-[164px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-100 opacity-30 tablet:h-[80px] tablet:w-[80px] mobile:h-[60px] mobile:w-[60px]'></div>
             <Image className='absolute left-1/2 top-1/2 z-10 h-[40px] w-[40px] -translate-x-1/2 -translate-y-1/2' src={photoIcon} alt='사진 로고' />
             <input id='profileImg' type='file' hidden accept='image/png, image/jpeg' ref={fileInputRef} onChange={handleChangeFileInput} />
