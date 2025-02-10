@@ -33,6 +33,9 @@ export default {
         tablet: { max: '1199px' },
         mobile: { max: '767px' },
       },
+      boxShadow: {
+        drop: '0px 2px 20px rgba(0, 0, 0, 0.04)',
+      },
     },
   },
   plugins: [],
