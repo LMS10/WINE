@@ -31,3 +31,9 @@ export interface WineListResponse {
   nextCursor: number | null;
   list: Wine[];
 }
+
+export interface MyWineListResponse {
+  totalCount: number;
+  nextCursor: number | null;
+  list: WineDetails[];
+}
