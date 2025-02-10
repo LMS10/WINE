@@ -93,7 +93,7 @@ export default function SignupForm() {
         <input
           {...register('email')}
           type='text'
-          placeholder='whyne@email.com'
+          placeholder='wine@email.com'
           className='h-[48px] w-[400px] rounded-2xl border border-gray-300 pl-5 focus:outline-purple-100 mobile:h-[42px] mobile:w-[303px] mobile:text-[14px]'
         />
         <p className='h-[10px] pl-5 pt-1 text-sm text-purple-100'>{errors.email?.message}</p>
@@ -105,7 +105,7 @@ export default function SignupForm() {
         <input
           {...register('nickname')}
           type='text'
-          placeholder='whyne'
+          placeholder='wine'
           className='h-[48px] w-[400px] rounded-2xl border border-gray-300 pl-5 focus:outline-purple-100 mobile:h-[42px] mobile:w-[303px] mobile:text-[14px]'
         />
         <p className='h-[10px] pl-5 pt-1 text-sm text-purple-100'>{errors.nickname?.message}</p>
