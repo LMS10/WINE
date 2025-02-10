@@ -6,7 +6,7 @@ export interface WineCardProps {
   name: string;
   region: string;
   image: string;
-  price: string;
+  price: number;
   isKebab?: boolean;
   size?: 'large' | 'midium';
 }
@@ -22,7 +22,7 @@ export default function WineCard({ id, name, region, image, price, isKebab = fal
   return (
     <div className={`flex rounded-[16px] border border-gray-300 mobile:gap-[40px] mobile:px-[20px] ${cardWrapperStyle}`}>
       <div className={`relative w-[60px] overflow-hidden ${wineImgSize}`}>
-        <Image className='absolute top-[0px] h-[210px] object-cover object-top mobile:h-[154px]' src={image} alt='와인 이미지' fill />
+        <Image className='absolute top-[0px] h-[210px] object-cover object-top mobile:h-[154px]' src={image} alt='와인 이미지' fill sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw' />
       </div>
       <div className='relative flex flex-grow flex-col justify-between'>
         <div className='flex flex-col gap-[20px] mobile:gap-[15px]'>
