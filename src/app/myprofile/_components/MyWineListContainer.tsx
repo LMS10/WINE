@@ -44,7 +44,7 @@ export default function MyWineListContainer() {
     );
 
   return (
-    <div className='flex flex-col gap-[62px] mobile:gap-[37px]'>
+    <div className='flex flex-col gap-[8px] tablet:gap-[16px] mobile:gap-[16px]'>
       {myWineData.map((value) => (
         <WineCard key={value.id} id={value.id} name={value.name} region={value.region} image={value.image} price={value.price} size='midium' isKebab />
       ))}
