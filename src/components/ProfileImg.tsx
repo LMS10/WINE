@@ -3,7 +3,7 @@
 import Image, { StaticImageData } from 'next/image';
 
 interface ProfileImgProps {
-  src: StaticImageData;
+  src: StaticImageData | string;
   size: 'large' | 'medium' | 'small';
   isLine?: boolean;
   onClick?: () => void;
