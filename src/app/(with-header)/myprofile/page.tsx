@@ -19,7 +19,7 @@ export default function Page() {
 
   const selectClassName = 'cursor-pointer text-xl font-bold text-gray-800 transition-all duration-300 hover:text-purple-100';
 
-  const unSelectClassName = 'duration-300cursor-pointer text-xl font-bold text-gray-500 transition-all hover:text-purple-100';
+  const unSelectClassName = 'duration-300 cursor-pointer text-xl font-bold text-gray-500 transition-all hover:text-purple-100';
 
   useEffect(() => {
     const token = getAccessToken();

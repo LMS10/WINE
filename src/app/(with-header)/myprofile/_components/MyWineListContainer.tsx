@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { fetchWithAuth } from '@/lib/auth';
 import { MyWineListResponse, WineDetails } from '@/types/wine';
@@ -11,7 +11,7 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
   const [myWineData, setMyWineData] = useState<WineDetails[]>([]);
   const [isLoading, setIsloading] = useState(true);
 
-  const getMyWine = async () => {
+  const getMyWine = useCallback(async () => {
     try {
       setIsloading(true);
       const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/wines?limit=30`);
@@ -22,17 +22,17 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
 
       const data: MyWineListResponse = await response.json();
       setMyWineData(data.list);
+      setDataCount(data.totalCount);
     } catch (error) {
       console.error('데이터를 불러오는데 오류가 발생했습니다:', error);
     } finally {
       setIsloading(false);
     }
-  };
+  }, [setDataCount]);
 
   useEffect(() => {
     getMyWine();
-    setDataCount(myWineData.length);
-  }, [setDataCount, myWineData.length]);
+  }, [getMyWine]);
 
   if (isLoading) return <div></div>;
 
