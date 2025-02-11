@@ -8,6 +8,7 @@ import googleIcon from '@/assets/icons/google.svg';
 import kakaoIcon from '@/assets/icons/kakao.svg';
 import { useAuth } from '@/contexts/authContext';
 import Button from '@/components/Button';
+// import KakaoApi from '@/app/signin/api/KakaoApi';
 
 interface FormValues {
   email: string;
@@ -24,8 +25,6 @@ export default function LoginForm() {
     formState: { errors },
     setError,
   } = useForm<FormValues>();
-
-  let loginType: 'email' | 'google' | 'kakao' = 'email';
 
   // 로그인 API 호출 함수
   const handleLogin: SubmitHandler<FormValues> = async (data) => {
@@ -52,20 +51,17 @@ export default function LoginForm() {
     }
   };
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    if (loginType === 'email') {
-      handleLogin(data);
-    } else if (loginType === 'google') {
-      console.log('Google OAuth 로그인 실행');
-      // TODO: Google OAuth API 요청 추가
-    } else if (loginType === 'kakao') {
-      console.log('Kakao OAuth 로그인 실행');
-      // TODO: Kakao OAuth API 요청 추가
-    }
+  const handleKakaoLogin = () => {
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL}&response_type=code`;
+    window.location.href = kakaoAuthUrl;
+  };
+
+  const handleGoogleLogin = () => {
+    console.log('구글 로그인');
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <div className='flex flex-col pb-[28px] mobile:pb-4'>
         <label htmlFor='email' className='pb-[10px] font-medium leading-[26px] text-gray-800 mobile:text-[14px]'>
           이메일
@@ -92,12 +88,12 @@ export default function LoginForm() {
       </div>
 
       <div className='flex w-full flex-col gap-[15px] pb-8 pt-14 mobile:pb-6 mobile:pt-10'>
-        <Button type='submit' onClick={() => (loginType = 'email')} text='로그인' className='h-[50px] rounded-2xl border mobile:text-[14px]'></Button>
-        <button type='submit' onClick={() => (loginType = 'google')} className='flex h-[50px] items-center justify-center gap-3 rounded-2xl border border-gray-300 bg-white'>
+        <Button type='button' onClick={handleSubmit(handleLogin)} text='로그인' className='h-[50px] rounded-2xl border mobile:text-[14px]'></Button>
+        <button type='button' onClick={handleGoogleLogin} className='flex h-[50px] items-center justify-center gap-3 rounded-2xl border border-gray-300 bg-white'>
           <Image src={googleIcon} alt='구글아이콘' />
           <p className='font-medium mobile:text-[14px]'>Google로 시작하기</p>
         </button>
-        <button type='submit' onClick={() => (loginType = 'kakao')} className='flex h-[50px] items-center justify-center gap-3 rounded-2xl border border-gray-300 bg-white'>
+        <button type='button' onClick={handleKakaoLogin} className='flex h-[50px] items-center justify-center gap-3 rounded-2xl border border-gray-300 bg-white'>
           <Image src={kakaoIcon} alt='카카오아이콘' />
           <p className='font-medium mobile:text-[14px]'>카카오로 시작하기</p>
         </button>
