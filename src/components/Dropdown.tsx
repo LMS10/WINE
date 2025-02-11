@@ -69,7 +69,7 @@ function Dropdown({ options, onSelect, placeholder, changeButton = false, childr
           className={
             changeButton
               ? `${ulClassName} absolute z-10 mt-1 flex h-[156px] w-[412px] flex-col rounded-2xl border border-gray-300 bg-white font-medium mobile:h-[138px] mobile:w-[327px]`
-              : `${ulClassName}absolute -ml-[100px] mt-1 flex h-[104px] w-[126px] flex-col rounded-2xl border border-gray-300 bg-white text-lg font-medium mobile:-ml-20 mobile:h-[92px] mobile:w-[101px]`
+              : `${ulClassName} absolute -ml-[100px] mt-1 flex h-[104px] w-[126px] flex-col rounded-2xl border border-gray-300 bg-white text-lg font-medium mobile:-ml-20 mobile:h-[92px] mobile:w-[101px]`
           }
         >
           {options.map((option) => (
