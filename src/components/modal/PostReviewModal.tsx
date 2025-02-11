@@ -163,8 +163,8 @@ export default function PostReviewModal() {
   return (
     <div>
       <Button text='리뷰 남기기' onClick={openModal} variant='primary' className='h-[42px] w-[113px] rounded-xl text-lg' />
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} className='min-w-[375px] overflow-x-hidden rounded-2xl mobile:mb-0 mobile:h-[930px] mobile:w-[375px] mobile:rounded-b-none'>
-        <div className='mobile:p- flex h-[1006px] w-[528px] flex-col gap-12 p-6 mobile:h-[762px] mobile:w-[375px] mobile:gap-10'>
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} className='min-h-[930px] min-w-[375px] overflow-x-hidden rounded-2xl mobile:mb-0 mobile:h-[930px] mobile:w-[375px] mobile:rounded-b-none'>
+        <div className='flex h-[1006px] w-[528px] flex-col gap-12 p-6 mobile:h-[762px] mobile:w-[375px] mobile:gap-10 mobile:py-8'>
           <div className='flex items-center justify-between'>
             <h1 className='text-2xl font-bold text-gray-800 mobile:text-xl'>리뷰 등록</h1>
             <button type='button' onClick={closeModal}>
@@ -183,11 +183,11 @@ export default function PostReviewModal() {
                 </div>
                 <textarea
                   placeholder='후기를 작성해 주세요'
-                  className='h-[120px] w-[480px] resize-none rounded-2xl border border-gray-100 px-5 py-[14px] align-text-top placeholder:text-lg placeholder:font-normal placeholder:text-gray-500 focus:outline-purple-100 mobile:h-[100px] mobile:w-[327px] placeholder:mobile:text-md'
+                  className='h-[120px] w-[480px] resize-none rounded-2xl border border-gray-100 px-5 py-[14px] align-text-top placeholder:text-lg placeholder:font-normal placeholder:text-gray-500 focus:outline-purple-100 mobile:h-[100px] mobile:w-[327px] mobile:rounded-xl placeholder:mobile:text-md'
                   {...register('content')}
                 />
               </div>
-              <div className='flex flex-col gap-6'>
+              <div className='flex h-[212px] flex-col gap-6 mobile:h-[194px]'>
                 <h4 className='text-xl font-bold text-gray-800 mobile:text-2lg'>와인의 맛은 어땠나요?</h4>
                 <div>
                   <ControlBar label='바디감' minLabel={'가벼워요'} maxLabel={'진해요'} value={0} onChange={handleLightBoldChange} name='바디감' isDraggable={true} size='small' />
@@ -217,7 +217,7 @@ export default function PostReviewModal() {
               type='submit'
               variant='primary'
               disabled={aromaValue.length === 0 || ratingValue === 0 || !textValue.trim()}
-              className='mt-12 h-[54px] w-[480px] rounded-xl text-lg disabled:bg-gray-400 mobile:w-[327px]'
+              className='mb-8 mt-12 h-[54px] w-[480px] rounded-xl text-lg disabled:bg-gray-400 mobile:w-[327px]'
             />
           </form>
         </div>
