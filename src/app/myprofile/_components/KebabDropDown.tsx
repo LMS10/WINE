@@ -21,7 +21,7 @@ export default function KebabDropDown({ id }: { id: number }) {
           option.value?.();
         }}
       >
-        <Image className='cursor-pointer' src={kebab} alt='케밥 아이콘' />
+        <Image className='h-[24px] w-[24px] cursor-pointer' src={kebab} alt='케밥 아이콘' />
       </Dropdown>
     </div>
   );
