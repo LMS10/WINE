@@ -1,34 +1,42 @@
 'use client';
 
 import { useState } from 'react';
+import FilterTypes from './FilterTypes';
+import FilterPrice from './FilterPrice';
+import FilterRating from './FilterRating';
+
+const MAX_PRICE = 2000000;
 
 type WineFilterProps = {
-  onChangeType: (type: string | null) => void;
+  onChangeFilter: (filters: { type: string | null; minPrice: number; maxPrice: number; rating: number | null }) => void;
 };
 
-export default function WineFilter({ onChangeType }: WineFilterProps) {
+export default function WineFilter({ onChangeFilter }: WineFilterProps) {
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, MAX_PRICE]);
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
 
-  const handleTypeClick = (type: string) => {
-    const newType = selectedType === type ? null : type;
+  const handleTypeChange = (newType: string | null) => {
     setSelectedType(newType);
-    onChangeType(newType);
+    onChangeFilter({ type: newType, minPrice: priceRange[0], maxPrice: priceRange[1], rating: selectedRating });
+  };
+
+  const handlePriceChange = (values: number[]) => {
+    const [minPrice, maxPrice] = values;
+    setPriceRange([minPrice, maxPrice]);
+    onChangeFilter({ type: selectedType, minPrice, maxPrice, rating: selectedRating });
+  };
+
+  const handleRatingChange = (rating: number | null) => {
+    setSelectedRating(rating);
+    onChangeFilter({ type: selectedType, minPrice: priceRange[0], maxPrice: priceRange[1], rating });
   };
 
   return (
-    <div className='flex flex-col gap-3'>
-      <div className='text-xl font-bold text-gray-800'>WINE TYPES</div>
-      <div className='flex gap-[15px]'>
-        {['Red', 'White', 'Sparkling'].map((type) => (
-          <button
-            key={type}
-            className={`rounded-full px-[18px] py-[10px] font-medium ${selectedType === type ? 'bg-purple-100 text-white' : 'border border-gray-300 bg-white text-gray-800'}`}
-            onClick={() => handleTypeClick(type)}
-          >
-            {type}
-          </button>
-        ))}
-      </div>
+    <div className='flex flex-col gap-[56px]'>
+      <FilterTypes selectedType={selectedType} onTypeChange={handleTypeChange} />
+      <FilterPrice priceRange={priceRange} onPriceChange={handlePriceChange} />
+      <FilterRating selectedRating={selectedRating} onRatingChange={handleRatingChange} />
     </div>
   );
 }
