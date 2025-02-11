@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import KebabDropDown from '@/app/myprofile/_components/KebabDropDown';
+import KebabDropDown from '@/app/(with-header)/myprofile/_components/KebabDropDown';
 
 export interface WineCardProps {
   id: number;
@@ -15,7 +15,7 @@ export default function WineCard({ id, name, region, image, price, isKebab = fal
   const cardWrapperStyle =
     size === 'large'
       ? 'max-w-[1140px] h-[260px] gap-[86px] pt-[52px] pb-[40px] pl-[100px] pr-[40px] tablet:pl-[60px] tablet:gap-[60px] mobile:pl-[40px] mobile:pt-[33px] mobile:pb-[29.5px] mobile:h-[190px]'
-      : 'max-w-[800px] h-[228px] gap-[40px] py-[30px] pl-[60px] pr-[40px] mobile:pb-[16.5px] mobile:pt-[20px] mobile:h-[164px] mobile:pl-[40px]';
+      : 'pc:max-w-[800px] h-[228px] gap-[40px] py-[30px] pl-[60px] pr-[40px] tablet:w-full mobile:w-full mobile:pb-[16.5px] mobile:pt-[20px] mobile:h-[164px] mobile:pl-[40px]';
 
   const wineImgSize = size === 'large' ? 'h-[208px] mobile:h-[155px] mobile:w-[40px]' : 'h-[198px] mobile:h-[144px] mobile:w-[40px]';
 
