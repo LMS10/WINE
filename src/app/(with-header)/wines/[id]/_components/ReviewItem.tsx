@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import profileDefault from '@/assets/icons/profile_default.svg';
 import likeIcon from '@/assets/icons/like.svg';
 import likeFilledIcon from '@/assets/icons/like_filled.svg';
 import starIcon from '@/assets/icons/star_hover.svg';
@@ -66,7 +67,7 @@ export default function ReviewItem({ review }: ReviewItemProps) {
     <div className='mb-[20px] min-h-[200px] w-[800px] rounded-2xl border-[1px] border-solid border-gray-300 pb-[20px] pl-[40px] pr-[40px] pt-[30px] hover:shadow-lg'>
       <div className='mb-[20px] flex justify-between'>
         <div className='flex gap-[16px]'>
-          <ProfileImg src={review.user.image} size='medium' />
+          <ProfileImg src={review.user.image || profileDefault} size='medium' />
           <div>
             <div className='pb-[4px] text-2lg font-semibold text-gray-800'>{review.user.nickname}</div>
             <div className='text-lg font-normal text-gray-500'>{elapsedTime(review.createdAt)}</div>
