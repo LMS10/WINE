@@ -85,6 +85,7 @@ export default function PostReviewModal() {
 
   const aromaValue = watch('aroma', []);
   const ratingValue = watch('rating', 0);
+  const textValue = watch('content', '');
 
   const openModal = () => {
     setIsOpen(true);
@@ -126,7 +127,9 @@ export default function PostReviewModal() {
       }
 
       const body = await response.json();
-      console.log(body);
+      if (body) {
+        setIsOpen(false);
+      }
     } catch (error) {
       console.error('리뷰 등록 에러:', error);
       console.log(data);
@@ -213,7 +216,7 @@ export default function PostReviewModal() {
               text='리뷰 남기기'
               type='submit'
               variant='primary'
-              disabled={aromaValue.length === 0 || ratingValue === 0}
+              disabled={aromaValue.length === 0 || ratingValue === 0 || !textValue.trim()}
               className='mt-12 h-[54px] w-[480px] rounded-xl text-lg disabled:bg-gray-400 mobile:w-[327px]'
             />
           </form>
