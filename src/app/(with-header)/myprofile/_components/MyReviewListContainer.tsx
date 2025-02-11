@@ -21,7 +21,7 @@ export function MyReviewItem({ id, rating, createdAt, wineName, content }: MyRev
   const reviewElapsedTime = elapsedTime(createdAt);
 
   return (
-    <div className='flex max-w-[800px] rounded-[16px] border border-gray-300 px-10 py-7'>
+    <div className='flex w-[800px] rounded-[16px] border border-gray-300 px-10 py-7 tablet:w-full mobile:w-full'>
       <div className='flex flex-grow flex-col gap-[20px]'>
         <div className='relative flex gap-[15px]'>
           <div className='flex h-[42px] w-[80px] items-center justify-center gap-[4px] rounded-[12px] bg-purple-10 tablet:h-[38px] mobile:h-[32px] mobile:w-[60px]'>
@@ -70,7 +70,7 @@ export default function MyReviewListContainer() {
 
   if (myReviewData.length === 0)
     return (
-      <div className='flex h-[80vh] max-w-[800px] flex-col items-center justify-center gap-[24px] mobile:h-[40vh] mobile:gap-[12px]'>
+      <div className='flex h-[80vh] w-full flex-col items-center justify-center gap-[24px] pc:w-[800px] mobile:h-[40vh] mobile:gap-[12px]'>
         <Image className='h-[120px] w-[120px] mobile:h-[50px] mobile:w-[50px]' alt='데이터 없음' src={emptyData} priority />
         <p className='text-lg font-normal text-gray-500 mobile:text-md'>내가 등록한 후기가 없어요</p>
       </div>
