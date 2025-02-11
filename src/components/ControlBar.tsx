@@ -9,7 +9,7 @@ type ControlBarProps = {
   isDraggable: boolean;
   size: 'small' | 'medium' | 'large';
   name: string;
-  onChange: (name: string, value: number) => void;
+  onChange: (value: number) => void;
 };
 
 export default function ControlBar({ label, minLabel, maxLabel, value, isDraggable, size = 'large', onChange, name }: ControlBarProps) {
@@ -49,7 +49,7 @@ export default function ControlBar({ label, minLabel, maxLabel, value, isDraggab
       let newValue = initialValue.current + (deltaX / controlBarWidth) * 10;
       newValue = Math.min(Math.max(Math.round(newValue), 1), 10);
       setDragValue(newValue);
-      onChange(name, newValue);
+      onChange(newValue);
     };
 
     const handleMouseUp = () => {
