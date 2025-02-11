@@ -25,7 +25,7 @@ export interface ReviewData {
 export interface MyReviewResponse {
   list: MyReview[];
   totalCount: number;
-  nextCursor: string | null;
+  nextCursor: number | null;
 }
 
 export interface MyReview {

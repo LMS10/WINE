@@ -47,7 +47,7 @@ export default function MyReviewListContainer() {
   const getMyReview = async () => {
     try {
       setIsloading(true);
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/reviews?limit=5`);
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/reviews?limit=30`);
 
       if (!response?.ok || response === null) {
         return;
