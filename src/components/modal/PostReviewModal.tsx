@@ -217,7 +217,7 @@ export default function PostReviewModal() {
               type='submit'
               variant='primary'
               disabled={aromaValue.length === 0 || ratingValue === 0 || !textValue.trim()}
-              className='mb-8 mt-12 h-[54px] w-[480px] rounded-xl text-lg disabled:bg-gray-400 mobile:w-[327px]'
+              className='mt-12 h-[54px] w-[480px] rounded-xl text-lg disabled:bg-gray-400 mobile:mb-8 mobile:w-[327px]'
             />
           </form>
         </div>
