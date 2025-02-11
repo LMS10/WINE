@@ -3,16 +3,23 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { fetchWithAuth } from '@/lib/auth';
 import { ReviewData } from '@/types/review-data';
-import { calculateTasteAverage, getTopThreeAromas } from '@/utils/ReviewUtils';
+import { calculateTasteAverage, getTopThreeAromas, calculateRatingCount } from '@/utils/ReviewUtils';
+import Button from '@/components/Button';
 import ReviewTasteAverage from './ReviewTasteAverage';
 import ReviewAroma from './ReviewAroma';
 import ReviewItem from './ReviewItem';
+import ReviewRating from './ReviewRating';
+import NoReview from './NoReview';
 
 function ReviewList({ reviews }: { reviews: ReviewData['reviews'] }) {
   return (
     <div>
       <div className='mb-[30px] text-xl font-bold'>리뷰 목록</div>
-      <div>{reviews.length === 0 ? <p>작성된 리뷰가 없어요</p> : reviews.map((review) => <ReviewItem key={review.id} review={review} />)}</div>
+      <div>
+        {reviews.map((review) => (
+          <ReviewItem key={review.id} review={review} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -20,6 +27,7 @@ function ReviewList({ reviews }: { reviews: ReviewData['reviews'] }) {
 export default function ReviewContainer() {
   const { id } = useParams();
   const [reviews, setReviews] = useState<ReviewData['reviews']>([]);
+  const [avgRating, setAvgRating] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,6 +46,7 @@ export default function ReviewContainer() {
 
         const data: ReviewData = await response.json();
         setReviews(data.reviews);
+        setAvgRating(data.avgRating);
       } catch (error: unknown) {
         if (error instanceof Error) setError(`Error fetching reviews: ${error.message}`);
       } finally {
@@ -57,27 +66,46 @@ export default function ReviewContainer() {
 
   const averages = calculateTasteAverage(reviews);
   const topThreeAromas = getTopThreeAromas(reviews);
+  const ratingPercentages = calculateRatingCount(reviews);
 
   return (
     <div>
-      {reviews.length > 0 && (
-        <div className='flex gap-[60px]'>
-          <ReviewTasteAverage
-            count={reviews.length}
-            lightBold={averages.lightBold}
-            smoothTannic={averages.smoothTannic}
-            drySweet={averages.drySweet}
-            softAcidic={averages.softAcidic}
-            isDraggable={false}
-          />
-          <ReviewAroma selectedAroma={topThreeAromas} count={reviews.length} />
+      {reviews.length > 0 ? (
+        <div className='mt-[60px] w-full'>
+          <div className='mx-auto w-full max-w-[1140px] transition-all duration-300 ease-in-out tablet:max-w-[1000px] mobile:max-w-[700px]'>
+            <div className='grid grid-cols-2 gap-8 tablet:grid-cols-1 tablet:px-6 mobile:grid-cols-1 mobile:px-6'>
+              <ReviewTasteAverage
+                count={reviews.length}
+                lightBold={averages.lightBold}
+                smoothTannic={averages.smoothTannic}
+                drySweet={averages.drySweet}
+                softAcidic={averages.softAcidic}
+                isDraggable={false}
+              />
+              <ReviewAroma selectedAroma={topThreeAromas} count={reviews.length} />
+            </div>
+
+            <div className='mt-[60px] flex gap-[60px]'>
+              <div>
+                <ReviewList reviews={reviews} />
+              </div>
+              <div>
+                <div>
+                  <ReviewRating avgRating={avgRating} count={reviews.length} ratingPercentages={ratingPercentages} />
+                </div>
+                <div className='mt-[30px]'>
+                  <Button text='리뷰 남기기' onClick={() => {}} className='rounded-xl px-[20px] py-[8px] text-lg font-bold' />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className='mx-auto mt-[60px] max-w-[1140px]'>
+          <div className='mb-[30px] text-xl font-bold'>리뷰 목록</div>
+          <NoReview />
         </div>
       )}
-      <div className='mt-[60px] flex gap-[60px]'>
-        <div>
-          <ReviewList reviews={reviews} />
-        </div>
-      </div>
     </div>
   );
 }
