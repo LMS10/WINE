@@ -94,7 +94,7 @@ export default function ReviewItem({ review }: ReviewItemProps) {
         </div>
         <div className='flex items-center gap-[4.5px] rounded-[10px] bg-purple-10 px-[15px] py-[8px]'>
           <div>
-            <Image src={starIcon} width={20} height={20} alt='별점' />
+            <Image src={starIcon} width={20} height={20} style={{ width: 'auto', height: 'auto' }} alt='별점' />
           </div>
           <div className='text-lg font-bold text-purple-100'>{review.rating.toFixed(1)}</div>
         </div>
