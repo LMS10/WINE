@@ -1,11 +1,11 @@
-import RecommendedWine from './_components/RecommendedWine';
+import RecommendedWineContainer from './_components/RecommendWineContainer';
 import WineListContainer from './_components/WineListContainer';
 
 export default function Wines() {
   return (
-    <div className='flex justify-center'>
-      <div className='mx-auto mt-[20px] w-[1140px] max-w-[1200px] tablet:mx-6 tablet:max-w-[1000px] mobile:mx-5 mobile:mt-[15px] mobile:min-w-[343px] mobile:max-w-[700px]'>
-        <RecommendedWine />
+    <div className='mx-auto mb-[100px] max-w-[1140px] tablet:max-w-[1050px] mobile:min-w-[343px] mobile:max-w-[752px]'>
+      <div className='mx-auto mt-[20px] w-[1140px] tablet:mx-6 tablet:w-auto tablet:min-w-[700px] tablet:max-w-[1000px] mobile:mx-5 mobile:mt-[15px] mobile:min-w-[343px] mobile:max-w-[700px]'>
+        <RecommendedWineContainer />
         <WineListContainer />
       </div>
     </div>
