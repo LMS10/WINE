@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import likeIcon from '@/assets/icons/like.svg';
 import likeFilledIcon from '@/assets/icons/like_filled.svg';
-import menuIcon from '@/assets/icons/menu.svg';
 import starIcon from '@/assets/icons/star_hover.svg';
 import lessIcon from '@/assets/icons/less.svg';
 import moreIcon from '@/assets/icons/more.svg';
@@ -12,6 +11,7 @@ import { aromaTraslations } from '@/constants/aromaTranslation';
 import elapsedTime from '@/utils/formatDate';
 import ProfileImg from '@/components/ProfileImg';
 import ReviewTasteItem from './ReviewTasteItem';
+import ReviewDropdown from './ReviewDropdown';
 
 type ReviewItemProps = { review: ReviewData['reviews'][0] };
 
@@ -19,6 +19,24 @@ export default function ReviewItem({ review }: ReviewItemProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [liked, setLiked] = useState(review.isLiked || false);
   const [loading, setLoading] = useState(false);
+  const [isMyReview, setIsMyReview] = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userResponse = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me`);
+
+        if (userResponse && userResponse.ok) {
+          const userData = await userResponse.json();
+          setIsMyReview(userData.id === review.user.id);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setIsMyReview(false);
+      }
+    };
+    fetchUserData();
+  }, [review.user.id]);
 
   useEffect(() => {
     setLiked(review.isLiked);
@@ -31,13 +49,11 @@ export default function ReviewItem({ review }: ReviewItemProps) {
     try {
       const method = liked ? 'DELETE' : 'POST';
       const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews/${review.id}/like`, {
-        method: method,
+        method,
       });
 
-      if (response && response.ok) {
+      if (response?.ok) {
         setLiked((prevLiked) => !prevLiked);
-      } else {
-        console.log('좋아요 클릭');
       }
     } catch (error) {
       console.error(error);
@@ -56,15 +72,15 @@ export default function ReviewItem({ review }: ReviewItemProps) {
             <div className='text-lg font-normal text-gray-500'>{elapsedTime(review.createdAt)}</div>
           </div>
         </div>
-        <div className='flex gap-[24px]'>
+        <div className='flex'>
           <div>
-            <button className='transform transition-transform duration-200 hover:scale-110' onClick={handleLikeToggle}>
-              <Image src={liked ? likeFilledIcon : likeIcon} width={38} height={38} alt={liked ? '좋아요 취소' : '좋아요'} />
-            </button>
+            {!isMyReview && (
+              <button className='transform transition-transform duration-200 hover:scale-110' onClick={handleLikeToggle}>
+                <Image src={liked ? likeFilledIcon : likeIcon} width={38} height={38} alt={liked ? '좋아요 취소' : '좋아요'} />
+              </button>
+            )}
           </div>
-          <div>
-            <Image src={menuIcon} width={38} height={38} alt='메뉴' />
-          </div>
+          <div className='cursor-pointer'>{isMyReview && <ReviewDropdown id={review.id} />}</div>
         </div>
       </div>
       <div className='flex justify-between'>
