@@ -1,9 +1,9 @@
 'use client';
 
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import elapsedTime from '@/utils/formatDate';
 import like from '@/assets/icons/star_hover.svg';
-import { useEffect, useState } from 'react';
 import { fetchWithAuth } from '@/lib/auth';
 import emptyData from '@/assets/icons/empty_review.svg';
 import { MyReview, MyReviewResponse } from '@/types/review-data';
@@ -40,7 +40,7 @@ export function MyReviewItem({ id, rating, createdAt, wineName, content }: MyRev
   );
 }
 
-export default function MyReviewListContainer() {
+export default function MyReviewListContainer({ setDataCount }: { setDataCount: (value: number) => void }) {
   const [myReviewData, setMyReviewData] = useState<MyReview[]>([]);
   const [isLoading, setIsloading] = useState(true);
 
@@ -64,9 +64,10 @@ export default function MyReviewListContainer() {
 
   useEffect(() => {
     getMyReview();
-  }, []);
+    setDataCount(myReviewData.length);
+  }, [setDataCount, myReviewData.length]);
 
-  if (isLoading) return <div>로딩중...</div>;
+  if (isLoading) return <div></div>;
 
   if (myReviewData.length === 0)
     return (

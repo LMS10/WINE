@@ -7,14 +7,14 @@ import { MyWineListResponse, WineDetails } from '@/types/wine';
 import emptyData from '@/assets/icons/empty_review.svg';
 import WineCard from '@/components/WineCard';
 
-export default function MyWineListContainer() {
+export default function MyWineListContainer({ setDataCount }: { setDataCount: (value: number) => void }) {
   const [myWineData, setMyWineData] = useState<WineDetails[]>([]);
   const [isLoading, setIsloading] = useState(true);
 
   const getMyWine = async () => {
     try {
       setIsloading(true);
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/wines?limit=5`);
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/wines?limit=30`);
 
       if (!response?.ok || response === null) {
         return;
@@ -31,9 +31,10 @@ export default function MyWineListContainer() {
 
   useEffect(() => {
     getMyWine();
-  }, []);
+    setDataCount(myWineData.length);
+  }, [setDataCount, myWineData.length]);
 
-  if (isLoading) return <div>로딩중...</div>;
+  if (isLoading) return <div></div>;
 
   if (myWineData.length === 0)
     return (
