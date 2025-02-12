@@ -1,17 +1,20 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '@/contexts/authContext';
 import Image from 'next/image';
 import { WineDetails } from '@/types/wine';
 import SearchBar from './SearchBar';
 import WineFilter from './WineFilter';
 import WineFilterModal from './WineFilterModal';
 import WineCard from './WineCard';
+import PostWineModal from '@/components/modal/PostWineModal';
 import filterIcon from '@/assets/icons/filter.svg';
 
 const MAX_PRICE = 2000000;
 
 export default function WineListContainer() {
+  const { isLoggedIn } = useAuth();
   const [wines, setWines] = useState<WineDetails[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filters, setFilters] = useState<{ type: string | null; minPrice: number; maxPrice: number; rating: number | null }>({
@@ -83,12 +86,27 @@ export default function WineListContainer() {
       </div>
       <div className='hidden pc:block'>
         <WineFilter onChangeFilter={setFilters} />
+        {isLoggedIn && (
+          <div className='mt-[60px]'>
+            <PostWineModal />
+          </div>
+        )}
       </div>
       <div className='flex w-full items-center justify-between pc:hidden'>
         <button className='mr-6 flex h-12 w-12 items-center justify-center rounded-lg border border-gray-300' onClick={() => setFilterModalOpen(true)}>
           <Image src={filterIcon} alt='와인 필터 아이콘' width={26} height={26} />
         </button>
         <SearchBar onSearch={setSearchQuery} />
+        {isLoggedIn && (
+          <div className='ml-4 mobile:hidden'>
+            <PostWineModal />
+          </div>
+        )}
+        {isLoggedIn && (
+          <div className='fixed bottom-[35px] left-1/2 z-50 w-[calc(100vw-40px)] max-w-[700px] -translate-x-1/2 justify-center rounded-xl py-3 text-lg tablet:hidden mobile:block'>
+            <PostWineModal />
+          </div>
+        )}
       </div>
       <WineFilterModal isOpen={isFilterModalOpen} onClose={() => setFilterModalOpen(false)} onApply={applyFilters} initialFilters={pendingFilters} onFilterChange={setPendingFilters} />
       <div className='flex flex-1 flex-col gap-[62px]'>
