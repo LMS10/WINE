@@ -34,7 +34,7 @@ export default function ProfileImg({ src, size, isLine = false, onClick }: Profi
 
   return (
     <div onClick={onClickProfileImg} className={`relative rounded-full ${cursor} ${profileSize}`}>
-      <Image onError={onErrorImg} fill className='rounded-[100] bg-black object-cover' src={src} alt='프로필 이미지' priority sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw' />
+      <Image onError={onErrorImg} fill className='rounded-full bg-black object-cover' src={src} alt='프로필 이미지' priority sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw' />
       <div
         className={`absolute ${borderRoundWidth} ${borderRoundHeight} left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] rounded-full border border-solid border-gray-300 mobile:h-[calc(100%)] mobile:w-[calc(100%)]`}
       ></div>

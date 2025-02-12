@@ -1,14 +1,13 @@
 'use client';
 
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import { ChangeEvent, useRef, useState } from 'react';
 import photoIcon from '@/assets/icons/photo.svg';
 import ProfileImg from '@/components/ProfileImg';
 import Button from '@/components/Button';
-import { fetchWithAuth } from '@/lib/auth';
 import profileDefault from '@/assets/icons/profile_default.svg';
 
-interface MyProfileData {
+export interface MyProfileData {
   id: number;
   image: string;
   nickname: string;
@@ -122,72 +121,4 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
       </div>
     </div>
   );
-}
-
-export default function MyProfileContainer() {
-  const [profileData, setProfileData] = useState<MyProfileData>();
-
-  const getUserData = async () => {
-    try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me`);
-
-      if (!response?.ok || response === null) {
-        return;
-      }
-
-      const data: MyProfileData = await response.json();
-      setProfileData(data);
-    } catch (error) {
-      console.error('데이터를 불러오는데 오류가 발생했습니다:', error);
-    }
-  };
-
-  const upLoadImgFile = async (formData: FormData): Promise<string | undefined> => {
-    try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/images/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response?.ok || response === null) {
-        return;
-      }
-
-      const data = await response.json();
-      return data.url as string;
-    } catch (error) {
-      console.error('이미지 에러 발생:', error);
-      return;
-    }
-  };
-
-  const upLoadUserData = async (image: string, nickname: string): Promise<string | undefined> => {
-    try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ image: image, nickname: nickname }),
-      });
-
-      if (!response?.ok || response === null) {
-        return;
-      }
-
-      const result = await response.json();
-      return result;
-    } catch (error) {
-      console.error('프로필 에러 발생', error);
-      return;
-    }
-  };
-
-  useEffect(() => {
-    getUserData();
-  }, []);
-
-  if (!profileData) return <div>로딩중...</div>;
-
-  return <MyProfile profileData={profileData} upLoadImgFile={upLoadImgFile} upLoadUserData={upLoadUserData} />;
 }
