@@ -13,7 +13,7 @@ export const getRefreshToken = () => localStorage.getItem('refresh_token');
 
 export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const token = getAccessToken();
-  if (!token) return null; // 로그인 안 되어 있음
+  if (!token) return null;
 
   const response = await fetch(url, {
     ...options,
@@ -24,9 +24,8 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   });
 
   if (response.status === 401) {
-    // 토큰 만료 시, refreshToken으로 갱신 시도
     const newAccessToken = await refreshAccessToken();
-    if (!newAccessToken) return null; // 갱신 실패 시 로그아웃
+    if (!newAccessToken) return null;
 
     return fetch(url, {
       ...options,
@@ -54,12 +53,12 @@ export const refreshAccessToken = async () => {
     });
 
     if (!response.ok) {
-      removeTokens(); // 리프레시 토큰도 만료되었을 가능성 -> 로그아웃 처리
+      removeTokens();
       return null;
     }
 
     const data = await response.json();
-    saveTokens(data.accessToken, data.refreshToken); // 새 토큰 저장
+    saveTokens(data.accessToken, data.refreshToken);
     return data.accessToken;
   } catch (error) {
     console.error('토큰 갱신 실패:', error);
