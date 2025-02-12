@@ -2,6 +2,7 @@ export default async function KakaoApi() {
   try {
     const requestBody = {
       appKey: process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY,
+      appSecret: '',
       provider: 'KAKAO',
     };
 

@@ -26,7 +26,6 @@ export default function LoginForm() {
     setError,
   } = useForm<FormValues>();
 
-  // 로그인 API 호출 함수
   const handleLogin: SubmitHandler<FormValues> = async (data) => {
     const { email, password } = data;
     try {
@@ -43,8 +42,7 @@ export default function LoginForm() {
       const responseData = await response.json();
       login(responseData.accessToken, responseData.refreshToken);
 
-      // 로그인 성공 후 리다이렉션
-      router.push('/wines'); // /wines 주소로 리다이렉션
+      router.push('/wines');
     } catch (error) {
       console.error('로그인 에러:', error);
       setError('email', { message: '이메일 혹은 비밀번호를 확인해주세요.' });
@@ -52,7 +50,7 @@ export default function LoginForm() {
   };
 
   const handleKakaoLogin = () => {
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL}&response_type=code`;
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
     window.location.href = kakaoAuthUrl;
   };
 
