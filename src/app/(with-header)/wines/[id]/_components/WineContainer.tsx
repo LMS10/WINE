@@ -42,5 +42,11 @@ export default function WineContainer() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
-  return <div>{wine ? <WineCard {...wine} size='large' /> : <p>존재하지 않는 와인 데이터</p>}</div>;
+  return (
+    <div className='mt-[62px] w-full mobile:mt-[29px]'>
+      <div className='mx-auto w-full max-w-[1140px] tablet:w-[calc(100%-45px)] tablet:max-w-[1000px] mobile:max-w-[700px]'>
+        {wine ? <WineCard {...wine} size='large' /> : <p>존재하지 않는 와인 데이터</p>}
+      </div>
+    </div>
+  );
 }

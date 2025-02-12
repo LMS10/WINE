@@ -77,7 +77,7 @@ export default function ReviewItem({ review }: ReviewItemProps) {
           <div>
             {!isMyReview && (
               <button className='transform transition-transform duration-200 hover:scale-110' onClick={handleLikeToggle}>
-                <Image src={liked ? likeFilledIcon : likeIcon} width={38} height={38} alt={liked ? '좋아요 취소' : '좋아요'} />
+                <Image src={liked ? likeFilledIcon : likeIcon} width={38} height={38} alt={liked ? '좋아요 취소' : '좋아요'} className='mobile:h-[32px] mobile:w-[32px]' />
               </button>
             )}
           </div>
