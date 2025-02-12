@@ -166,8 +166,14 @@ export default function PostReviewModal() {
   return (
     <div>
       <Button text='리뷰 남기기' onClick={openModal} variant='primary' className='rounded-xl px-[20px] py-[8px] text-lg font-bold mobile:px-[18px] mobile:text-md' />
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} className='min-h-[930px] min-w-[375px] overflow-x-hidden rounded-2xl mobile:mb-0 mobile:h-[930px] mobile:w-[375px] mobile:rounded-b-none'>
-        <div className='flex h-[1006px] w-[528px] flex-col gap-12 p-6 mobile:h-[762px] mobile:w-[375px] mobile:gap-10 mobile:py-8'>
+      <Modal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        className={`overflow-x-hidden rounded-2xl mobile:mb-0 mobile:h-[930px] mobile:rounded-b-none ${
+          isOpen ? 'mobile:translate-y-0 mobile:animate-slide-up' : 'mobile:animate-slide-down mobile:translate-y-full'
+        }`}
+      >
+        <div className='flex w-full flex-col gap-12 p-6 pc:w-[528px] tablet:w-[528px] mobile:h-[762px] mobile:w-full mobile:gap-10 mobile:py-8'>
           <div className='flex items-center justify-between'>
             <h1 className='text-2xl font-bold text-gray-800 mobile:text-xl'>리뷰 등록</h1>
             <button type='button' onClick={closeModal}>
@@ -186,7 +192,7 @@ export default function PostReviewModal() {
                 </div>
                 <textarea
                   placeholder='후기를 작성해 주세요'
-                  className='h-[120px] w-[480px] resize-none rounded-2xl border border-gray-100 px-5 py-[14px] align-text-top placeholder:text-lg placeholder:font-normal placeholder:text-gray-500 focus:outline-purple-100 mobile:h-[100px] mobile:w-[327px] mobile:rounded-xl placeholder:mobile:text-md'
+                  className='h-[120px] resize-none rounded-2xl border border-gray-100 px-5 py-[14px] align-text-top placeholder:text-lg placeholder:font-normal placeholder:text-gray-500 focus:outline-purple-100 pc:h-[120px] pc:w-[480px] mobile:h-[100px] mobile:w-auto mobile:rounded-xl placeholder:mobile:text-md'
                   {...register('content')}
                 />
               </div>
@@ -220,7 +226,7 @@ export default function PostReviewModal() {
               type='submit'
               variant='primary'
               disabled={aromaValue.length === 0 || ratingValue === 0 || !textValue.trim()}
-              className='mt-12 h-[54px] w-[480px] rounded-xl text-lg disabled:bg-gray-400 mobile:mb-8 mobile:w-[327px]'
+              className='mt-12 h-[54px] w-auto whitespace-nowrap rounded-xl text-center text-lg disabled:bg-gray-400 pc:w-[480px] pc:px-[203.5px] pc:py-[14px] tablet:w-[480px] mobile:mb-8 mobile:w-full mobile:min-w-[300px]'
             />
           </form>
         </div>

@@ -18,7 +18,7 @@ export default function ControlBar({ label, minLabel, maxLabel, value, isDraggab
       ? 'max-w-[720px] h-[28px] tablet:max-w-[880px] tablet:h-[26px]  mobile:max-w-[600px] mobile:h-[30px]'
       : size === 'medium'
         ? 'max-w-[540px] h-[25px] tablet:max-w-[1000px] mobile:max-w-[700px] mobile:h-[24px]'
-        : 'max-w-[480px] h-[26px] mobile:max-w-[327px] mobile:h-[24px]';
+        : 'max-w-[480px] h-[26px] mobile:max-w-[700px] mobile:h-[24px]';
 
   const [isDragging, setIsDragging] = useState(false);
   const [dragValue, setDragValue] = useState(value);
