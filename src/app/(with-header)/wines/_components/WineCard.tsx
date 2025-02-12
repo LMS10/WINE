@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/authContext';
+import { useAuth } from '@/contexts/AuthProvider';
 import { WineDetails } from '@/types/wine';
 import StaticRating from '@/components/StaticRating';
 import rightArrow from '@/assets/icons/right_arrow.svg';
