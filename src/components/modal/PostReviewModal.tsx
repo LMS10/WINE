@@ -177,14 +177,14 @@ export default function PostReviewModal() {
           <div className='flex items-center justify-between'>
             <h1 className='text-2xl font-bold text-gray-800 mobile:text-xl'>리뷰 등록</h1>
             <button type='button' onClick={closeModal}>
-              <Image src={close} alt='close'></Image>
+              <Image src={close} width={34} height={34} className='mobile:h-[24px] mobile:w-[24px]' alt='창 닫기'></Image>
             </button>
           </div>
           <form onSubmit={handleSubmit(handlePostReviewWine)}>
             <div className='flex flex-col gap-10'>
               <div className='flex flex-col gap-6'>
                 <div className='flex gap-4'>
-                  <Image src={wineIcon} alt='close' className='h-[68px] w-[68px] rounded-lg bg-gray-100 p-[7px] mobile:h-[67px] mobile:w-[67px]' />
+                  <Image src={wineIcon} alt='와인 이미지' className='h-[68px] w-[68px] rounded-lg bg-gray-100 p-[7px] mobile:h-[67px] mobile:w-[67px]' />
                   <div className='flex flex-col gap-2'>
                     <p className='text-2lg font-semibold text-gray-800 mobile:text-lg'>{wineData.name}</p>
                     <InteractiveRating initialValue={0} size='large' onChange={(rate) => setValue('rating', rate)} />
