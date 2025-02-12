@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { fetchWithAuth } from '@/lib/auth';
 import WineCard, { WineCardProps } from '@/components/WineCard';
 
@@ -9,6 +9,7 @@ export default function WineContainer() {
   const [wine, setWine] = useState<WineCardProps | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchWineData = async () => {
@@ -18,9 +19,17 @@ export default function WineContainer() {
         });
 
         if (!response) {
-          setError('로그인 상태가 아니거나, 토큰 갱신에 실패했습니다.');
+          alert('로그인 후, 이용해 주세요');
+          router.push('/signin');
           setLoading(false);
           return;
+        }
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            alert('존재하지 않는 와인입니다. 다시 확인해 주세요.');
+            router.push('/wines');
+          }
         }
 
         const data: WineCardProps = await response.json();
@@ -37,16 +46,14 @@ export default function WineContainer() {
     } else {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, router]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div className='mt-[62px] w-full mobile:mt-[29px]'>
-      <div className='mx-auto w-full max-w-[1140px] tablet:w-[calc(100%-45px)] tablet:max-w-[1000px] mobile:max-w-[700px]'>
-        {wine ? <WineCard {...wine} size='large' /> : <p>존재하지 않는 와인 데이터</p>}
-      </div>
+      <div className='mx-auto w-full max-w-[1140px] tablet:w-[calc(100%-45px)] tablet:max-w-[1000px] mobile:max-w-[700px]'>{wine ? <WineCard {...wine} size='large' /> : ''}</div>
     </div>
   );
 }
