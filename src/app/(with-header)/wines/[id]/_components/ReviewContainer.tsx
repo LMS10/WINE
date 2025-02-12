@@ -4,22 +4,19 @@ import { useParams } from 'next/navigation';
 import { fetchWithAuth } from '@/lib/auth';
 import { ReviewData } from '@/types/review-data';
 import { calculateTasteAverage, getTopThreeAromas, calculateRatingCount } from '@/utils/ReviewUtils';
-import Button from '@/components/Button';
 import ReviewTasteAverage from './ReviewTasteAverage';
 import ReviewAroma from './ReviewAroma';
 import ReviewItem from './ReviewItem';
-import ReviewRating from './ReviewRating';
+import Temp from './Temp';
 import NoReview from './NoReview';
 
 function ReviewList({ reviews }: { reviews: ReviewData['reviews'] }) {
   return (
     <div>
       <div className='mb-[30px] text-xl font-bold'>리뷰 목록</div>
-      <div>
-        {reviews.map((review) => (
-          <ReviewItem key={review.id} review={review} />
-        ))}
-      </div>
+      {reviews.map((review) => (
+        <ReviewItem key={review.id} review={review} />
+      ))}
     </div>
   );
 }
@@ -71,7 +68,7 @@ export default function ReviewContainer() {
   return (
     <div>
       {reviews.length > 0 ? (
-        <div className='mt-[60px] w-full'>
+        <div className='mb-[100px] mt-[60px] w-full'>
           <div className='mx-auto w-full max-w-[1140px] transition-all duration-300 ease-in-out tablet:max-w-[1000px] mobile:max-w-[700px]'>
             <div className='grid grid-cols-2 gap-8 tablet:grid-cols-1 tablet:px-6 mobile:grid-cols-1 mobile:px-6'>
               <ReviewTasteAverage
@@ -85,16 +82,13 @@ export default function ReviewContainer() {
               <ReviewAroma selectedAroma={topThreeAromas} count={reviews.length} />
             </div>
 
-            <div className='mt-[60px] flex gap-[60px]'>
+            <div className='mt-[60px] flex justify-between gap-[60px] tablet:flex-col-reverse tablet:px-6'>
               <div>
                 <ReviewList reviews={reviews} />
               </div>
-              <div>
-                <div>
-                  <ReviewRating avgRating={avgRating} count={reviews.length} ratingPercentages={ratingPercentages} />
-                </div>
-                <div className='mt-[30px]'>
-                  <Button text='리뷰 남기기' onClick={() => {}} className='rounded-xl px-[20px] py-[8px] text-lg font-bold' />
+              <div className='relative'>
+                <div className='sticky top-28'>
+                  <Temp avgRating={avgRating} count={reviews.length} ratingPercentages={ratingPercentages} />
                 </div>
               </div>
             </div>
