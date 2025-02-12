@@ -19,12 +19,6 @@ export default function Signin() {
               회원가입하기
             </Link>
           </div>
-          <div className='flex gap-[14px]'>
-            <p className='font-normal text-gray-500 mobile:text-[14px]'>암호를 잊으셨나요?</p>
-            <Link href='' className='font-medium text-purple-100 underline mobile:text-[14px]'>
-              비밀번호 찾기
-            </Link>
-          </div>
         </div>
       </div>
     </section>

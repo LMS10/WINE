@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useAuth } from '@/contexts/authContext';
+import { useAuth } from '@/contexts/AuthProvider';
 import logoWhite from '@/assets/icons/logo_white.svg';
 import profileDefault from '@/assets/icons/profile_default.svg';
 import ProfileImgDropdown from './ProfileImgDropdown';

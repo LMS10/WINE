@@ -10,7 +10,6 @@ import { saveTokens } from '@/lib/auth';
 
 import Button from '@/components/Button';
 
-// 입력값 검증 스키마 정의
 const schema = yup.object().shape({
   email: yup.string().required('이메일은 필수 입력입니다.').email('이메일 형식으로 작성해 주세요.'),
   nickname: yup.string().required('닉네임은 필수 입력입니다.').max(20, '닉네임은 최대 20자까지 가능합니다.'),
@@ -34,7 +33,7 @@ interface FormValues {
 
 export default function SignupForm() {
   const router = useRouter();
-  const isLoggedIn = false; // 로그인 상태 확인 (실제로는 인증 상태 체크)
+  const isLoggedIn = false;
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -77,7 +76,6 @@ export default function SignupForm() {
       const responseData = await response.json();
       saveTokens(responseData.accessToken, responseData.refreshToken);
 
-      // 회원가입 성공 후 홈 화면으로 이동
       router.push('/');
     } catch (error) {
       console.error('회원가입 에러:', error);

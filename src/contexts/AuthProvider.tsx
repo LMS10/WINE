@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me`);
     if (!response || response.status !== 200) {
-      logout(); // 토큰 만료 시 로그아웃 처리
+      logout();
       return;
     }
 
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = (accessToken: string, refreshToken: string) => {
     saveTokens(accessToken, refreshToken);
     setIsLoggedIn(true);
-    checkLoginStatus(); // 로그인 후 유저 정보 가져오기
+    checkLoginStatus();
   };
 
   const logout = () => {
