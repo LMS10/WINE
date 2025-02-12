@@ -7,7 +7,7 @@ import { calculateTasteAverage, getTopThreeAromas, calculateRatingCount } from '
 import ReviewTasteAverage from './ReviewTasteAverage';
 import ReviewAroma from './ReviewAroma';
 import ReviewItem from './ReviewItem';
-import Temp from './Temp';
+import ReviewRating from './ReviewRating';
 import NoReview from './NoReview';
 
 function ReviewList({ reviews }: { reviews: ReviewData['reviews'] }) {
@@ -88,7 +88,7 @@ export default function ReviewContainer() {
               </div>
               <div className='relative'>
                 <div className='sticky top-28'>
-                  <Temp avgRating={avgRating} count={reviews.length} ratingPercentages={ratingPercentages} />
+                  <ReviewRating avgRating={avgRating} count={reviews.length} ratingPercentages={ratingPercentages} />
                 </div>
               </div>
             </div>
