@@ -44,6 +44,11 @@ export default function PostWineModal() {
   const handlePostWine: SubmitHandler<FormValues> = async (data) => {
     const { name, region, image, price, type } = data;
 
+    if (!name || !region || !image || !price || !type) {
+      alert('모든 정보를 입력해 주세요.');
+      return;
+    }
+
     try {
       const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/wines`, {
         method: 'POST',
@@ -91,50 +96,63 @@ export default function PostWineModal() {
 
   return (
     <div>
-      <Button onClick={openModal} text='와인 등록하기' className='flex h-[50px] w-[284px] items-center justify-center rounded-2xl text-center text-lg' />
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} className='min-w-[375px] rounded-2xl mobile:mb-0 mobile:rounded-b-none'>
-        <div className='flex h-[871px] w-[460px] flex-col gap-10 p-6 mobile:h-[762px] mobile:w-[375px] mobile:gap-8'>
-          <h1 className='text-2xl font-bold text-gray-800 mobile:text-xl'>와인 등록</h1>
+      <Button
+        onClick={openModal}
+        text='와인 등록하기'
+        className='rounded-2xl px-[98.5px] py-3 text-lg tablet:px-[66.5px] tablet:py-[11px] mobile:mx-auto mobile:w-full mobile:min-w-[343px] mobile:rounded-xl mobile:py-3'
+      />
+      <Modal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        className={`min-w-[375px] rounded-2xl transition-transform mobile:fixed mobile:bottom-0 mobile:left-0 mobile:mb-0 mobile:w-full mobile:rounded-b-none ${
+          isOpen ? 'mobile:translate-y-0 mobile:animate-slide-up' : 'mobile:animate-slide-down mobile:translate-y-full'
+        }`}
+      >
+        <div className='flex flex-col gap-6 p-6 mobile:gap-4'>
+          <p className='text-2xl font-bold text-gray-800 mobile:text-xl'>와인 등록</p>
           <form onSubmit={handleSubmit(handlePostWine)}>
-            <div className='flex flex-col gap-8 mobile:gap-6'>
-              <div className='flex h-[90px] w-[412px] flex-col justify-between mobile:h-[80px] mobile:w-[327px]'>
-                <label htmlFor='wineName' className='text-lg font-medium text-gray-800 mobile:text-md'>
+            <div className='flex flex-col gap-6 mobile:gap-4'>
+              <div className='flex flex-col gap-3 mobile:gap-[12px]'>
+                <label htmlFor='wineName' className='text-lg font-bold text-gray-800 mobile:text-md'>
                   와인 이름
                 </label>
                 <input
                   type='text'
                   id='wineName'
                   placeholder='와인 이름 입력'
-                  className='mobile: h-[48px] w-[412px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-md focus:outline-purple-100 mobile:h-[42px] mobile:w-[327px]'
+                  className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
                   {...register('name')}
                 />
               </div>
-              <div className='flex h-[90px] w-[412px] flex-col justify-between mobile:h-[80px] mobile:w-[327px]'>
-                <label htmlFor='price' className='text-lg font-medium text-gray-800 mobile:text-md'>
+
+              <div className='flex flex-col gap-3 mobile:gap-[12px]'>
+                <label htmlFor='price' className='text-lg font-bold text-gray-800 mobile:text-md'>
                   가격
                 </label>
                 <input
                   type='number'
                   id='price'
-                  placeholder='가격 입력'
-                  className='mobile: h-[48px] w-[412px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-md focus:outline-purple-100 mobile:h-[42px] mobile:w-[327px]'
+                  placeholder='가격 입력 (200만원 이하)'
+                  className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
                   {...register('price')}
                 />
               </div>
-              <div className='flex h-[90px] w-[412px] flex-col justify-between mobile:h-[80px] mobile:w-[327px]'>
-                <label htmlFor='origin' className='text-lg font-medium text-gray-800 mobile:text-md'>
+
+              <div className='flex flex-col gap-3 mobile:gap-[12px]'>
+                <label htmlFor='origin' className='text-lg font-bold text-gray-800 mobile:text-md'>
                   원산지
                 </label>
                 <input
                   type='text'
                   id='origin'
                   placeholder='원산지 입력'
-                  className='mobile: h-[48px] w-[412px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-md focus:outline-purple-100 mobile:h-[42px] mobile:w-[327px]'
+                  className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
                   {...register('region')}
                 />
               </div>
-              <div className='flex h-[90px] w-[412px] flex-col justify-between mobile:h-[80px] mobile:w-[327px]'>
-                <label htmlFor='type' className='text-lg font-medium text-gray-800 mobile:text-md'>
+
+              <div className='flex flex-col gap-3 mobile:gap-[12px]'>
+                <label htmlFor='type' className='text-lg font-bold text-gray-800 mobile:text-md'>
                   타입
                 </label>
                 <Dropdown
@@ -146,8 +164,9 @@ export default function PostWineModal() {
                   changeButton
                 />
               </div>
-              <div className='items -my-[3px] flex h-[182px] w-[140px] flex-col justify-between mobile:h-[158px] mobile:w-[120px]'>
-                <label htmlFor='image' className='text-lg font-medium text-gray-800 mobile:text-md'>
+
+              <div className='-my-[5px] flex flex-col gap-3 mobile:gap-[12px]'>
+                <label htmlFor='image' className='text-lg font-bold text-gray-800 mobile:text-md'>
                   와인 사진
                 </label>
                 <button
@@ -155,19 +174,18 @@ export default function PostWineModal() {
                   className='relative flex h-[140px] w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-gray-300 mobile:h-[120px] mobile:w-[120px]'
                 >
                   {preview ? (
-                    <Image src={preview} alt='preview' fill className='h-[140px] w-[140px] object-contain mobile:h-[120px] mobile:w-[120px]' />
+                    <Image src={preview} alt='preview' fill sizes='10vw' className='h-[140px] w-[140px] object-contain mobile:h-[120px] mobile:w-[120px]' />
                   ) : (
-                    <Image src={camera} alt='camera' width={27} height={24} />
+                    <Image src={camera} alt='camera' width={32} height={32} className='h-[32px] w-[32px]' />
                   )}
                   <input id='image' type='file' className='absolute left-0 scale-[5] cursor-pointer opacity-0' onChange={handleFileChange} />
                 </button>
               </div>
             </div>
-            <div className='mt-10 flex h-[54px] w-[412px] justify-between mobile:w-[327px]'>
-              <button onClick={closeModal} className='flex h-[54px] w-[108px] items-center justify-center rounded-xl bg-purple-10 text-lg font-bold text-purple-100 mobile:w-[96px]'>
-                취소
-              </button>
-              <Button text='와인 등록하기' type='submit' variant='primary' className='h-[54px] w-[294px] rounded-xl text-lg mobile:w-[223px]' />
+
+            <div className='mt-10 flex gap-[10px] mobile:gap-2'>
+              <Button text='취소' variant='lightPurple' onClick={closeModal} />
+              <Button text='와인 등록하기' type='submit' variant='primary' className='w-[294px] rounded-xl py-[16px] text-lg mobile:flex-1' />
             </div>
           </form>
         </div>
