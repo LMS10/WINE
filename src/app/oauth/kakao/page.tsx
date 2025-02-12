@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/contexts/authContext';
+import { useAuth } from '@/contexts/AuthProvider';
 
 export default function KakaoCallback() {
   const searchParams = useSearchParams();

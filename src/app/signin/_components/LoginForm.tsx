@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import googleIcon from '@/assets/icons/google.svg';
 import kakaoIcon from '@/assets/icons/kakao.svg';
-import { useAuth } from '@/contexts/authContext';
+import { useAuth } from '@/contexts/AuthProvider';
 import Button from '@/components/Button';
 
 interface FormValues {
