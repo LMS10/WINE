@@ -1,18 +1,29 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/authContext';
 import { WineDetails } from '@/types/wine';
-import rightArrow from '@/assets/icons/right_arrow.svg';
 import StaticRating from '@/components/StaticRating';
+import rightArrow from '@/assets/icons/right_arrow.svg';
 
 type WineCardProps = {
   wine: WineDetails;
 };
 
 export default function WineCard({ wine }: WineCardProps) {
+  const router = useRouter();
+  const { isLoggedIn } = useAuth();
+  const handleClick = () => {
+    if (!isLoggedIn) {
+      alert('로그인 후 이용 가능합니다.');
+      return;
+    }
+    router.push(`/wines/${wine.id}`);
+  };
+
   return (
-    <Link href={`/wines/${wine.id}`} className='rounded-2xl border border-gray-300 hover:shadow-lg'>
+    <div onClick={handleClick} className='cursor-pointer rounded-2xl border border-gray-300 hover:shadow-lg'>
       <div className='flex justify-between gap-[81px] tablet:gap-[47px] mobile:gap-9'>
         <div className='relative ml-[60px] mt-10 h-[208px] w-[60px] overflow-hidden tablet:ml-10 mobile:ml-5'>
           <Image src={wine.image} alt={wine.name} sizes='30vw' fill className='absolute object-cover' />
@@ -45,6 +56,6 @@ export default function WineCard({ wine }: WineCardProps) {
         <p className='text-lg font-semibold text-gray-800 mobile:text-md'>최신 후기</p>
         <p className='line-clamp-2 h-[26px] overflow-hidden text-ellipsis text-lg text-gray-500 mobile:text-md'>{wine.recentReview?.content || '아직 후기가 없습니다.'}</p>
       </div>
-    </Link>
+    </div>
   );
 }

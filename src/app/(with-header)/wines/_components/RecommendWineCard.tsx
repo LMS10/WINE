@@ -1,10 +1,28 @@
+'use client';
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/authContext';
 import { Wine } from '@/types/wine';
 import StaticRating from '@/components/StaticRating';
 
-export default function RecommendWineCard({ image, name, avgRating }: Wine) {
+export default function RecommendWineCard({ id, image, name, avgRating }: Wine) {
+  const router = useRouter();
+  const { isLoggedIn } = useAuth();
+
+  const handleClick = () => {
+    if (!isLoggedIn) {
+      alert('로그인 후 이용 가능합니다.');
+      return;
+    }
+    router.push(`/wines/${id}`);
+  };
+
   return (
-    <div className='flex h-[185px] w-[232px] cursor-pointer justify-between gap-[28px] rounded-xl bg-white px-[30px] pt-6 mobile:h-[160px] mobile:w-[193px] mobile:gap-[25px] mobile:px-[25px]'>
+    <div
+      onClick={handleClick}
+      className='flex h-[185px] w-[232px] cursor-pointer justify-between gap-[28px] rounded-xl bg-white px-[30px] pt-6 mobile:h-[160px] mobile:w-[193px] mobile:gap-[25px] mobile:px-[25px]'
+    >
       <div className='relative h-[161px] w-[44px] overflow-hidden mobile:h-[136px] mobile:w-[38px]'>
         <Image src={image} alt={name} sizes='10vw' fill className='absolute object-cover' />
       </div>
