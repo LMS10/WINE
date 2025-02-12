@@ -8,7 +8,6 @@ import googleIcon from '@/assets/icons/google.svg';
 import kakaoIcon from '@/assets/icons/kakao.svg';
 import { useAuth } from '@/contexts/authContext';
 import Button from '@/components/Button';
-// import KakaoApi from '@/app/signin/api/KakaoApi';
 
 interface FormValues {
   email: string;
