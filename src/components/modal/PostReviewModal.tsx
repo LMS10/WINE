@@ -165,7 +165,7 @@ export default function PostReviewModal() {
 
   return (
     <div>
-      <Button text='리뷰 남기기' onClick={openModal} variant='primary' className='h-[42px] w-[113px] rounded-xl text-lg' />
+      <Button text='리뷰 남기기' onClick={openModal} variant='primary' className='rounded-xl px-[20px] py-[8px] text-lg font-bold mobile:px-[18px] mobile:text-md' />
       <Modal isOpen={isOpen} setIsOpen={setIsOpen} className='min-h-[930px] min-w-[375px] overflow-x-hidden rounded-2xl mobile:mb-0 mobile:h-[930px] mobile:w-[375px] mobile:rounded-b-none'>
         <div className='flex h-[1006px] w-[528px] flex-col gap-12 p-6 mobile:h-[762px] mobile:w-[375px] mobile:gap-10 mobile:py-8'>
           <div className='flex items-center justify-between'>

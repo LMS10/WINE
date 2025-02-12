@@ -36,7 +36,7 @@ export default function ReviewContainer() {
         });
 
         if (!response) {
-          setError('로그인 상태가 아니거나, 토큰 갱신에 실패했습니다.');
+          setError(' ');
           setLoading(false);
           return;
         }
@@ -95,7 +95,7 @@ export default function ReviewContainer() {
           </div>
         </div>
       ) : (
-        <div className='mx-auto mt-[60px] max-w-[1140px]'>
+        <div className='mx-auto mt-[60px] w-full pc:max-w-[1140px] tablet:max-w-[1000px] tablet:px-6 mobile:max-w-[700px]'>
           <div className='mb-[30px] text-xl font-bold'>리뷰 목록</div>
           <NoReview />
         </div>

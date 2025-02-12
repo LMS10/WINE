@@ -15,8 +15,13 @@ export default function Temp({ count, avgRating, ratingPercentages }: ReviewRati
         <div className='flex flex-col self-start'>
           <div className='flex items-center gap-[20px] tablet:mt-[15px] tablet:h-[81px] tablet:flex-none tablet:justify-center mobile:justify-start mobile:gap-[15px]'>
             <div className='text-[54px] font-extrabold mobile:text-[36px]'>{avgRating.toFixed(1)}</div>
-            <div className='flex flex-col gap-[5px] mobile:gap-0'>
-              <StaticRating value={avgRating} />
+            <div className='flex flex-col'>
+              <div className='mobile:hidden'>
+                <StaticRating value={avgRating} />
+              </div>
+              <div className='pc:hidden tablet:hidden mobile:block'>
+                <StaticRating size={'medium'} value={avgRating} />
+              </div>
               <div className='text-md text-gray-500'>{count}개의 후기</div>
             </div>
           </div>
