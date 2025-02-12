@@ -1,7 +1,7 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { fetchWithAuth } from '@/lib/auth';
@@ -73,6 +73,7 @@ export default function PostReviewModal() {
   const [wineData, setWineData] = useState<wineDataValues>(INICIALVALUES);
   const [selectedAroma, setSelectedAroma] = useState<string[]>([]);
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
 
   const { register, handleSubmit, setValue, watch } = useForm<FormValues>({
     defaultValues: {
@@ -123,6 +124,7 @@ export default function PostReviewModal() {
       });
 
       if (!response?.ok || response === null) {
+        alert('리뷰 등록에 실패했습니다.');
         throw new Error('리뷰 등록에 실패했습니다');
       }
 
@@ -131,8 +133,9 @@ export default function PostReviewModal() {
         setIsOpen(false);
       }
     } catch (error) {
+      alert('로그인이 만료되었습니다. 로그인 후, 다시 시도해 주세요.');
       console.error('리뷰 등록 에러:', error);
-      console.log(data);
+      router.push('/signin');
     }
   };
 
@@ -204,7 +207,7 @@ export default function PostReviewModal() {
                       key={aroma.key}
                       type='button'
                       onClick={() => handleAromaClick(aroma.key)}
-                      className={`rounded-full border border-gray-300 px-[18px] py-[10px] font-medium ${selectedAroma.includes(aroma.key) ? 'border border-purple-100 bg-purple-100 text-white' : 'border border-gray-300 bg-white text-gray-800'}`}
+                      className={`rounded-full border border-gray-300 px-[18px] py-[10px] font-medium mobile:px-[10px] mobile:py-[6px] mobile:text-md ${selectedAroma.includes(aroma.key) ? 'border border-purple-100 bg-purple-100 text-white' : 'border border-gray-300 bg-white text-gray-800'}`}
                     >
                       {aroma.name}
                     </button>

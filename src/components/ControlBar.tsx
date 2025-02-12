@@ -73,7 +73,7 @@ export default function ControlBar({ label, minLabel, maxLabel, value, isDraggab
         <label className='mr-[16px] h-[28px] w-[56px] flex-none rounded-[6px] bg-gray-100 text-center text-md font-semibold leading-[28px] text-gray-500 mobile:px-[8px] mobile:py-[5px] mobile:text-xs'>
           {label}
         </label>
-        <span className='mr-[16px] w-[70px] flex-none whitespace-nowrap text-lg font-medium text-gray-800 mobile:text-md'>{minLabel}</span>
+        <span className='mr-[16px] w-[70px] flex-none whitespace-nowrap text-lg font-medium text-gray-800 mobile:mr-0 mobile:text-md'>{minLabel}</span>
         <div className='relative h-[6px] w-full cursor-pointer rounded-full border-[1px] border-solid border-gray-300 bg-gray-100' ref={controlBarRef} onMouseDown={handleMouseDown}>
           <div
             className='absolute left-0 top-1/2 h-[16px] w-[16px] -translate-y-1/2 transform cursor-pointer rounded-full bg-purple-100 mobile:h-[12px] mobile:w-[12px]'
@@ -81,7 +81,7 @@ export default function ControlBar({ label, minLabel, maxLabel, value, isDraggab
             onMouseDown={handleMouseDown}
           />
         </div>
-        <span className='ml-[16px] w-[70px] flex-none whitespace-nowrap text-right text-lg font-medium text-gray-800 mobile:text-md'>{maxLabel}</span>
+        <span className='ml-[16px] w-[70px] flex-none whitespace-nowrap text-right text-lg font-medium text-gray-800 mobile:ml-0 mobile:text-md'>{maxLabel}</span>
       </div>
     </div>
   );

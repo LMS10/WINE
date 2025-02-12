@@ -64,7 +64,7 @@ export default function ReviewItem({ review }: ReviewItemProps) {
   };
 
   return (
-    <div className='mb-[20px] min-h-[200px] max-w-[800px] rounded-2xl border-[1px] border-solid border-gray-300 pb-[20px] pl-[40px] pr-[40px] pt-[30px] hover:shadow-lg tablet:max-w-[1100px] mobile:px-[30px] mobile:py-[30px]'>
+    <div className='mb-[20px] min-h-[200px] rounded-2xl border-[1px] border-solid border-gray-300 pb-[20px] pl-[40px] pr-[40px] pt-[30px] hover:shadow-lg pc:w-[800px] tablet:max-w-[1100px] mobile:px-[30px] mobile:py-[30px]'>
       <div className='mb-[20px] flex justify-between'>
         <div className='flex gap-[16px]'>
           <ProfileImg src={review.user.image || profileDefault} size='medium' />
@@ -102,7 +102,7 @@ export default function ReviewItem({ review }: ReviewItemProps) {
           <div className='text-2lg font-bold text-purple-100 mobile:text-md mobile:leading-none'>{review.rating.toFixed(1)}</div>
         </div>
       </div>
-      <div className={`overflow-hidden transition-[max-height] duration-300 ${isOpen ? 'max-h-[1000px]' : 'max-h-0'}`}>
+      <div className={`overflow-hidden transition-[max-height] duration-300 ${isOpen ? 'max-h-[1000px]' : 'max-h-0'} w-full`}>
         {isOpen && (
           <div className='mt-[24px] mobile:mt-[16px]'>
             <div className='mb-[20px] text-lg tablet:mb-[24px] mobile:mb-[16px] mobile:text-md'>{review.content}</div>

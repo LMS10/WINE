@@ -1,6 +1,6 @@
 'use client';
 import StaticRating from '@/components/StaticRating';
-import Button from '@/components/Button';
+import PostReviewModal from '@/components/modal/PostReviewModal';
 
 type ReviewRatingProps = {
   count: number;
@@ -21,7 +21,7 @@ export default function Temp({ count, avgRating, ratingPercentages }: ReviewRati
             </div>
           </div>
           <div className='pc:hidden tablet:mx-auto tablet:mt-2 tablet:flex mobile:hidden'>
-            <Button text='리뷰 남기기' onClick={() => {}} className='rounded-xl px-[20px] py-[8px] text-lg font-bold' />
+            <PostReviewModal />
           </div>
         </div>
         <div className='tablet:col-start-2 mobile:col-span-2 mobile:col-start-1 mobile:row-start-2 mobile:items-center mobile:justify-center'>
@@ -45,7 +45,7 @@ export default function Temp({ count, avgRating, ratingPercentages }: ReviewRati
         </div>
         <div className='mobile:col-start-2 mobile:mx-auto mobile:my-auto mobile:mr-0'>
           <div className='mt-[30px] tablet:hidden mobile:mt-0 mobile:block mobile:items-center mobile:justify-center'>
-            <Button text='리뷰 남기기' onClick={() => {}} className='rounded-xl px-[20px] py-[8px] text-lg font-bold mobile:text-md' />
+            <PostReviewModal />
           </div>
         </div>
       </div>
