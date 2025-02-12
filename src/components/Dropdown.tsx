@@ -51,9 +51,7 @@ function Dropdown({ options, onSelect, placeholder, changeButton = false, childr
       <button
         type='button'
         onClick={toggleDropdown}
-        className={
-          changeButton ? `${buttonClassName} ${labelActive} h-12 w-[412px] rounded-2xl border border-gray-300 px-5 py-3 text-lg font-medium mobile:h-[42px] mobile:w-[327px] mobile:text-md` : ``
-        }
+        className={changeButton ? `${buttonClassName} ${labelActive} h-12 w-full rounded-2xl border border-gray-300 px-5 py-3 text-lg font-medium mobile:h-[42px] mobile:text-md` : ``}
       >
         {!changeButton ? (
           <span>{children}</span>
@@ -68,7 +66,7 @@ function Dropdown({ options, onSelect, placeholder, changeButton = false, childr
         <ul
           className={
             changeButton
-              ? `${ulClassName} absolute z-10 mt-1 flex h-[156px] w-[412px] flex-col rounded-2xl border border-gray-300 bg-white font-medium mobile:h-[138px] mobile:w-[327px]`
+              ? `${ulClassName} absolute z-10 mt-1 flex h-[156px] w-full flex-col rounded-2xl border border-gray-300 bg-white font-medium mobile:h-[138px]`
               : `${ulClassName} absolute -ml-[100px] mt-1 flex h-[104px] w-[126px] flex-col rounded-2xl border border-gray-300 bg-white text-lg font-medium mobile:-ml-20 mobile:h-[92px] mobile:w-[101px]`
           }
         >
