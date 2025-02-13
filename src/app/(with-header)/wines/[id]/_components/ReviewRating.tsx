@@ -8,7 +8,7 @@ type ReviewRatingProps = {
   avgRating: number;
 };
 
-export default function Temp({ count, avgRating, ratingPercentages }: ReviewRatingProps) {
+export default function ReviewRating({ count, avgRating, ratingPercentages }: ReviewRatingProps) {
   return (
     <div>
       <div className='grid grid-cols-1 gap-4 pc:grid-cols-1 tablet:grid-cols-2 tablet:grid-rows-1 tablet:gap-0 mobile:grid-cols-2'>
