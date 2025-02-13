@@ -65,7 +65,7 @@ export default function ReviewItem({ review, wineName }: ReviewItemProps) {
           <ProfileImg src={review.user.image || profileDefault} size='medium' />
           <div>
             <div className='pb-[4px] text-2lg font-semibold text-gray-800 mobile:text-lg mobile:leading-5'>{review.user.nickname}</div>
-            <div className='text-lg font-normal text-gray-500 mobile:text-md mobile:leading-none'>{elapsedTime(review.createdAt)}</div>
+            <div className='text-lg font-normal text-gray-500 mobile:text-md mobile:leading-none'>{elapsedTime(review.updatedAt || review.createdAt)}</div>
           </div>
         </div>
         <div className='flex'>
