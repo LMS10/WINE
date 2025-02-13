@@ -8,6 +8,7 @@ import { fetchWithAuth } from '@/lib/auth';
 import Dropdown from '../Dropdown';
 import Button from '../Button';
 import camera from '@/assets/icons/photo.svg';
+import { WineDataProps } from '@/app/(with-header)/myprofile/_components/MyWIneKebabDropDown ';
 
 interface FormValues {
   name: string;
@@ -22,10 +23,12 @@ type ImageValues = { image: FileList };
 interface postWinePorps {
   onClose: () => void;
   id: string;
+  wineInitialData: WineDataProps;
+  editMyWine: (id: number, editWineData: WineDataProps) => void;
 }
 
-export default function PatchWineForm({ onClose, id }: postWinePorps) {
-  const [preview, setPreview] = useState<string | null>(null);
+export default function PatchWineForm({ onClose, id, wineInitialData, editMyWine }: postWinePorps) {
+  const [preview, setPreview] = useState<string | null>(wineInitialData.image);
   const router = useRouter();
 
   const { register, handleSubmit, setValue } = useForm<FormValues>();
@@ -49,6 +52,7 @@ export default function PatchWineForm({ onClose, id }: postWinePorps) {
       if (!response?.ok || response === null) return alert('와인 수정에 실패했습니다');
 
       const body = await response.json();
+      editMyWine(body.id, { ...data, type: data.type as 'RED' | 'WHITE' | 'SPARKLING' });
       router.push(`/wines/${body.id}`);
     } catch (error) {
       console.error('와인 수정 에러:', error);
@@ -93,6 +97,7 @@ export default function PatchWineForm({ onClose, id }: postWinePorps) {
               type='text'
               id='wineName'
               placeholder='와인 이름 입력'
+              defaultValue={wineInitialData.name}
               className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
               {...register('name')}
             />
@@ -106,6 +111,7 @@ export default function PatchWineForm({ onClose, id }: postWinePorps) {
               type='number'
               id='price'
               placeholder='가격 입력 (200만원 이하)'
+              defaultValue={wineInitialData.price}
               className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
               {...register('price')}
             />
@@ -119,6 +125,7 @@ export default function PatchWineForm({ onClose, id }: postWinePorps) {
               type='text'
               id='origin'
               placeholder='원산지 입력'
+              defaultValue={wineInitialData.region}
               className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
               {...register('region')}
             />
@@ -135,6 +142,7 @@ export default function PatchWineForm({ onClose, id }: postWinePorps) {
               }}
               placeholder='Red'
               changeButton
+              defaultValue={{ label: wineInitialData.type, value: () => {} }}
             />
           </div>
 

@@ -59,7 +59,7 @@ export default function Modal({ children, isOpen, setIsOpen, className }: ModalP
   }
 
   return createPortal(
-    <dialog className={`mobile:mx-0 mobile:w-full mobile:max-w-[764px] ${className}`} ref={dialogRef}>
+    <dialog className={`ignore-click mobile:w-full mobile:max-w-[764px] ${className}`} ref={dialogRef}>
       {children}
     </dialog>,
     document.getElementById('modal-root') as HTMLElement,

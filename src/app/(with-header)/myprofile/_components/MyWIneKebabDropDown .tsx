@@ -9,7 +9,25 @@ import PatchWineForm from '@/components/modal/PatchWineForm';
 import DeleteWineForm from '@/components/modal/DeleteWineModal';
 import { fetchWithAuth } from '@/lib/auth';
 
-export default function MyWIneKebabDropDown({ id }: { id: number }) {
+export interface WineDataProps {
+  name: string;
+  price: number;
+  region: string;
+  type: 'RED' | 'WHITE' | 'SPARKLING';
+  image: string;
+}
+
+export default function MyWIneKebabDropDown({
+  id,
+  wineInitialData,
+  editMyWine,
+  deleteMyWine,
+}: {
+  id: number;
+  wineInitialData: WineDataProps;
+  editMyWine: (id: number, editWineData: WineDataProps) => void;
+  deleteMyWine: (id: number) => void;
+}) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
@@ -44,6 +62,7 @@ export default function MyWIneKebabDropDown({ id }: { id: number }) {
 
       const body = await response.json();
       if (body) {
+        deleteMyWine(id);
         closeDeleteModal();
       }
     } catch (error) {
@@ -52,7 +71,7 @@ export default function MyWIneKebabDropDown({ id }: { id: number }) {
   };
 
   return (
-    <div className='absolute right-0 w-fit'>
+    <div className='ignore-click absolute right-0 w-fit'>
       <Dropdown
         options={options}
         onSelect={(option) => {
@@ -68,9 +87,9 @@ export default function MyWIneKebabDropDown({ id }: { id: number }) {
           isEditModalOpen ? 'mobile:translate-y-0 mobile:animate-slide-up' : 'mobile:animate-slide-down mobile:translate-y-full'
         }`}
       >
-        <PatchWineForm onClose={closeEditModal} id={`${id}`} />
+        <PatchWineForm onClose={closeEditModal} id={`${id}`} wineInitialData={wineInitialData} editMyWine={editMyWine} />
       </Modal>
-      <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:w-[353px]'>
+      <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:max-w-[353px]'>
         <DeleteWineForm onClose={closeDeleteModal} onDelete={handleDeleteWine} />
       </Modal>
     </div>
