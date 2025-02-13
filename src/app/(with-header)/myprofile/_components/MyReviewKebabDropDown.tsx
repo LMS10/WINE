@@ -75,7 +75,7 @@ export default function MyReviewKebabDropDown({ wineName, id }: { wineName: stri
       >
         <PatchReviewForm name={wineName} id={id} onClose={closeEditModal} />
       </Modal>
-      <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:w-[353px]'>
+      <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:max-w-[353px]'>
         <DeleteWineForm onClose={closeDeleteModal} onDelete={handleDeleteWine} />
       </Modal>
     </div>
