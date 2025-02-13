@@ -163,7 +163,7 @@ export default function PatchReviewForm({ name, id, onClose }: postReviewPorp) {
           </div>
         </div>
         <Button
-          text='리뷰 남기기'
+          text='수정하기'
           type='submit'
           variant='primary'
           disabled={aromaValue.length === 0 || ratingValue === 0 || !textValue.trim()}

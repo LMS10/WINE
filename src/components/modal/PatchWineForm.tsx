@@ -158,7 +158,7 @@ export default function PatchWineForm({ onClose, id }: postWinePorps) {
 
         <div className='mt-10 flex gap-[10px] mobile:gap-2'>
           <Button text='취소' variant='lightPurple' onClick={onClose} />
-          <Button text='와인 등록하기' type='submit' variant='primary' className='w-[294px] rounded-xl py-[16px] text-lg mobile:flex-1' />
+          <Button text='수정하기' type='submit' variant='primary' className='w-[294px] rounded-xl py-[16px] text-lg mobile:flex-1' />
         </div>
       </form>
     </div>
