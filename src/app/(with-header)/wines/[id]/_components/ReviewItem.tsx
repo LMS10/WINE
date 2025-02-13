@@ -14,9 +14,9 @@ import ProfileImg from '@/components/ProfileImg';
 import ReviewTasteItem from './ReviewTasteItem';
 import ReviewDropdown from './ReviewDropdown';
 
-type ReviewItemProps = { review: ReviewData['reviews'][0] };
+type ReviewItemProps = { review: ReviewData['reviews'][0]; wineName: string };
 
-export default function ReviewItem({ review }: ReviewItemProps) {
+export default function ReviewItem({ review, wineName }: ReviewItemProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [liked, setLiked] = useState(review.isLiked || false);
   const [loading, setLoading] = useState(false);
@@ -39,18 +39,13 @@ export default function ReviewItem({ review }: ReviewItemProps) {
     fetchUserData();
   }, [review.user.id]);
 
-  useEffect(() => {
-    setLiked(review.isLiked);
-  }, [review.isLiked]);
-
   const handleLikeToggle = async () => {
     if (loading) return;
     setLoading(true);
 
     try {
-      const method = liked ? 'DELETE' : 'POST';
       const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews/${review.id}/like`, {
-        method,
+        method: liked ? 'DELETE' : 'POST',
       });
 
       if (response?.ok) {
@@ -81,7 +76,7 @@ export default function ReviewItem({ review }: ReviewItemProps) {
               </button>
             )}
           </div>
-          <div className='cursor-pointer'>{isMyReview && <ReviewDropdown id={review.id} />}</div>
+          <div className='cursor-pointer'>{isMyReview && <ReviewDropdown wineName={wineName} id={review.id} />}</div>
         </div>
       </div>
       <div className='flex justify-between'>

@@ -10,12 +10,12 @@ import ReviewItem from './ReviewItem';
 import ReviewRating from './ReviewRating';
 import NoReview from './NoReview';
 
-function ReviewList({ reviews }: { reviews: ReviewData['reviews'] }) {
+function ReviewList({ reviews, wineName }: { reviews: ReviewData['reviews']; wineName: string }) {
   return (
     <div>
       <div className='mb-[30px] text-xl font-bold'>리뷰 목록</div>
       {reviews.map((review) => (
-        <ReviewItem key={review.id} review={review} />
+        <ReviewItem key={review.id} review={review} wineName={wineName} />
       ))}
     </div>
   );
@@ -24,6 +24,7 @@ function ReviewList({ reviews }: { reviews: ReviewData['reviews'] }) {
 export default function ReviewContainer() {
   const { id } = useParams();
   const [reviews, setReviews] = useState<ReviewData['reviews']>([]);
+  const [wineName, setWineName] = useState<string>('');
   const [avgRating, setAvgRating] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +43,7 @@ export default function ReviewContainer() {
         }
 
         const data: ReviewData = await response.json();
+        setWineName(data.name);
         setReviews(data.reviews);
         setAvgRating(data.avgRating);
       } catch (error: unknown) {
@@ -84,7 +86,7 @@ export default function ReviewContainer() {
 
             <div className='mt-[60px] flex justify-between gap-[60px] tablet:flex-col-reverse tablet:px-6'>
               <div>
-                <ReviewList reviews={reviews} />
+                <ReviewList reviews={reviews} wineName={wineName} />
               </div>
               <div className='relative'>
                 <div className='sticky top-28'>

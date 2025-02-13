@@ -59,7 +59,11 @@ export default function Modal({ children, isOpen, setIsOpen, className }: ModalP
   }
 
   return createPortal(
+<<<<<<< HEAD
     <dialog className={`ignore-click mobile:w-full mobile:max-w-[764px] ${className}`} ref={dialogRef}>
+=======
+    <dialog className={`mobile:w-full mobile:max-w-[764px] ${className}`} ref={dialogRef}>
+>>>>>>> 3d74fa0 (✨ feat : 내가 작성한 리뷰 수정, 삭제 기능 구현)
       {children}
     </dialog>,
     document.getElementById('modal-root') as HTMLElement,
