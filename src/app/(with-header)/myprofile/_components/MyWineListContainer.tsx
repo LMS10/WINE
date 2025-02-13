@@ -32,8 +32,8 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
   }, [setDataCount]);
 
   const deleteMyWine = (id: number) => {
-    const updatedReviewList = myWineData.filter((value) => value.id !== id);
-    setMyWineData(updatedReviewList);
+    const updatedWineList = myWineData.filter((value) => value.id !== id);
+    setMyWineData(updatedWineList);
   };
 
   const editMyWine = (id: number, editWineData: WineDataProps) => {

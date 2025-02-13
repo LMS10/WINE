@@ -7,6 +7,17 @@ import emptyData from '@/assets/icons/empty_review.svg';
 import { MyReview, MyReviewResponse } from '@/types/review-data';
 import { MyReviewItem } from './MyReviewItem';
 
+export interface EditReviewData {
+  rating: number;
+  lightBold: number;
+  smoothTannic: number;
+  drySweet: number;
+  softAcidic: number;
+  aroma: string[];
+  content: string;
+  wineId: number;
+}
+
 export default function MyReviewListContainer({ setDataCount }: { setDataCount: (value: number) => void }) {
   const [myReviewData, setMyReviewData] = useState<MyReview[]>([]);
   const [isLoading, setIsloading] = useState(true);
@@ -30,6 +41,21 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
     }
   }, [setDataCount]);
 
+  const deleteMyReview = (id: number) => {
+    const updatedReviewList = myReviewData.filter((value) => value.id !== id);
+    setMyReviewData(updatedReviewList);
+  };
+
+  const editMyReview = (id: number, editReviewData: EditReviewData, updatedAt: string) => {
+    const updatedReviewList = myReviewData.map((value) => {
+      if (value.id === id) {
+        return { ...value, ...editReviewData, updatedAt: updatedAt };
+      }
+      return value;
+    });
+    setMyReviewData(updatedReviewList);
+  };
+
   useEffect(() => {
     getMyReview();
   }, [getMyReview]);
@@ -47,7 +73,7 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
   return (
     <div className='flex flex-col gap-[8px] tablet:gap-[16px] mobile:gap-[16px]'>
       {myReviewData.map((value) => (
-        <MyReviewItem key={value.id} rating={value.rating} createdAt={value.createdAt} wineName={value.wine.name} content={value.content} id={value.id} wineId={value.wine.id} />
+        <MyReviewItem key={value.id} reviewInitialData={value} editMyReview={editMyReview} deleteMyReview={deleteMyReview} />
       ))}
     </div>
   );
