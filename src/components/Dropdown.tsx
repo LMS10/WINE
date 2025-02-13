@@ -51,7 +51,7 @@ function Dropdown({ options, onSelect, placeholder, changeButton = false, childr
       <button
         type='button'
         onClick={toggleDropdown}
-        className={changeButton ? `${buttonClassName} ${labelActive} h-12 w-full rounded-2xl border border-gray-300 px-5 py-3 text-lg font-medium mobile:h-[42px] mobile:text-md` : ``}
+        className={changeButton ? `${buttonClassName} ${labelActive} h-12 w-full rounded-2xl border border-gray-300 px-5 text-lg font-medium mobile:h-[42px] mobile:text-md` : ``}
       >
         {!changeButton ? (
           <span>{children}</span>
