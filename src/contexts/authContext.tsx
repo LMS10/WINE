@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, Dispatch, SetStateAction, useCallback } from 'react';
 import { getAccessToken, saveTokens, removeTokens, fetchWithAuth } from '@/lib/auth';
 
 interface AuthContextType {
@@ -8,6 +8,7 @@ interface AuthContextType {
   profileImage: string | null;
   login: (accessToken: string, refreshToken: string) => void;
   logout: () => void;
+  setProfileImage: Dispatch<SetStateAction<string | null>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,11 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
-
-  const checkLoginStatus = async () => {
+  const checkLoginStatus = useCallback(async () => {
     const token = getAccessToken();
     if (!token) return;
 
@@ -41,7 +38,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const data = await response.json();
     setIsLoggedIn(true);
     setProfileImage(data.image);
-  };
+  }, []);
+
+  useEffect(() => {
+    checkLoginStatus();
+  }, [checkLoginStatus]);
 
   const login = (accessToken: string, refreshToken: string) => {
     saveTokens(accessToken, refreshToken);
@@ -55,5 +56,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setProfileImage(null);
   };
 
-  return <AuthContext.Provider value={{ isLoggedIn, profileImage, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ isLoggedIn, profileImage, setProfileImage, login, logout }}>{children}</AuthContext.Provider>;
 }

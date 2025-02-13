@@ -1,7 +1,10 @@
+'use client';
+
 import elapsedTime from '@/utils/formatDate';
 import like from '@/assets/icons/star_hover.svg';
 import KebabDropDown from './KebabDropDown';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface MyReviewProps {
   id: number;
@@ -12,10 +15,15 @@ interface MyReviewProps {
 }
 
 export function MyReviewItem({ id, rating, createdAt, wineName, content }: MyReviewProps) {
+  const router = useRouter();
   const reviewElapsedTime = elapsedTime(createdAt);
 
+  const onClickReviewItem = () => {
+    router.push(`/wines/${id}`);
+  };
+
   return (
-    <div className='flex w-[800px] rounded-[16px] border border-gray-300 px-10 py-7 tablet:w-full mobile:w-full'>
+    <div className='flex w-[800px] cursor-pointer rounded-[16px] border border-gray-300 px-10 py-7 hover:shadow-lg tablet:w-full mobile:w-full' onClick={onClickReviewItem}>
       <div className='flex flex-grow flex-col gap-[20px]'>
         <div className='relative flex gap-[15px]'>
           <div className='flex h-[42px] w-[80px] items-center justify-center gap-[4px] rounded-[12px] bg-purple-10 tablet:h-[38px] mobile:h-[32px] mobile:w-[60px]'>

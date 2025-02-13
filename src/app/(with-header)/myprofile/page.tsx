@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAccessToken } from '@/lib/auth';
+import { useAuth } from '@/contexts/authContext';
 import MyProfileContainer from './_components/MyProfileContainer';
 import MyReviewListContainer from './_components/MyReviewListContainer';
 import MyWineListContainer from './_components/MyWineListContainer';
@@ -10,6 +10,7 @@ import MyWineListContainer from './_components/MyWineListContainer';
 export default function Page() {
   const [category, setCategory] = useState('내가 쓴 후기');
   const [dataCount, setDataCount] = useState(0);
+  const { isLoggedIn } = useAuth();
   const router = useRouter();
 
   function listSelection() {
@@ -22,11 +23,12 @@ export default function Page() {
   const unSelectClassName = 'duration-300 cursor-pointer text-xl font-bold text-gray-500 transition-all hover:text-purple-100';
 
   useEffect(() => {
-    const token = getAccessToken();
-    if (!token) {
+    if (!isLoggedIn) {
       router.push('/signin');
+      alert('로그인 후 이용 가능합니다.');
+      return;
     }
-  }, [router]);
+  }, [isLoggedIn, router]);
 
   return (
     <div className='mb-20 pt-[37px] tablet:mx-6 tablet:pt-[17px] mobile:mx-5'>

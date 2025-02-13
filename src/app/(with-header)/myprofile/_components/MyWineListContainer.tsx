@@ -24,7 +24,7 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
       setMyWineData(data.list);
       setDataCount(data.totalCount);
     } catch (error) {
-      console.error('데이터를 불러오는데 오류가 발생했습니다:', error);
+      console.error('와인을 불러오는 중 문제가 발생했습니다:', error);
     } finally {
       setIsloading(false);
     }
@@ -47,7 +47,7 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
   return (
     <div className='flex flex-col gap-[8px] tablet:gap-[16px] mobile:gap-[16px]'>
       {myWineData.map((value) => (
-        <WineCard key={value.id} id={value.id} name={value.name} region={value.region} image={value.image} price={value.price} size='midium' isKebab />
+        <WineCard key={value.id} id={value.id} name={value.name} region={value.region} image={value.image} price={value.price} size='midium' isKebab onClick />
       ))}
     </div>
   );
