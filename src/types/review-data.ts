@@ -1,7 +1,11 @@
 import { Wine } from './wine';
 
 export interface ReviewData {
+  id: number;
   name: string;
+  region: string;
+  image: string;
+  price: number;
   avgRating: number;
   reviews: {
     id: number;

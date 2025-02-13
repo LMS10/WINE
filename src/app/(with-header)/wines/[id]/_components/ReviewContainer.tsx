@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { fetchWithAuth } from '@/lib/auth';
+import { fetchWineDetail } from '@/lib/fetchWineDetail';
 import { ReviewData } from '@/types/review-data';
 import { calculateTasteAverage, getTopThreeAromas, calculateRatingCount } from '@/utils/ReviewUtils';
 import ReviewTasteAverage from './ReviewTasteAverage';
@@ -23,6 +23,7 @@ function ReviewList({ reviews, wineName }: { reviews: ReviewData['reviews']; win
 
 export default function ReviewContainer() {
   const { id } = useParams();
+  const wineId = typeof id === 'string' ? Number(id) : NaN;
   const [reviews, setReviews] = useState<ReviewData['reviews']>([]);
   const [wineName, setWineName] = useState<string>('');
   const [avgRating, setAvgRating] = useState<number>(0);
@@ -31,34 +32,31 @@ export default function ReviewContainer() {
 
   useEffect(() => {
     const fetchReviews = async () => {
+      if (isNaN(wineId)) {
+        setError('유효한 와인 ID가 아닙니다.');
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
       try {
-        const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/wines/${id}`, {
-          method: 'GET',
-        });
-
-        if (!response) {
-          setError(' ');
-          setLoading(false);
-          return;
-        }
-
-        const data: ReviewData = await response.json();
+        const data = await fetchWineDetail(wineId);
         setWineName(data.name);
         setReviews(data.reviews);
         setAvgRating(data.avgRating);
-      } catch (error: unknown) {
-        if (error instanceof Error) setError(`Error fetching reviews: ${error.message}`);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        }
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) {
+    if (wineId) {
       fetchReviews();
-    } else {
-      setLoading(false);
     }
-  }, [id]);
+  }, [wineId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -66,7 +64,6 @@ export default function ReviewContainer() {
   const averages = calculateTasteAverage(reviews);
   const topThreeAromas = getTopThreeAromas(reviews);
   const ratingPercentages = calculateRatingCount(reviews);
-
   return (
     <div>
       {reviews.length > 0 ? (
