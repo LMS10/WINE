@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getAccessToken, saveTokens, removeTokens, fetchWithAuth } from '@/lib/auth';
 
 interface AuthContextType {
@@ -24,11 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
-
-  const checkLoginStatus = async () => {
+  const checkLoginStatus = useCallback(async () => {
     const token = getAccessToken();
     if (!token) return;
 
@@ -41,7 +37,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const data = await response.json();
     setIsLoggedIn(true);
     setProfileImage(data.image);
-  };
+  }, []);
+
+  useEffect(() => {
+    checkLoginStatus();
+  }, [checkLoginStatus]);
 
   const login = (accessToken: string, refreshToken: string) => {
     saveTokens(accessToken, refreshToken);
