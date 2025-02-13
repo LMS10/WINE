@@ -6,6 +6,7 @@ import { fetchWithAuth } from '@/lib/auth';
 import { MyWineListResponse, WineDetails } from '@/types/wine';
 import emptyData from '@/assets/icons/empty_review.svg';
 import WineCard from '@/components/WineCard';
+import { WineDataProps } from './MyWIneKebabDropDown ';
 
 export default function MyWineListContainer({ setDataCount }: { setDataCount: (value: number) => void }) {
   const [myWineData, setMyWineData] = useState<WineDetails[]>([]);
@@ -30,6 +31,21 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
     }
   }, [setDataCount]);
 
+  const deleteMyWine = (id: number) => {
+    const updatedReviewList = myWineData.filter((value) => value.id !== id);
+    setMyWineData(updatedReviewList);
+  };
+
+  const editMyWine = (id: number, editWineData: WineDataProps) => {
+    const updatedWineList = myWineData.map((value) => {
+      if (value.id === id) {
+        return { ...value, ...editWineData };
+      }
+      return value;
+    });
+    setMyWineData(updatedWineList);
+  };
+
   useEffect(() => {
     getMyWine();
   }, [getMyWine]);
@@ -47,7 +63,20 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
   return (
     <div className='flex flex-col gap-[8px] tablet:gap-[16px] mobile:gap-[16px]'>
       {myWineData.map((value) => (
-        <WineCard key={value.id} id={value.id} name={value.name} region={value.region} image={value.image} price={value.price} size='midium' isKebab onClick type={value.type} />
+        <WineCard
+          key={value.id}
+          id={value.id}
+          name={value.name}
+          region={value.region}
+          image={value.image}
+          price={value.price}
+          size='midium'
+          isKebab
+          onClick
+          type={value.type}
+          editMyWine={editMyWine}
+          deleteMyWine={deleteMyWine}
+        />
       ))}
     </div>
   );

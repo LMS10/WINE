@@ -8,6 +8,7 @@ import { fetchWithAuth } from '@/lib/auth';
 import Dropdown from '../Dropdown';
 import Button from '../Button';
 import camera from '@/assets/icons/photo.svg';
+import { WineDataProps } from '@/app/(with-header)/myprofile/_components/MyWIneKebabDropDown ';
 
 interface FormValues {
   name: string;
@@ -22,16 +23,11 @@ type ImageValues = { image: FileList };
 interface postWinePorps {
   onClose: () => void;
   id: string;
-  wineInitialData: {
-    name: string;
-    price: number;
-    region: string;
-    type: 'RED' | 'WHITE' | 'SPARKLING';
-    image: string;
-  };
+  wineInitialData: WineDataProps;
+  editMyWine: (id: number, editWineData: WineDataProps) => void;
 }
 
-export default function PatchWineForm({ onClose, id, wineInitialData }: postWinePorps) {
+export default function PatchWineForm({ onClose, id, wineInitialData, editMyWine }: postWinePorps) {
   const [preview, setPreview] = useState<string | null>(wineInitialData.image);
   const router = useRouter();
 
@@ -56,6 +52,7 @@ export default function PatchWineForm({ onClose, id, wineInitialData }: postWine
       if (!response?.ok || response === null) return alert('와인 수정에 실패했습니다');
 
       const body = await response.json();
+      editMyWine(body.id, { ...data, type: data.type as 'RED' | 'WHITE' | 'SPARKLING' });
       router.push(`/wines/${body.id}`);
     } catch (error) {
       console.error('와인 수정 에러:', error);

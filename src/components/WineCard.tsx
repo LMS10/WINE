@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import MyWIneKebabDropDown from '@/app/(with-header)/myprofile/_components/MyWIneKebabDropDown ';
+import MyWIneKebabDropDown, { WineDataProps } from '@/app/(with-header)/myprofile/_components/MyWIneKebabDropDown ';
 
 export interface WineCardProps {
   id: number;
@@ -14,9 +14,11 @@ export interface WineCardProps {
   size?: 'large' | 'midium';
   onClick?: boolean;
   type?: 'RED' | 'WHITE' | 'SPARKLING';
+  editMyWine?: (id: number, editWineData: WineDataProps) => void;
+  deleteMyWine?: (id: number) => void;
 }
 
-export default function WineCard({ id, name, region, image, price, isKebab = false, size = 'large', onClick = false, type = 'RED' }: WineCardProps) {
+export default function WineCard({ id, name, region, image, price, isKebab = false, size = 'large', onClick = false, type = 'RED', editMyWine, deleteMyWine }: WineCardProps) {
   const router = useRouter();
 
   const cardWrapperStyle =
@@ -51,8 +53,12 @@ export default function WineCard({ id, name, region, image, price, isKebab = fal
           <h3 className={`line-clamp-2 text-[30px] font-semibold leading-[35.8px] text-gray-800 mobile:text-xl mobile:leading-[23.87px] ${wineClamp}`}>{name}</h3>
           <p className={`line-clamp-1 text-lg font-normal text-gray-500 mobile:text-md ${wineClamp}`}>{region}</p>
         </div>
-        {isKebab && <MyWIneKebabDropDown id={id} wineInitialData={{ name: name, price: price, region: region, type: type, image: image }} />}
-        <span className='w-fit rounded-[12px] bg-purple-10 px-[15px] py-[5.5px] text-[18px] font-bold text-purple-100 mobile:px-[10px] mobile:py-[6px] mobile:text-md'>₩ {price.toLocaleString()}</span>
+        {isKebab && editMyWine && deleteMyWine && (
+          <MyWIneKebabDropDown id={id} wineInitialData={{ name: name, price: price, region: region, type: type, image: image }} editMyWine={editMyWine} deleteMyWine={deleteMyWine} />
+        )}
+        <span className='w-fit rounded-[12px] bg-purple-10 px-[15px] py-[5.5px] text-[18px] font-bold text-purple-100 mobile:px-[10px] mobile:py-[6px] mobile:text-md'>
+          ₩ {Number(price).toLocaleString()}
+        </span>
       </div>
     </div>
   );
