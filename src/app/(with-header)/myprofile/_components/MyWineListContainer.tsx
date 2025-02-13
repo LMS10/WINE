@@ -47,7 +47,7 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
   return (
     <div className='flex flex-col gap-[8px] tablet:gap-[16px] mobile:gap-[16px]'>
       {myWineData.map((value) => (
-        <WineCard key={value.id} id={value.id} name={value.name} region={value.region} image={value.image} price={value.price} size='midium' isKebab onClick />
+        <WineCard key={value.id} id={value.id} name={value.name} region={value.region} image={value.image} price={value.price} size='midium' isKebab onClick type={value.type} />
       ))}
     </div>
   );

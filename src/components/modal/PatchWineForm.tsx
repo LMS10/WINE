@@ -22,10 +22,17 @@ type ImageValues = { image: FileList };
 interface postWinePorps {
   onClose: () => void;
   id: string;
+  wineInitialData: {
+    name: string;
+    price: number;
+    region: string;
+    type: 'RED' | 'WHITE' | 'SPARKLING';
+    image: string;
+  };
 }
 
-export default function PatchWineForm({ onClose, id }: postWinePorps) {
-  const [preview, setPreview] = useState<string | null>(null);
+export default function PatchWineForm({ onClose, id, wineInitialData }: postWinePorps) {
+  const [preview, setPreview] = useState<string | null>(wineInitialData.image);
   const router = useRouter();
 
   const { register, handleSubmit, setValue } = useForm<FormValues>();
@@ -93,6 +100,7 @@ export default function PatchWineForm({ onClose, id }: postWinePorps) {
               type='text'
               id='wineName'
               placeholder='와인 이름 입력'
+              defaultValue={wineInitialData.name}
               className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
               {...register('name')}
             />
@@ -106,6 +114,7 @@ export default function PatchWineForm({ onClose, id }: postWinePorps) {
               type='number'
               id='price'
               placeholder='가격 입력 (200만원 이하)'
+              defaultValue={wineInitialData.price}
               className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
               {...register('price')}
             />
@@ -119,6 +128,7 @@ export default function PatchWineForm({ onClose, id }: postWinePorps) {
               type='text'
               id='origin'
               placeholder='원산지 입력'
+              defaultValue={wineInitialData.region}
               className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
               {...register('region')}
             />
@@ -135,6 +145,7 @@ export default function PatchWineForm({ onClose, id }: postWinePorps) {
               }}
               placeholder='Red'
               changeButton
+              defaultValue={{ label: wineInitialData.type, value: () => {} }}
             />
           </div>
 

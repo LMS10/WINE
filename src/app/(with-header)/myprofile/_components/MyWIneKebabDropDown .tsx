@@ -9,7 +9,19 @@ import PatchWineForm from '@/components/modal/PatchWineForm';
 import DeleteWineForm from '@/components/modal/DeleteWineModal';
 import { fetchWithAuth } from '@/lib/auth';
 
-export default function MyWIneKebabDropDown({ id }: { id: number }) {
+export default function MyWIneKebabDropDown({
+  id,
+  wineInitialData,
+}: {
+  id: number;
+  wineInitialData: {
+    name: string;
+    price: number;
+    region: string;
+    type: 'RED' | 'WHITE' | 'SPARKLING';
+    image: string;
+  };
+}) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
@@ -68,7 +80,7 @@ export default function MyWIneKebabDropDown({ id }: { id: number }) {
           isEditModalOpen ? 'mobile:translate-y-0 mobile:animate-slide-up' : 'mobile:animate-slide-down mobile:translate-y-full'
         }`}
       >
-        <PatchWineForm onClose={closeEditModal} id={`${id}`} />
+        <PatchWineForm onClose={closeEditModal} id={`${id}`} wineInitialData={wineInitialData} />
       </Modal>
       <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:w-[353px] mobile:max-w-[353px]'>
         <DeleteWineForm onClose={closeDeleteModal} onDelete={handleDeleteWine} />

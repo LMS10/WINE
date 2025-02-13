@@ -18,11 +18,12 @@ interface DropdownProps {
   buttonClassName?: string;
   ulClassName?: string;
   liClassName?: string;
+  defaultValue?: DropdownOption | null;
 }
 
-function Dropdown({ options, onSelect, placeholder, changeButton = false, children, buttonClassName, ulClassName, liClassName }: DropdownProps) {
+function Dropdown({ options, onSelect, placeholder, changeButton = false, children, buttonClassName, ulClassName, liClassName, defaultValue = null }: DropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selected, setSelected] = useState<DropdownOption | null>(null);
+  const [selected, setSelected] = useState<DropdownOption | null>(defaultValue);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
