@@ -43,11 +43,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkLoginStatus();
   }, [checkLoginStatus]);
 
-  const login = (accessToken: string, refreshToken: string) => {
-    saveTokens(accessToken, refreshToken);
-    setIsLoggedIn(true);
-    checkLoginStatus();
-  };
+  const login = useCallback(
+    (accessToken: string, refreshToken: string) => {
+      saveTokens(accessToken, refreshToken);
+      setIsLoggedIn(true);
+      checkLoginStatus();
+    },
+    [checkLoginStatus],
+  );
 
   const logout = () => {
     removeTokens();

@@ -1,17 +1,16 @@
 'use client';
 
-import { Suspense, useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthProvider';
 
-function KakaoAuthHandler() {
+export default function KakaoCallback() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { login } = useAuth();
 
-  const code = useMemo(() => searchParams.get('code'), [searchParams]);
-
   useEffect(() => {
+    const code = searchParams.get('code');
     if (!code) return;
 
     const fetchKakaoToken = async () => {
@@ -33,15 +32,7 @@ function KakaoAuthHandler() {
     };
 
     fetchKakaoToken();
-  }, [code, router, login]);
+  }, [searchParams, router, login]);
 
   return <p>카카오 로그인 처리 중...</p>;
-}
-
-export default function KakaoCallback() {
-  return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <KakaoAuthHandler />
-    </Suspense>
-  );
 }
