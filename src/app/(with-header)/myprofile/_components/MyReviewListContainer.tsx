@@ -30,21 +30,6 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
     }
   }, [setDataCount]);
 
-  // const deleteMyReview = (id: number) => {
-  //   const updatedReviewList = myReviewData.filter((value) => value.id !== id);
-  //   setMyReviewData(updatedReviewList);
-  // };
-
-  // const editMyReview = (id: number, editReview) => {
-  //   const updatedReviewList = myReviewData.map((value) => {
-  //     if (value.id === editReview.id) {
-  //       return { ...value, ...editReview };
-  //     }
-  //     return value;
-  //   });
-  //   setMyReviewData(updatedReviewList);
-  // };
-
   useEffect(() => {
     getMyReview();
   }, [getMyReview]);
