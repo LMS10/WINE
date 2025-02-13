@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import KebabDropDown from '@/app/(with-header)/myprofile/_components/KebabDropDown';
 import { useRouter } from 'next/navigation';
+import MyWIneKebabDropDown from '@/app/(with-header)/myprofile/_components/MyWIneKebabDropDown ';
 
 export interface WineCardProps {
   id: number;
@@ -27,11 +27,15 @@ export default function WineCard({ id, name, region, image, price, isKebab = fal
 
   const wineClamp = size === 'large' ? 'max-w-[850px] mobile:max-w-[550px]' : 'max-w-[600px] tablet:max-w-[800px] mobile:max-w-[550px] pr-[24px]';
 
-  const toWineDetailPage = () => {
+  const toWineDetailPage = (event: React.MouseEvent<HTMLElement>) => {
+    if ((event.target as HTMLElement).closest('.ignore-click')) {
+      event.stopPropagation();
+      return;
+    }
     router.push(`/wines/${id}`);
   };
 
-  const onClickWineCard = onClick ? () => toWineDetailPage() : undefined;
+  const onClickWineCard = onClick ? (event: React.MouseEvent<HTMLElement>) => toWineDetailPage(event) : undefined;
 
   return (
     <div
@@ -46,7 +50,7 @@ export default function WineCard({ id, name, region, image, price, isKebab = fal
           <h3 className={`line-clamp-2 text-[30px] font-semibold leading-[35.8px] text-gray-800 mobile:text-xl mobile:leading-[23.87px] ${wineClamp}`}>{name}</h3>
           <p className={`line-clamp-1 text-lg font-normal text-gray-500 mobile:text-md ${wineClamp}`}>{region}</p>
         </div>
-        {isKebab && <KebabDropDown id={id} />}
+        {isKebab && <MyWIneKebabDropDown id={id} />}
         <span className='w-fit rounded-[12px] bg-purple-10 px-[15px] py-[5.5px] text-[18px] font-bold text-purple-100 mobile:px-[10px] mobile:py-[6px] mobile:text-md'>₩ {price.toLocaleString()}</span>
       </div>
     </div>

@@ -52,7 +52,7 @@ export default function MyWIneKebabDropDown({ id }: { id: number }) {
   };
 
   return (
-    <div className='absolute right-0 w-fit'>
+    <div className='ignore-click absolute right-0 w-fit'>
       <Dropdown
         options={options}
         onSelect={(option) => {
@@ -70,7 +70,7 @@ export default function MyWIneKebabDropDown({ id }: { id: number }) {
       >
         <PatchWineForm onClose={closeEditModal} id={`${id}`} />
       </Modal>
-      <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:w-[353px]'>
+      <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:w-[353px] mobile:max-w-[353px]'>
         <DeleteWineForm onClose={closeDeleteModal} onDelete={handleDeleteWine} />
       </Modal>
     </div>

@@ -38,6 +38,9 @@ export default function MyReviewKebabDropDown({ wineName, id }: { wineName: stri
     try {
       const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!response?.ok || response === null) {
@@ -54,7 +57,7 @@ export default function MyReviewKebabDropDown({ wineName, id }: { wineName: stri
   };
 
   return (
-    <div className='absolute right-0 w-fit'>
+    <div className='ignore-click absolute right-0 w-fit'>
       <Dropdown
         options={options}
         onSelect={(option) => {
@@ -72,7 +75,7 @@ export default function MyReviewKebabDropDown({ wineName, id }: { wineName: stri
       >
         <PatchReviewForm name={wineName} id={id} onClose={closeEditModal} />
       </Modal>
-      <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:w-[353px]'>
+      <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:max-w-[353px]'>
         <DeleteWineForm onClose={closeDeleteModal} onDelete={handleDeleteWine} />
       </Modal>
     </div>
