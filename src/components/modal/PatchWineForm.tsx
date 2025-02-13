@@ -82,7 +82,7 @@ export default function PatchWineForm({ onClose, id }: postWinePorps) {
 
   return (
     <div className='flex flex-col gap-6 p-6 mobile:gap-4'>
-      <p className='text-2xl font-bold text-gray-800 mobile:text-xl'>와인 등록</p>
+      <p className='text-2xl font-bold text-gray-800 mobile:text-xl'>내가 등록한 와인</p>
       <form onSubmit={handleSubmit(handlePatchWine)}>
         <div className='flex flex-col gap-6 mobile:gap-4'>
           <div className='flex flex-col gap-3 mobile:gap-[12px]'>

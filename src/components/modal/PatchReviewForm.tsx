@@ -116,7 +116,7 @@ export default function PatchReviewForm({ name, id, onClose }: postReviewPorp) {
   return (
     <div className='flex w-full flex-col gap-12 p-6 pc:w-[528px] tablet:w-[528px] mobile:h-[762px] mobile:w-full mobile:gap-10 mobile:py-8'>
       <div className='flex items-center justify-between'>
-        <h1 className='text-2xl font-bold text-gray-800 mobile:text-xl'>리뷰 등록</h1>
+        <h1 className='text-2xl font-bold text-gray-800 mobile:text-xl'>수정하기</h1>
         <button type='button' onClick={onClose}>
           <Image src={close} width={34} height={34} className='mobile:h-[24px] mobile:w-[24px]' alt='창 닫기'></Image>
         </button>
