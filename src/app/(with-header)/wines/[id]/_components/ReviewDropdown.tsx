@@ -37,7 +37,7 @@ export default function ReviewDropdown({ id }: { id: number }) {
           option.value?.();
         }}
       >
-        <Image width={38} height={38} src={menu} alt='메뉴 아이콘' />
+        <Image width={38} height={38} src={menu} className='mobile:h-[32px] mobile:w-[32px]' alt='메뉴 아이콘' />
       </Dropdown>
     </div>
   );
