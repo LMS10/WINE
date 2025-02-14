@@ -1,5 +1,6 @@
 'use client';
 
+import { forwardRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthProvider';
@@ -11,7 +12,7 @@ type WineCardProps = {
   wine: WineDetails;
 };
 
-export default function WineCard({ wine }: WineCardProps) {
+const WineCard = forwardRef<HTMLDivElement, WineCardProps>(({ wine }, ref) => {
   const router = useRouter();
   const { isLoggedIn } = useAuth();
   const handleClick = () => {
@@ -23,7 +24,7 @@ export default function WineCard({ wine }: WineCardProps) {
   };
 
   return (
-    <div onClick={handleClick} className='cursor-pointer rounded-2xl border border-gray-300 hover:shadow-lg'>
+    <div ref={ref} onClick={handleClick} className='cursor-pointer rounded-2xl border border-gray-300 hover:shadow-lg'>
       <div className='flex justify-between gap-[81px] tablet:gap-[47px] mobile:gap-9'>
         <div className='relative ml-[60px] mt-10 h-[208px] w-[60px] overflow-hidden tablet:ml-10 mobile:ml-5'>
           <Image src={wine.image} alt={wine.name} sizes='30vw' fill className='absolute object-cover' />
@@ -58,4 +59,8 @@ export default function WineCard({ wine }: WineCardProps) {
       </div>
     </div>
   );
-}
+});
+
+WineCard.displayName = 'WineCard';
+
+export default WineCard;
