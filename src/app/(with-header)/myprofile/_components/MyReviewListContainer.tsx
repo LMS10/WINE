@@ -23,7 +23,7 @@ export interface EditReviewData {
 export default function MyReviewListContainer({ setDataCount }: { setDataCount: (value: number) => void }) {
   const [myReviewData, setMyReviewData] = useState<MyReview[]>([]);
   const [isLoading, setIsloading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
 
   const getMyReview = useCallback(async () => {
     setError('');
