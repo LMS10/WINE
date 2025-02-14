@@ -7,6 +7,7 @@ import { MyWineListResponse, WineDetails } from '@/types/wine';
 import emptyData from '@/assets/icons/empty_review.svg';
 import WineCard from '@/components/WineCard';
 import { WineDataProps } from './MyWIneKebabDropDown ';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function MyWineListContainer({ setDataCount }: { setDataCount: (value: number) => void }) {
   const [myWineData, setMyWineData] = useState<WineDetails[]>([]);
@@ -32,8 +33,8 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
   }, [setDataCount]);
 
   const deleteMyWine = (id: number) => {
-    const updatedReviewList = myWineData.filter((value) => value.id !== id);
-    setMyWineData(updatedReviewList);
+    const updatedWineList = myWineData.filter((value) => value.id !== id);
+    setMyWineData(updatedWineList);
   };
 
   const editMyWine = (id: number, editWineData: WineDataProps) => {
@@ -50,7 +51,7 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
     getMyWine();
   }, [getMyWine]);
 
-  if (isLoading) return <div></div>;
+  if (isLoading) return <LoadingSpinner className='flex h-[228px] w-[800px] rounded-[16px] border border-gray-300 tablet:w-full mobile:w-full' />;
 
   if (myWineData.length === 0)
     return (

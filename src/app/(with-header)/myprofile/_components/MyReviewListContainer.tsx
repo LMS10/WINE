@@ -6,6 +6,18 @@ import { fetchWithAuth } from '@/lib/auth';
 import emptyData from '@/assets/icons/empty_review.svg';
 import { MyReview, MyReviewResponse } from '@/types/review-data';
 import { MyReviewItem } from './MyReviewItem';
+import LoadingSpinner from '@/components/LoadingSpinner';
+
+export interface EditReviewData {
+  rating: number;
+  lightBold: number;
+  smoothTannic: number;
+  drySweet: number;
+  softAcidic: number;
+  aroma: string[];
+  content: string;
+  wineId: number;
+}
 
 export default function MyReviewListContainer({ setDataCount }: { setDataCount: (value: number) => void }) {
   const [myReviewData, setMyReviewData] = useState<MyReview[]>([]);
@@ -30,11 +42,26 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
     }
   }, [setDataCount]);
 
+  const deleteMyReview = (id: number) => {
+    const updatedReviewList = myReviewData.filter((value) => value.id !== id);
+    setMyReviewData(updatedReviewList);
+  };
+
+  const editMyReview = (id: number, editReviewData: EditReviewData, updatedAt: string) => {
+    const updatedReviewList = myReviewData.map((value) => {
+      if (value.id === id) {
+        return { ...value, ...editReviewData, updatedAt: updatedAt };
+      }
+      return value;
+    });
+    setMyReviewData(updatedReviewList);
+  };
+
   useEffect(() => {
     getMyReview();
   }, [getMyReview]);
 
-  if (isLoading) return <div></div>;
+  if (isLoading) return <LoadingSpinner className='flex h-[228px] w-[800px] rounded-[16px] border border-gray-300 tablet:w-full mobile:w-full' />;
 
   if (myReviewData.length === 0)
     return (
@@ -47,7 +74,7 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
   return (
     <div className='flex flex-col gap-[8px] tablet:gap-[16px] mobile:gap-[16px]'>
       {myReviewData.map((value) => (
-        <MyReviewItem key={value.id} rating={value.rating} createdAt={value.createdAt} wineName={value.wine.name} content={value.content} id={value.id} wineId={value.wine.id} />
+        <MyReviewItem key={value.id} reviewInitialData={value} editMyReview={editMyReview} deleteMyReview={deleteMyReview} />
       ))}
     </div>
   );

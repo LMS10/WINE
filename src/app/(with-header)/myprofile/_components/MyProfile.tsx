@@ -121,7 +121,8 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
             <Button
               text='적용하기'
               onClick={onClickUploadButton}
-              className='rounded-[12px] px-[20px] py-[8px] text-lg tablet:px-[30px] tablet:py-[11px] mobile:px-[20px] mobile:py-[9px] mobile:text-md'
+              disabled={nickNameValue === ''}
+              className={`rounded-[12px] px-[20px] py-[8px] text-lg tablet:px-[30px] tablet:py-[11px] mobile:px-[20px] mobile:py-[9px] mobile:text-md ${nickNameValue === '' ? 'bg-gray-400' : ''}`}
             />
           )}
         </div>

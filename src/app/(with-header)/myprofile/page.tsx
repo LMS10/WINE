@@ -17,7 +17,7 @@ export default function Page() {
     else if (category === '내가 등록한 와인') return <MyWineListContainer setDataCount={setDataCount} />;
   }
 
-  const selectClassName = 'cursor-pointer text-xl font-bold text-gray-800 transition-all duration-300 hover:text-purple-100';
+  const selectClassName = 'cursor-pointer text-xl font-bold text-purple-100 transition-all duration-300 hover:text-purple-100';
 
   const unSelectClassName = 'duration-300 cursor-pointer text-xl font-bold text-gray-500 transition-all hover:text-purple-100';
 
