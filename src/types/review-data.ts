@@ -23,6 +23,7 @@ export interface ReviewData {
       nickname: string;
       image: string;
     };
+    wine: Wine;
     isLiked: boolean;
   }[];
 }

@@ -7,8 +7,22 @@ import Modal from '@/components/modal/Modal';
 import DeleteWineForm from '@/components/modal/DeleteWineModal';
 import PatchReviewForm from '@/components/modal/PatchReviewForm';
 import { useState } from 'react';
+import { MyReview } from '@/types/review-data';
+import { EditReviewData } from './ReviewContainer';
 
-export default function ReviewDropdown({ id, wineName }: { id: number; wineName: string }) {
+export default function ReviewDropdown({
+  id,
+  wineName,
+  reviewInitialData,
+  editMyReview,
+  deleteMyReview,
+}: {
+  id: number;
+  wineName: string;
+  reviewInitialData: MyReview;
+  editMyReview: (id: number, editReviewData: EditReviewData, updatedAt: string) => void;
+  deleteMyReview: (id: number) => void;
+}) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
@@ -45,6 +59,9 @@ export default function ReviewDropdown({ id, wineName }: { id: number; wineName:
 
       const body = await response.json();
       if (body) {
+        if (deleteMyReview) {
+          deleteMyReview(id);
+        }
         closeDeleteModal();
       }
     } catch (error) {
@@ -69,7 +86,7 @@ export default function ReviewDropdown({ id, wineName }: { id: number; wineName:
           isEditModalOpen ? 'mobile:translate-y-0 mobile:animate-slide-up' : 'mobile:animate-slide-down mobile:translate-y-full'
         }`}
       >
-        <PatchReviewForm name={wineName} id={id} onClose={closeEditModal} />
+        <PatchReviewForm name={wineName} id={id} onClose={closeEditModal} reviewInitialData={reviewInitialData} editMyReview={editMyReview} />
       </Modal>
       <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:w-[353px]'>
         <DeleteWineForm onClose={closeDeleteModal} onDelete={handleDeleteWine} />

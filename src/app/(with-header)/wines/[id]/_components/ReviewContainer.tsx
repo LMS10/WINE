@@ -10,12 +10,33 @@ import ReviewItem from './ReviewItem';
 import ReviewRating from './ReviewRating';
 import NoReview from './NoReview';
 
-function ReviewList({ reviews, wineName }: { reviews: ReviewData['reviews']; wineName: string }) {
+export interface EditReviewData {
+  rating: number;
+  lightBold: number;
+  smoothTannic: number;
+  drySweet: number;
+  softAcidic: number;
+  aroma: string[];
+  content: string;
+  wineId: number;
+}
+
+function ReviewList({
+  reviews,
+  wineName,
+  deleteMyReview,
+  editMyReview,
+}: {
+  reviews: ReviewData['reviews'];
+  wineName: string;
+  deleteMyReview: (id: number) => void;
+  editMyReview: (id: number, editReviewData: EditReviewData, updatedAt: string) => void;
+}) {
   return (
     <div>
       <div className='mb-[30px] text-xl font-bold'>리뷰 목록</div>
       {reviews.map((review) => (
-        <ReviewItem key={review.id} review={review} wineName={wineName} />
+        <ReviewItem key={review.id} review={review} wineName={wineName} reviewInitialData={review} editMyReview={editMyReview} deleteMyReview={deleteMyReview} />
       ))}
     </div>
   );
@@ -29,6 +50,7 @@ export default function ReviewContainer() {
   const [avgRating, setAvgRating] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [myReviewData, setMyReviewData] = useState<ReviewData['reviews']>([]);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -44,6 +66,7 @@ export default function ReviewContainer() {
         setWineName(data.name);
         setReviews(data.reviews);
         setAvgRating(data.avgRating);
+        setMyReviewData(data.reviews);
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
@@ -57,6 +80,21 @@ export default function ReviewContainer() {
       fetchReviews();
     }
   }, [wineId]);
+
+  const deleteMyReview = (id: number) => {
+    const updatedReviewList = myReviewData.filter((value) => value.id !== id);
+    setMyReviewData(updatedReviewList);
+  };
+
+  const editMyReview = (id: number, editReviewData: EditReviewData, updatedAt: string) => {
+    const updatedReviewList = myReviewData.map((value) => {
+      if (value.id === id) {
+        return { ...value, ...editReviewData, updatedAt: updatedAt };
+      }
+      return value;
+    });
+    setMyReviewData(updatedReviewList);
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -83,7 +121,7 @@ export default function ReviewContainer() {
 
             <div className='mt-[60px] flex justify-between gap-[60px] tablet:flex-col-reverse tablet:px-6'>
               <div>
-                <ReviewList reviews={reviews} wineName={wineName} />
+                <ReviewList reviews={reviews} wineName={wineName} deleteMyReview={deleteMyReview} editMyReview={editMyReview} />
               </div>
               <div className='relative'>
                 <div className='sticky top-28'>

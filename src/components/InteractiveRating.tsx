@@ -20,6 +20,8 @@ export default function InteractiveRating({ initialValue = 0, onChange, size = '
         setValue(newValue);
         if (newValue !== null) {
           onChange(newValue);
+        } else if (newValue === null) {
+          onChange(0);
         }
       }}
       size={size}

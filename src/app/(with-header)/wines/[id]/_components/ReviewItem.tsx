@@ -7,20 +7,28 @@ import starIcon from '@/assets/icons/star_hover.svg';
 import lessIcon from '@/assets/icons/less.svg';
 import moreIcon from '@/assets/icons/more.svg';
 import { fetchWithAuth } from '@/lib/auth';
-import { ReviewData } from '@/types/review-data';
+import { MyReview, ReviewData } from '@/types/review-data';
 import { aromaTraslations } from '@/constants/aromaTranslation';
 import elapsedTime from '@/utils/formatDate';
 import ProfileImg from '@/components/ProfileImg';
 import ReviewTasteItem from './ReviewTasteItem';
 import ReviewDropdown from './ReviewDropdown';
+import { EditReviewData } from './ReviewContainer';
 
-type ReviewItemProps = { review: ReviewData['reviews'][0]; wineName: string };
+type ReviewItemProps = {
+  review: ReviewData['reviews'][0];
+  wineName: string;
+  reviewInitialData: MyReview;
+  editMyReview: (id: number, editReviewData: EditReviewData, updatedAt: string) => void;
+  deleteMyReview: (id: number) => void;
+};
 
-export default function ReviewItem({ review, wineName }: ReviewItemProps) {
+export default function ReviewItem({ review, wineName, reviewInitialData, editMyReview, deleteMyReview }: ReviewItemProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [liked, setLiked] = useState(review.isLiked || false);
   const [loading, setLoading] = useState(false);
   const [isMyReview, setIsMyReview] = useState(false);
+  const [reviewData, setReviewData] = useState(review);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -58,6 +66,20 @@ export default function ReviewItem({ review, wineName }: ReviewItemProps) {
     }
   };
 
+  const handleEdit = (id: number, editReviewData: EditReviewData, updatedAt: string) => {
+    editMyReview(review.id, editReviewData, updatedAt);
+
+    setReviewData((prev) => ({
+      ...prev,
+      ...editReviewData,
+      updatedAt,
+    }));
+  };
+
+  const handleDelete = () => {
+    deleteMyReview(reviewData.id);
+  };
+
   return (
     <div className='mb-[20px] min-h-[200px] rounded-2xl border-[1px] border-solid border-gray-300 pb-[20px] pl-[40px] pr-[40px] pt-[30px] hover:shadow-lg pc:w-[800px] tablet:max-w-[1100px] mobile:mb-[16px] mobile:px-[30px] mobile:py-[30px]'>
       <div className='mb-[20px] flex justify-between'>
@@ -76,7 +98,9 @@ export default function ReviewItem({ review, wineName }: ReviewItemProps) {
               </button>
             )}
           </div>
-          <div className='cursor-pointer'>{isMyReview && <ReviewDropdown wineName={wineName} id={review.id} />}</div>
+          <div className='cursor-pointer'>
+            {isMyReview && <ReviewDropdown wineName={wineName} id={review.id} reviewInitialData={reviewInitialData} editMyReview={handleEdit} deleteMyReview={handleDelete} />}
+          </div>
         </div>
       </div>
       <div className='flex justify-between'>
