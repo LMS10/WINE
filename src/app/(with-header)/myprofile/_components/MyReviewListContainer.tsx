@@ -6,6 +6,7 @@ import { fetchWithAuth } from '@/lib/auth';
 import emptyData from '@/assets/icons/empty_review.svg';
 import { MyReview, MyReviewResponse } from '@/types/review-data';
 import { MyReviewItem } from './MyReviewItem';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export interface EditReviewData {
   rating: number;
@@ -60,7 +61,7 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
     getMyReview();
   }, [getMyReview]);
 
-  if (isLoading) return <div></div>;
+  if (isLoading) return <LoadingSpinner className='flex h-[228px] w-[800px] rounded-[16px] border border-gray-300 tablet:w-full mobile:w-full' />;
 
   if (myReviewData.length === 0)
     return (
