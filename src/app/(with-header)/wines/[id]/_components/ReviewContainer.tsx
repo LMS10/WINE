@@ -176,7 +176,7 @@ export default function ReviewContainer() {
       ) : (
         <div className='mx-auto mt-[60px] w-full pc:max-w-[1140px] tablet:max-w-[1000px] tablet:px-6 mobile:max-w-[700px]'>
           <div className='mb-[30px] text-xl font-bold'>리뷰 목록</div>
-          <NoReview />
+          <NoReview addReview={addReview} />
         </div>
       )}
     </div>
