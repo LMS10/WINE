@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { fetchWineDetail } from '@/lib/fetchWineDetail';
 import { ReviewData } from '@/types/review-data';
 import WineCard from '@/components/WineCard';
+import WineContainerSkeleton from './skeleton/WineContainerSkeleton';
 
 export default function WineContainer() {
   const { id } = useParams();
@@ -23,13 +24,23 @@ export default function WineContainer() {
 
         try {
           const wineData = await fetchWineDetail(wineId);
-          setWine(wineData);
+          if (!wineData) {
+            setError('와인 정보를 불러오는 데 실패했습니다.');
+          } else {
+            setWine(wineData);
+          }
         } catch (error: unknown) {
-          if (error instanceof Error) setError(error.message);
+          if (error instanceof Error) {
+            console.error(`Error fetching wine data: ${error.message}`);
+            setError('데이터를 불러오는 중 문제가 발생했습니다. 다시 시도해 주세요.');
+          } else {
+            setError('알 수 없는 오류가 발생했습니다.');
+          }
         } finally {
           setLoading(false);
         }
       } else {
+        setError('유효한 와인 ID가 없습니다.');
         setLoading(false);
       }
     };
@@ -37,7 +48,12 @@ export default function WineContainer() {
     fetchWineData();
   }, [id]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div>
+        <WineContainerSkeleton />
+      </div>
+    );
   if (error) return <div>{error}</div>;
 
   return (
