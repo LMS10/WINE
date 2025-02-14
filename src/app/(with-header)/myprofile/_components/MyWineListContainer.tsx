@@ -8,17 +8,21 @@ import emptyData from '@/assets/icons/empty_review.svg';
 import WineCard from '@/components/WineCard';
 import { WineDataProps } from './MyWIneKebabDropDown ';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import Refresh from '@/components/Refresh';
 
 export default function MyWineListContainer({ setDataCount }: { setDataCount: (value: number) => void }) {
   const [myWineData, setMyWineData] = useState<WineDetails[]>([]);
   const [isLoading, setIsloading] = useState(true);
+  const [error, setError] = useState('');
 
   const getMyWine = useCallback(async () => {
+    setError('');
     try {
       setIsloading(true);
       const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/wines?limit=30`);
 
       if (!response?.ok || response === null) {
+        setError('와인 데이터를 불러오는데 실패했습니다.');
         return;
       }
 
@@ -26,7 +30,11 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
       setMyWineData(data.list);
       setDataCount(data.totalCount);
     } catch (error) {
-      console.error('와인을 불러오는 중 문제가 발생했습니다:', error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('알 수 없는 오류가 발생했습니다.');
+      }
     } finally {
       setIsloading(false);
     }
@@ -52,6 +60,17 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
   }, [getMyWine]);
 
   if (isLoading) return <LoadingSpinner className='flex h-[228px] w-[800px] rounded-[16px] border border-gray-300 tablet:w-full mobile:w-full' />;
+
+  if (error)
+    return (
+      <Refresh
+        handleLoad={getMyWine}
+        boxStyle='flex h-[228px] w-[800px] rounded-[16px] border border-gray-300 tablet:w-full mobile:w-full gap-[10px]'
+        buttonStyle='px-[20px] py-[8px]'
+        iconSize='w-[50px] h-[50px] mobile:w-[40px] mobile:h-[40px]'
+        iconTextGap='gap-[10px]'
+      />
+    );
 
   if (myWineData.length === 0)
     return (
