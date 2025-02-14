@@ -1,52 +1,41 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { fetchWithAuth } from '@/lib/auth';
-import WineCard, { WineCardProps } from '@/components/WineCard';
+import { useParams } from 'next/navigation';
+import { fetchWineDetail } from '@/lib/fetchWineDetail';
+import { ReviewData } from '@/types/review-data';
+import WineCard from '@/components/WineCard';
 
 export default function WineContainer() {
   const { id } = useParams();
-  const [wine, setWine] = useState<WineCardProps | null>(null);
+  const [wine, setWine] = useState<ReviewData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchWineData = async () => {
-      try {
-        const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/wines/${id}`, {
-          method: 'GET',
-        });
-
-        if (!response) {
-          alert('로그인 후, 이용해 주세요');
-          router.push('/signin');
+      if (id) {
+        const wineId = typeof id === 'string' ? Number(id) : NaN;
+        if (isNaN(wineId)) {
+          setError('유효한 와인 ID가 아닙니다.');
           setLoading(false);
           return;
         }
 
-        if (!response.ok) {
-          if (response.status === 404) {
-            alert('존재하지 않는 와인입니다. 다시 확인해 주세요.');
-            router.push('/wines');
-          }
+        try {
+          const wineData = await fetchWineDetail(wineId);
+          setWine(wineData);
+        } catch (error: unknown) {
+          if (error instanceof Error) setError(error.message);
+        } finally {
+          setLoading(false);
         }
-
-        const data: WineCardProps = await response.json();
-        setWine(data);
-      } catch (error: unknown) {
-        if (error instanceof Error) setError(`와인 데이터 로드 실패: ${error.message}`);
-      } finally {
+      } else {
         setLoading(false);
       }
     };
 
-    if (id) {
-      fetchWineData();
-    } else {
-      setLoading(false);
-    }
-  }, [id, router]);
+    fetchWineData();
+  }, [id]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;

@@ -11,7 +11,7 @@ type ReviewTasteItemProps = {
 
 export default function ReviewListTasteItem({ lightBold, smoothTannic, drySweet, softAcidic, isDraggable }: ReviewTasteItemProps) {
   return (
-    <div>
+    <div className='cursor-default'>
       <ControlBar label='바디감' minLabel={'가벼워요'} maxLabel={'진해요'} value={lightBold} onChange={() => {}} isDraggable={isDraggable} name='바디감' size='large' />
       <ControlBar label='타닌' minLabel={'부드러워요'} maxLabel={'떫어요'} value={smoothTannic} onChange={() => {}} isDraggable={false} name='타닌' size='large' />
       <ControlBar label='당도' minLabel={'드라이해요'} maxLabel={'달아요'} value={drySweet} onChange={() => {}} isDraggable={false} name='당도' size='large' />

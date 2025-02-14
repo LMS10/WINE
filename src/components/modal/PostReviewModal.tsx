@@ -11,6 +11,7 @@ import close from '@/assets/icons/close.svg';
 import wineIcon from '@/assets/icons/wine.svg';
 import InteractiveRating from '../InteractiveRating';
 import ControlBar from '../ControlBar';
+import { AddReviewData } from '@/app/(with-header)/wines/[id]/_components/ReviewContainer';
 
 interface FormValues {
   rating: number;
@@ -68,15 +69,16 @@ const INICIALVALUES = {
   type: '',
 };
 
-export default function PostReviewModal() {
+export default function PostReviewModal({ addReview }: { addReview: (newReview: AddReviewData) => void }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [wineData, setWineData] = useState<wineDataValues>(INICIALVALUES);
   const [selectedAroma, setSelectedAroma] = useState<string[]>([]);
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
 
-  const { register, handleSubmit, setValue, watch } = useForm<FormValues>({
+  const { register, handleSubmit, setValue, watch, reset } = useForm<FormValues>({
     defaultValues: {
+      rating: 0,
       lightBold: 0,
       smoothTannic: 0,
       drySweet: 0,
@@ -93,6 +95,17 @@ export default function PostReviewModal() {
   };
 
   const closeModal = () => {
+    setSelectedAroma([]);
+    reset({
+      rating: 0,
+      lightBold: 0,
+      smoothTannic: 0,
+      drySweet: 0,
+      softAcidic: 0,
+      aroma: [],
+      content: '',
+      wineId: wineData.id,
+    });
     setIsOpen(false);
   };
 
@@ -130,6 +143,41 @@ export default function PostReviewModal() {
 
       const body = await response.json();
       if (body) {
+        const newReview: AddReviewData = {
+          reviewId: body.id,
+          rating,
+          lightBold,
+          smoothTannic,
+          drySweet,
+          softAcidic,
+          aroma,
+          content,
+          user: {
+            id: body.user.id,
+            nickname: body.user.nickname,
+            image: body.user.image,
+          },
+          wineId,
+          wineName: wineData.name,
+        };
+        addReview(newReview);
+        reset({
+          rating: 0,
+          lightBold: 0,
+          smoothTannic: 0,
+          drySweet: 0,
+          softAcidic: 0,
+          aroma: [],
+          content: '',
+          wineId: wineData.id,
+        });
+        setSelectedAroma([]);
+        setValue('rating', -1);
+        setValue('lightBold', -1);
+        setValue('smoothTannic', -1);
+        setValue('drySweet', -1);
+        setValue('softAcidic', -1);
+        setValue('aroma', []);
         setIsOpen(false);
       }
     } catch (error) {

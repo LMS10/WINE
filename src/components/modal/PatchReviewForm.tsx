@@ -9,6 +9,18 @@ import close from '@/assets/icons/close.svg';
 import wineIcon from '@/assets/icons/wine.svg';
 import InteractiveRating from '../InteractiveRating';
 import ControlBar from '../ControlBar';
+import { MyReview } from '@/types/review-data';
+
+export interface EditReviewData {
+  rating: number;
+  lightBold: number;
+  smoothTannic: number;
+  drySweet: number;
+  softAcidic: number;
+  aroma: string[];
+  content: string;
+  wineId: number;
+}
 
 interface FormValues {
   rating: number;
@@ -52,23 +64,25 @@ interface postReviewPorp {
   name: string;
   id: number;
   onClose: () => void;
+  reviewInitialData?: MyReview;
+  editMyReview?: (id: number, editReviewData: EditReviewData, updatedAt: string) => void;
 }
 
-export default function PatchReviewForm({ name, id, onClose }: postReviewPorp) {
-  const [selectedAroma, setSelectedAroma] = useState<string[]>([]);
+export default function PatchReviewForm({ name, id, onClose, reviewInitialData, editMyReview }: postReviewPorp) {
+  const [selectedAroma, setSelectedAroma] = useState<string[]>(reviewInitialData?.aroma || []);
 
   const { register, handleSubmit, setValue, watch } = useForm<FormValues>({
     defaultValues: {
-      lightBold: 0,
-      smoothTannic: 0,
-      drySweet: 0,
-      softAcidic: 0,
+      lightBold: reviewInitialData?.lightBold || 0,
+      smoothTannic: reviewInitialData?.smoothTannic || 0,
+      drySweet: reviewInitialData?.drySweet || 0,
+      softAcidic: reviewInitialData?.softAcidic || 0,
     },
   });
 
-  const aromaValue = watch('aroma', []);
-  const ratingValue = watch('rating', 0);
-  const textValue = watch('content', '');
+  const aromaValue = watch('aroma', reviewInitialData?.aroma || []);
+  const ratingValue = watch('rating', reviewInitialData?.rating || 0);
+  const textValue = watch('content', reviewInitialData?.content || '');
 
   const handleAromaClick = (aroma: string) => {
     setSelectedAroma((prevSelectedAroma) => (prevSelectedAroma.includes(aroma) ? prevSelectedAroma.filter((a) => a !== aroma) : [...prevSelectedAroma, aroma]));
@@ -101,6 +115,10 @@ export default function PatchReviewForm({ name, id, onClose }: postReviewPorp) {
 
       const body = await response.json();
       if (body) {
+        if (editMyReview) {
+          const now: string = new Date().toISOString();
+          editMyReview(id, data, now);
+        }
         onClose();
       }
     } catch (error) {
@@ -128,11 +146,12 @@ export default function PatchReviewForm({ name, id, onClose }: postReviewPorp) {
               <Image src={wineIcon} alt='와인 이미지' className='h-[68px] w-[68px] rounded-lg bg-gray-100 p-[7px] mobile:h-[67px] mobile:w-[67px]' />
               <div className='flex flex-col gap-2'>
                 <p className='text-2lg font-semibold text-gray-800 mobile:text-lg'>{name}</p>
-                <InteractiveRating initialValue={0} size='large' onChange={(rate) => setValue('rating', rate)} />
+                <InteractiveRating initialValue={reviewInitialData?.rating || 0} size='large' onChange={(rate) => setValue('rating', rate)} />
               </div>
             </div>
             <textarea
               placeholder='후기를 작성해 주세요'
+              defaultValue={reviewInitialData?.content}
               className='h-[120px] resize-none rounded-2xl border border-gray-100 px-5 py-[14px] align-text-top placeholder:text-lg placeholder:font-normal placeholder:text-gray-500 focus:outline-purple-100 pc:h-[120px] pc:w-[480px] mobile:h-[100px] mobile:w-auto mobile:rounded-xl placeholder:mobile:text-md'
               {...register('content')}
             />
@@ -140,10 +159,46 @@ export default function PatchReviewForm({ name, id, onClose }: postReviewPorp) {
           <div className='flex h-[212px] flex-col gap-6 mobile:h-[194px]'>
             <h4 className='text-xl font-bold text-gray-800 mobile:text-2lg'>와인의 맛은 어땠나요?</h4>
             <div>
-              <ControlBar label='바디감' minLabel={'가벼워요'} maxLabel={'진해요'} value={0} onChange={handleLightBoldChange} name='바디감' isDraggable={true} size='small' />
-              <ControlBar label='타닌' minLabel={'부드러워요'} maxLabel={'떫어요'} value={0} onChange={handleSmoothTannicChange} name='타닌' isDraggable={true} size='small' />
-              <ControlBar label='당도' minLabel={'드라이해요'} maxLabel={'달아요'} value={0} onChange={handleDrySweetChange} name='당도' isDraggable={true} size='small' />
-              <ControlBar label='산미' minLabel={'안셔요'} maxLabel={'많이셔요'} value={0} onChange={handleSoftAcidicChange} name='산미' isDraggable={true} size='small' />
+              <ControlBar
+                label='바디감'
+                minLabel={'가벼워요'}
+                maxLabel={'진해요'}
+                value={reviewInitialData?.lightBold || 0}
+                onChange={handleLightBoldChange}
+                name='바디감'
+                isDraggable={true}
+                size='small'
+              />
+              <ControlBar
+                label='타닌'
+                minLabel={'부드러워요'}
+                maxLabel={'떫어요'}
+                value={reviewInitialData?.smoothTannic || 0}
+                onChange={handleSmoothTannicChange}
+                name='타닌'
+                isDraggable={true}
+                size='small'
+              />
+              <ControlBar
+                label='당도'
+                minLabel={'드라이해요'}
+                maxLabel={'달아요'}
+                value={reviewInitialData?.drySweet || 0}
+                onChange={handleDrySweetChange}
+                name='당도'
+                isDraggable={true}
+                size='small'
+              />
+              <ControlBar
+                label='산미'
+                minLabel={'안셔요'}
+                maxLabel={'많이셔요'}
+                value={reviewInitialData?.softAcidic || 0}
+                onChange={handleSoftAcidicChange}
+                name='산미'
+                isDraggable={true}
+                size='small'
+              />
             </div>
           </div>
           <div className='flex flex-col gap-6'>
