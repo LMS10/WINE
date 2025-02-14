@@ -24,4 +24,12 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  .scrollbar-hidden {
+    overflow-y: auto;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    width: 0px;
+  }
 }

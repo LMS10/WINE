@@ -26,13 +26,13 @@ export interface Wine {
   avgRating: number;
 }
 
-export interface WineListResponse {
+export interface RecommendWineListResponse {
   totalCount: number;
   nextCursor: number | null;
   list: Wine[];
 }
 
-export interface MyWineListResponse {
+export interface WineListResponse {
   totalCount: number;
   nextCursor: number | null;
   list: WineDetails[];

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '@/contexts/authContext';
 import Image from 'next/image';
+import { fetchWines } from '@/lib/fetchWines';
 import { WineDetails } from '@/types/wine';
 import SearchBar from './SearchBar';
 import WineFilter from './WineFilter';
@@ -10,6 +11,7 @@ import WineFilterModal from './WineFilterModal';
 import WineCard from './WineCard';
 import PostWineModal from '@/components/modal/PostWineModal';
 import filterIcon from '@/assets/icons/filter.svg';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const MAX_PRICE = 2000000;
 
@@ -25,6 +27,70 @@ export default function WineListContainer() {
   });
   const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [pendingFilters, setPendingFilters] = useState(filters);
+  const [isLoading, setIsLoading] = useState(false);
+  const [nextCursor, setNextCursor] = useState<number | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+  const lastWineRef = useRef<HTMLDivElement | null>(null);
+
+  const loadMoreWines = useCallback(async () => {
+    console.log('loadMoreWines 호출됨!');
+    if (isLoading || !hasMore) return;
+
+    setIsLoading(true);
+    try {
+      const response = await fetchWines({
+        limit: 5,
+        cursor: nextCursor ?? undefined,
+        type: filters.type ?? undefined,
+        minPrice: filters.minPrice || undefined,
+        maxPrice: filters.maxPrice || undefined,
+        rating: filters.rating ?? undefined,
+        name: searchQuery || undefined,
+      });
+
+      setWines((prev) => [...prev, ...response.list]);
+      setNextCursor(response.nextCursor);
+      setHasMore(response.nextCursor !== null);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading, hasMore, nextCursor, filters, searchQuery]);
+
+  useEffect(() => {
+    if (!hasMore || !lastWineRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreWines();
+        }
+      },
+      {
+        root: null,
+        threshold: 1.0,
+      },
+    );
+
+    observer.observe(lastWineRef.current);
+
+    return () => observer.disconnect();
+  }, [loadMoreWines, hasMore]);
+
+  useEffect(() => {
+    console.log('필터 변경됨: 목록 초기화');
+    setWines([]);
+    setNextCursor(null);
+    setHasMore(true);
+  }, [filters, searchQuery]);
+
+  useEffect(() => {
+    if (wines.length === 0 && hasMore) {
+      console.log('새로운 목록 불러오기 실행');
+      loadMoreWines();
+    }
+  }, [wines, hasMore, loadMoreWines]);
 
   useEffect(() => {
     if (isFilterModalOpen) {
@@ -56,27 +122,8 @@ export default function WineListContainer() {
   };
 
   useEffect(() => {
-    const fetchWines = async () => {
-      const params = new URLSearchParams();
-      if (filters.type) params.append('type', filters.type.toUpperCase());
-      if (filters.minPrice) params.append('minPrice', filters.minPrice.toString());
-      if (filters.maxPrice) params.append('maxPrice', filters.maxPrice.toString());
-      if (filters.rating) params.append('rating', filters.rating.toString());
-      if (searchQuery) params.append('name', searchQuery);
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/wines?limit=20&${params.toString()}`);
-
-      if (!res.ok) {
-        console.error('Failed to fetch wines');
-        return;
-      }
-
-      const data = await res.json();
-      setWines(data.list);
-    };
-
-    fetchWines();
-  }, [filters, searchQuery]);
+    console.log('현재 필터:', filters);
+  }, [filters]);
 
   return (
     <div className='mt-10 grid grid-cols-[284px,1fr] grid-rows-[48px,1fr] gap-x-[60px] gap-y-[62px] tablet:flex tablet:flex-col mobile:mt-5 mobile:gap-[30px]'>
@@ -109,10 +156,13 @@ export default function WineListContainer() {
         )}
       </div>
       <WineFilterModal isOpen={isFilterModalOpen} onClose={() => setFilterModalOpen(false)} onApply={applyFilters} initialFilters={pendingFilters} onFilterChange={setPendingFilters} />
-      <div className='flex flex-1 flex-col gap-[62px]'>
-        {wines.map((wine) => (
-          <WineCard key={wine.id} wine={wine} />
-        ))}
+      <div className='flex min-h-0 flex-col'>
+        <div className='flex h-[650px] max-h-screen flex-col gap-[62px] overflow-y-auto tablet:h-[550px]'>
+          {wines.map((wine, index) => (
+            <WineCard key={`${wine.id}-${index}`} ref={index === wines.length - 1 ? lastWineRef : null} wine={wine} />
+          ))}
+          {isLoading && <LoadingSpinner />}
+        </div>
       </div>
     </div>
   );
