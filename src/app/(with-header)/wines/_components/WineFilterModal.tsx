@@ -78,7 +78,7 @@ export default function WineFilterModal({ isOpen, onClose, onApply, onFilterChan
       >
         <div className='mb-8 flex flex-row justify-between'>
           <p className='text-xl font-bold text-gray-800'>필터</p>
-          <Image src={closeIcon} alt='닫기 아이콘' width={24} height={24} className='cursor-pointer' onClick={onClose} />
+          <Image src={closeIcon} alt='닫기 아이콘' width={24} height={24} className='h-6 w-6 cursor-pointer' onClick={onClose} />
         </div>
 
         <div className='flex flex-col gap-[56px]'>
