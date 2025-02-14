@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { fetchWithAuth } from '@/lib/auth';
-import { MyWineListResponse, WineDetails } from '@/types/wine';
+import { WineListResponse, WineDetails } from '@/types/wine';
 import emptyData from '@/assets/icons/empty_review.svg';
 import WineCard from '@/components/WineCard';
 import { WineDataProps } from './MyWIneKebabDropDown ';
@@ -26,7 +26,7 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
         return;
       }
 
-      const data: MyWineListResponse = await response.json();
+      const data: WineListResponse = await response.json();
       setMyWineData(data.list);
       setDataCount(data.totalCount);
     } catch (error) {
