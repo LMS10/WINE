@@ -10,6 +10,24 @@ import ReviewItem from './ReviewItem';
 import ReviewRating from './ReviewRating';
 import NoReview from './NoReview';
 
+export interface AddReviewData {
+  reviewId: number;
+  rating: number;
+  lightBold: number;
+  smoothTannic: number;
+  drySweet: number;
+  softAcidic: number;
+  aroma: string[];
+  content: string;
+  user: {
+    id: number;
+    nickname: string;
+    image: string;
+  };
+  wineId: number;
+  wineName: string;
+}
+
 export interface EditReviewData {
   rating: number;
   lightBold: number;
@@ -107,6 +125,19 @@ export default function ReviewContainer() {
     setReviews(updatedReviews);
   };
 
+  const addReview = (newReview: AddReviewData) => {
+    const formattedReview = {
+      ...newReview,
+      id: newReview.reviewId,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      wine: { id: wineId, name: wineName, image: '', avgRating: 0 },
+      isLiked: false,
+    };
+
+    setReviews((prevReviews) => [formattedReview, ...prevReviews]);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -136,7 +167,7 @@ export default function ReviewContainer() {
               </div>
               <div className='relative'>
                 <div className='sticky top-28'>
-                  <ReviewRating avgRating={avgRating} count={reviews.length} ratingPercentages={ratingPercentages} />
+                  <ReviewRating avgRating={avgRating} count={reviews.length} ratingPercentages={ratingPercentages} addReview={addReview} />
                 </div>
               </div>
             </div>

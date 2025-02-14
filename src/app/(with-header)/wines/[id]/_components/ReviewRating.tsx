@@ -1,14 +1,16 @@
 'use client';
 import StaticRating from '@/components/StaticRating';
 import PostReviewModal from '@/components/modal/PostReviewModal';
+import { AddReviewData } from './ReviewContainer';
 
 type ReviewRatingProps = {
   count: number;
   ratingPercentages: number[];
   avgRating: number;
+  addReview: (newReview: AddReviewData) => void;
 };
 
-export default function ReviewRating({ count, avgRating, ratingPercentages }: ReviewRatingProps) {
+export default function ReviewRating({ count, avgRating, ratingPercentages, addReview }: ReviewRatingProps) {
   return (
     <div>
       <div className='grid grid-cols-1 gap-4 pc:grid-cols-1 tablet:grid-cols-2 tablet:grid-rows-1 tablet:gap-0 mobile:grid-cols-2'>
@@ -26,7 +28,7 @@ export default function ReviewRating({ count, avgRating, ratingPercentages }: Re
             </div>
           </div>
           <div className='pc:hidden tablet:mx-auto tablet:mt-2 tablet:flex mobile:hidden'>
-            <PostReviewModal />
+            <PostReviewModal addReview={addReview} />
           </div>
         </div>
         <div className='tablet:col-start-2 mobile:col-span-2 mobile:col-start-1 mobile:row-start-2 mobile:items-center mobile:justify-center'>
@@ -50,7 +52,7 @@ export default function ReviewRating({ count, avgRating, ratingPercentages }: Re
         </div>
         <div className='mobile:col-start-2 mobile:mx-auto mobile:my-auto mobile:mr-0'>
           <div className='mt-[30px] tablet:hidden mobile:mt-0 mobile:block mobile:items-center mobile:justify-center'>
-            <PostReviewModal />
+            <PostReviewModal addReview={addReview} />
           </div>
         </div>
       </div>

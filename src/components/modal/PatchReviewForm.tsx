@@ -10,7 +10,6 @@ import wineIcon from '@/assets/icons/wine.svg';
 import InteractiveRating from '../InteractiveRating';
 import ControlBar from '../ControlBar';
 import { MyReview } from '@/types/review-data';
-// import { EditReviewData } from '@/app/(with-header)/myprofile/_components/MyReviewListContainer';
 
 export interface EditReviewData {
   rating: number;
