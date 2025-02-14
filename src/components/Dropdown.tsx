@@ -18,11 +18,12 @@ interface DropdownProps {
   buttonClassName?: string;
   ulClassName?: string;
   liClassName?: string;
+  defaultValue?: DropdownOption | null;
 }
 
-function Dropdown({ options, onSelect, placeholder, changeButton = false, children, buttonClassName, ulClassName, liClassName }: DropdownProps) {
+function Dropdown({ options, onSelect, placeholder, changeButton = false, children, buttonClassName, ulClassName, liClassName, defaultValue = null }: DropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selected, setSelected] = useState<DropdownOption | null>(null);
+  const [selected, setSelected] = useState<DropdownOption | null>(defaultValue);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -51,7 +52,7 @@ function Dropdown({ options, onSelect, placeholder, changeButton = false, childr
       <button
         type='button'
         onClick={toggleDropdown}
-        className={changeButton ? `${buttonClassName} ${labelActive} h-12 w-full rounded-2xl border border-gray-300 px-5 py-3 text-lg font-medium mobile:h-[42px] mobile:text-md` : ``}
+        className={changeButton ? `${buttonClassName} ${labelActive} h-12 w-full rounded-2xl border border-gray-300 px-5 text-lg font-medium mobile:h-[42px] mobile:text-md` : ``}
       >
         {!changeButton ? (
           <span>{children}</span>

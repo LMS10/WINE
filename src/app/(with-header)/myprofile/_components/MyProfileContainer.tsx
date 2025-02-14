@@ -18,7 +18,7 @@ export default function MyProfileContainer() {
       const data: MyProfileData = await response.json();
       setProfileData(data);
     } catch (error) {
-      console.error('데이터를 불러오는데 오류가 발생했습니다:', error);
+      console.error('유저 정보를 불러오는 중 문제가 발생했습니다:', error);
     }
   };
 
@@ -36,7 +36,7 @@ export default function MyProfileContainer() {
       const data = await response.json();
       return data.url as string;
     } catch (error) {
-      console.error('이미지 에러 발생:', error);
+      console.error('이미지 업로드 중 문제가 발생했습니다:', error);
       return;
     }
   };
@@ -52,7 +52,7 @@ export default function MyProfileContainer() {
       });
 
       if (response?.status === 400) {
-        alert('동일한 닉네임이 있습니다');
+        alert('동일한 닉네임이 있습니다.');
       }
 
       if (!response?.ok || response === null) {
@@ -62,7 +62,7 @@ export default function MyProfileContainer() {
       const result = await response.json();
       return result;
     } catch (error) {
-      console.error('프로필 에러 발생', error);
+      console.error('프로필 업로드 중 문제가 발생했습니다:', error);
       return;
     }
   };
@@ -71,7 +71,7 @@ export default function MyProfileContainer() {
     getUserData();
   }, []);
 
-  if (!profileData) return <div>로딩중...</div>;
+  if (!profileData) return <div></div>;
 
   return <MyProfile profileData={profileData} upLoadImgFile={upLoadImgFile} upLoadUserData={upLoadUserData} />;
 }

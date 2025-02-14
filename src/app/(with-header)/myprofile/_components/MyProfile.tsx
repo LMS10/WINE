@@ -6,6 +6,7 @@ import photoIcon from '@/assets/icons/photo.svg';
 import ProfileImg from '@/components/ProfileImg';
 import Button from '@/components/Button';
 import profileDefault from '@/assets/icons/profile_default.svg';
+import { useAuth } from '@/contexts/authContext';
 
 export interface MyProfileData {
   id: number;
@@ -31,6 +32,7 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
   const fileInputRef = useRef(null);
   const nickNameRef = useRef(nickNameValue);
   const profileImgRef = useRef(profileImg);
+  const { setProfileImage: setHeaderProfileImage } = useAuth();
 
   const handleNickNameInput = (e: ChangeEvent<HTMLInputElement>) => {
     setNickNameValue(e.target.value);
@@ -42,6 +44,10 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
   };
 
   const onClickUploadButton = async () => {
+    if (nickNameValue === '') {
+      alert('닉네임을 입력해 주세요.');
+      return;
+    }
     if (!fileInput && nickNameValue === preNickName) {
       setIsDisableProfile(true);
       return;
@@ -52,6 +58,7 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
       const imgResult = await upLoadImgFile(formData);
       if (!imgResult) return;
       setProfileImg(imgResult);
+      setHeaderProfileImage(imgResult);
       profileImgRef.current = imgResult;
     }
     const UserResult = await upLoadUserData(profileImgRef.current, nickNameRef.current);
@@ -98,7 +105,7 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
             id='nickname'
             type='text'
             disabled={isDisableProfile}
-            className={`flex h-[48px] w-full rounded-2xl border border-gray-300 pl-5 text-lg font-normal focus:outline-purple-100 mobile:h-[42px] mobile:text-md ${isDisableProfile ? `text-gray-500` : `text-gray-800`}`}
+            className={`flex h-[48px] w-full rounded-2xl border border-gray-300 bg-white pl-5 text-lg font-normal focus:outline-purple-100 mobile:h-[42px] mobile:text-md ${isDisableProfile ? `text-gray-500` : `text-gray-800`}`}
             onChange={handleNickNameInput}
             value={nickNameValue}
           />
