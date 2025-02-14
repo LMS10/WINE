@@ -54,7 +54,14 @@ export default function LoginForm() {
   };
 
   const handleGoogleLogin = () => {
-    console.log('구글 로그인');
+    const googleAuthUrl =
+      `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&` +
+      `redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}&` +
+      `response_type=code&` +
+      `scope=openid%20profile%20email&` +
+      `state=google-login-state`;
+    window.location.href = googleAuthUrl;
   };
 
   return (
