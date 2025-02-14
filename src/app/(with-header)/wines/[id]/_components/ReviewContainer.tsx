@@ -84,6 +84,9 @@ export default function ReviewContainer() {
   const deleteMyReview = (id: number) => {
     const updatedReviewList = myReviewData.filter((value) => value.id !== id);
     setMyReviewData(updatedReviewList);
+
+    const updatedReviews = reviews.filter((value) => value.id !== id);
+    setReviews(updatedReviews);
   };
 
   const editMyReview = (id: number, editReviewData: EditReviewData, updatedAt: string) => {
@@ -94,6 +97,14 @@ export default function ReviewContainer() {
       return value;
     });
     setMyReviewData(updatedReviewList);
+
+    const updatedReviews = reviews.map((value) => {
+      if (value.id === id) {
+        return { ...value, ...editReviewData, updatedAt: updatedAt };
+      }
+      return value;
+    });
+    setReviews(updatedReviews);
   };
 
   if (loading) return <div>Loading...</div>;
