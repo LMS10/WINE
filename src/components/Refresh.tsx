@@ -10,13 +10,13 @@ interface RefreshProps {
   buttonStyle?: string;
 }
 
-export default function Refresh({ handleLoad, buttonStyle = 'px-[30px] py-[10px]', iconSize = 'h-[136px] w-[136px]', iconTextGap = 'gap-[10px]', boxStyle: boxSize = 'gap-[10px]' }: RefreshProps) {
+export default function Refresh({ handleLoad, buttonStyle = 'px-[30px] py-[10px]', iconSize = 'h-[136px] w-[136px]', iconTextGap = 'gap-[10px]', boxStyle = 'gap-[10px]' }: RefreshProps) {
   const onClickRefreshBtn = () => {
     handleLoad();
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center ${boxSize}`}>
+    <div className={`flex flex-col items-center justify-center ${boxStyle}`}>
       <div className={`flex flex-col items-center justify-center ${iconTextGap}`}>
         <Image className={` ${iconSize}`} alt='데이터 없음' src={emptyData} priority />
         <div className='flex flex-col items-center justify-center'>
