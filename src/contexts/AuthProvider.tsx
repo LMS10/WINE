@@ -8,6 +8,7 @@ interface AuthContextType {
   profileImage: string | null;
   login: (accessToken: string, refreshToken: string) => void;
   logout: () => void;
+  setProfileImage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -58,5 +59,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setProfileImage(null);
   };
 
-  return <AuthContext.Provider value={{ isLoggedIn, profileImage, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ isLoggedIn, profileImage, setProfileImage, login, logout }}>{children}</AuthContext.Provider>;
 }
