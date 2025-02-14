@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, Dispatch, SetStateAction, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getAccessToken, saveTokens, removeTokens, fetchWithAuth } from '@/lib/auth';
 
 interface AuthContextType {
@@ -8,7 +8,7 @@ interface AuthContextType {
   profileImage: string | null;
   login: (accessToken: string, refreshToken: string) => void;
   logout: () => void;
-  setProfileImage: Dispatch<SetStateAction<string | null>>;
+  setProfileImage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me`);
     if (!response || response.status !== 200) {
-      logout(); // 토큰 만료 시 로그아웃 처리
+      logout();
       return;
     }
 
@@ -44,11 +44,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkLoginStatus();
   }, [checkLoginStatus]);
 
-  const login = (accessToken: string, refreshToken: string) => {
-    saveTokens(accessToken, refreshToken);
-    setIsLoggedIn(true);
-    checkLoginStatus(); // 로그인 후 유저 정보 가져오기
-  };
+  const login = useCallback(
+    (accessToken: string, refreshToken: string) => {
+      saveTokens(accessToken, refreshToken);
+      setIsLoggedIn(true);
+      checkLoginStatus();
+    },
+    [checkLoginStatus],
+  );
 
   const logout = () => {
     removeTokens();

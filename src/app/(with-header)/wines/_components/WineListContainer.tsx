@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '@/contexts/authContext';
+import { useAuth } from '@/contexts/AuthProvider';
 import Image from 'next/image';
 import { WineDetails } from '@/types/wine';
 import SearchBar from './SearchBar';

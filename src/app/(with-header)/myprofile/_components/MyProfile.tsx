@@ -6,7 +6,7 @@ import photoIcon from '@/assets/icons/photo.svg';
 import ProfileImg from '@/components/ProfileImg';
 import Button from '@/components/Button';
 import profileDefault from '@/assets/icons/profile_default.svg';
-import { useAuth } from '@/contexts/authContext';
+import { useAuth } from '@/contexts/AuthProvider';
 
 export interface MyProfileData {
   id: number;
