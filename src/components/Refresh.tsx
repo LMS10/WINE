@@ -20,7 +20,7 @@ export default function Refresh({ handleLoad, buttonStyle = 'px-[30px] py-[10px]
       <div className={`flex flex-col items-center justify-center ${iconTextGap}`}>
         <Image className={` ${iconSize}`} alt='데이터 없음' src={emptyData} priority />
         <div className='flex flex-col items-center justify-center'>
-          <p className='text-center text-lg text-gray-500 mobile:text-md'>서버에서 데이터를 불러오는데</p>
+          <p className='text-center text-lg text-gray-500 mobile:text-md'>서버에서 데이터를 불러오는 데</p>
           <p className='text-center text-lg text-gray-500 mobile:text-md'>실패했습니다.</p>
         </div>
       </div>
