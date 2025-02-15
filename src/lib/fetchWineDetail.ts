@@ -8,19 +8,21 @@ export const fetchWineDetail = async (id: number): Promise<ReviewData> => {
     });
 
     if (!response) {
-      throw new Error('로그인 후, 이용해 주세요.');
+      throw new Error('UNAUTHORIZED');
     }
 
     if (!response.ok) {
-      throw new Error('와인 상세 정보를 불러오는 데 실패했습니다.');
+      if (response.status === 404) {
+        throw new Error('NOT_FOUND');
+      }
+      throw new Error('FETCH_ERROR');
     }
 
-    const data: ReviewData = await response.json();
-    return data;
+    return await response.json();
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error(`와인 데이터 로드 실패: ${error.message}`);
+      throw new Error(error.message);
     }
-    throw new Error('알 수 없는 오류가 발생했습니다.');
+    throw new Error('UNKNOWON_ERROR');
   }
 };
