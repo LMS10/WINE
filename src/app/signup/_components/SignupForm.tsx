@@ -37,7 +37,7 @@ export default function SignupForm() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.replace('/');
+      router.replace('/wines');
     }
   }, [isLoggedIn, router]);
 
