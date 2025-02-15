@@ -12,6 +12,7 @@ import wineIcon from '@/assets/icons/wine.svg';
 import InteractiveRating from '../InteractiveRating';
 import ControlBar from '../ControlBar';
 import { AddReviewData } from '@/types/review-data';
+import { toast } from 'react-toastify';
 
 interface FormValues {
   rating: number;
@@ -172,13 +173,8 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
           wineId: wineData.id,
         });
         setSelectedAroma([]);
-        setValue('rating', -1);
-        setValue('lightBold', -1);
-        setValue('smoothTannic', -1);
-        setValue('drySweet', -1);
-        setValue('softAcidic', -1);
-        setValue('aroma', []);
         setIsOpen(false);
+        toast.success('리뷰 등록에 성공했습니다.');
       }
     } catch (error) {
       alert('로그인이 만료되었습니다. 로그인 후, 다시 시도해 주세요.');

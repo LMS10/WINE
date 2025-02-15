@@ -10,6 +10,7 @@ import wineIcon from '@/assets/icons/wine.svg';
 import InteractiveRating from '../InteractiveRating';
 import ControlBar from '../ControlBar';
 import { MyReview } from '@/types/review-data';
+import { toast } from 'react-toastify';
 
 export interface EditReviewData {
   rating: number;
@@ -118,6 +119,7 @@ export default function PatchReviewForm({ name, id, onClose, reviewInitialData, 
         if (editMyReview) {
           const now: string = new Date().toISOString();
           editMyReview(id, data, now);
+          toast.success('리뷰 수정에 성공했습니다.');
         }
         onClose();
       }

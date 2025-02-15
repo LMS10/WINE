@@ -14,6 +14,7 @@ import ProfileImg from '@/components/ProfileImg';
 import ReviewTasteItem from './ReviewTasteItem';
 import ReviewDropdown from './ReviewDropdown';
 import { EditReviewData } from '@/types/review-data';
+import { toast } from 'react-toastify';
 
 type ReviewItemProps = {
   review: ReviewData['reviews'][0];
@@ -78,6 +79,7 @@ export default function ReviewItem({ review, wineName, reviewInitialData, editMy
 
   const handleDelete = () => {
     deleteMyReview(reviewData.id);
+    toast.success('리뷰 삭제에 성공했습니다.');
   };
 
   return (
