@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import emptyReview from '@/assets/icons/empty_review.svg';
 import PostReviewModal from '@/components/modal/PostReviewModal';
-import { AddReviewData } from './ReviewContainer';
+import { AddReviewData } from '@/types/review-data';
 
 export default function NoReview({ addReview }: { addReview: (newReview: AddReviewData) => void }) {
   return (

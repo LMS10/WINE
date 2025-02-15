@@ -13,7 +13,7 @@ import elapsedTime from '@/utils/formatDate';
 import ProfileImg from '@/components/ProfileImg';
 import ReviewTasteItem from './ReviewTasteItem';
 import ReviewDropdown from './ReviewDropdown';
-import { EditReviewData } from './ReviewContainer';
+import { EditReviewData } from '@/types/review-data';
 
 type ReviewItemProps = {
   review: ReviewData['reviews'][0];

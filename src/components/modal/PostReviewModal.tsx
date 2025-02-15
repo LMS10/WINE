@@ -11,7 +11,7 @@ import close from '@/assets/icons/close.svg';
 import wineIcon from '@/assets/icons/wine.svg';
 import InteractiveRating from '../InteractiveRating';
 import ControlBar from '../ControlBar';
-import { AddReviewData } from '@/app/(with-header)/wines/[id]/_components/ReviewContainer';
+import { AddReviewData } from '@/types/review-data';
 
 interface FormValues {
   rating: number;

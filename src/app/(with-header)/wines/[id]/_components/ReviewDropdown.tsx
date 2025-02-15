@@ -8,7 +8,7 @@ import DeleteWineForm from '@/components/modal/DeleteWineModal';
 import PatchReviewForm from '@/components/modal/PatchReviewForm';
 import { useState } from 'react';
 import { MyReview } from '@/types/review-data';
-import { EditReviewData } from './ReviewContainer';
+import { EditReviewData } from '@/types/review-data';
 
 export default function ReviewDropdown({
   id,

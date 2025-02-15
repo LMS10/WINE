@@ -52,3 +52,32 @@ export interface MyReview {
   };
   wine: Wine;
 }
+
+export interface AddReviewData {
+  reviewId: number;
+  rating: number;
+  lightBold: number;
+  smoothTannic: number;
+  drySweet: number;
+  softAcidic: number;
+  aroma: string[];
+  content: string;
+  user: {
+    id: number;
+    nickname: string;
+    image: string;
+  };
+  wineId: number;
+  wineName: string;
+}
+
+export interface EditReviewData {
+  rating: number;
+  lightBold: number;
+  smoothTannic: number;
+  drySweet: number;
+  softAcidic: number;
+  aroma: string[];
+  content: string;
+  wineId: number;
+}
