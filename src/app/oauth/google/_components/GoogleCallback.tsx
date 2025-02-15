@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthProvider';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function GoogleCallback() {
   const searchParams = useSearchParams();
@@ -15,16 +16,13 @@ export default function GoogleCallback() {
 
     const fetchGoogleToken = async () => {
       try {
-        // 1️⃣ code → ID 토큰 교환
         const idToken = await exchangeCodeForIdToken(code);
         if (!idToken) throw new Error('Google ID 토큰 발급 실패');
-
-        // 2️⃣ 서버로 ID 토큰 전송
         const googleLogin = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/signIn/GOOGLE`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            token: idToken, // 🔑 Google은 ID 토큰을 전달해야 함
+            token: idToken,
             redirectUri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI,
           }),
         });
@@ -32,7 +30,7 @@ export default function GoogleCallback() {
         const response = await googleLogin.json();
         if (response.accessToken && response.refreshToken) {
           login(response.accessToken, response.refreshToken);
-          router.push('/');
+          router.push('/wines');
         } else {
           console.error('🚨 구글 로그인 실패:', response);
           router.push('/signin');
@@ -43,7 +41,6 @@ export default function GoogleCallback() {
       }
     };
 
-    // ID 토큰 발급 함수
     const exchangeCodeForIdToken = async (code: string) => {
       const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
         method: 'POST',
@@ -63,5 +60,9 @@ export default function GoogleCallback() {
     fetchGoogleToken();
   }, [searchParams, router, login]);
 
-  return <p>🔄 구글 로그인 처리 중...</p>;
+  return (
+    <section className='flex h-screen items-center justify-center bg-gray-100'>
+      <LoadingSpinner></LoadingSpinner>
+    </section>
+  );
 }
