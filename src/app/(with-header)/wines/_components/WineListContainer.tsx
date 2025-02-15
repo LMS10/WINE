@@ -11,7 +11,7 @@ import WineFilterModal from './WineFilterModal';
 import WineCard from './WineCard';
 import PostWineModal from '@/components/modal/PostWineModal';
 import Refresh from '@/components/Refresh';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import WineListSkeleton from './skeleton/WineListSkeleton';
 import filterIcon from '@/assets/icons/filter.svg';
 
 const MAX_PRICE = 2000000;
@@ -163,7 +163,7 @@ export default function WineListContainer() {
           {wines.map((wine, index) => (
             <WineCard key={`${wine.id}-${index}`} ref={index === wines.length - 1 ? lastWineRef : null} wine={wine} />
           ))}
-          {isLoading && <LoadingSpinner />}
+          {isLoading && <WineListSkeleton count={2} />}
         </div>
       </div>
     </div>
