@@ -24,7 +24,7 @@ export default function KakaoCallback() {
         const response = await kakaoLogin.json();
         login(response.accessToken, response.refreshToken);
 
-        router.push('/');
+        router.push('/wines');
       } catch (error) {
         console.error('카카오 로그인 실패:', error);
         router.push('/signin');
@@ -34,5 +34,5 @@ export default function KakaoCallback() {
     fetchKakaoToken();
   }, [searchParams, router, login]);
 
-  return <p>카카오 로그인 처리 중...</p>;
+  return <div>카카오 로그인 처리 중...</div>;
 }
