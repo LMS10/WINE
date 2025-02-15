@@ -2,13 +2,13 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { fetchWithAuth } from '@/lib/auth';
-import { WineListResponse, WineDetails } from '@/types/wine';
+import { WineDetails } from '@/types/wine';
 import emptyData from '@/assets/icons/empty_review.svg';
 import WineCard from '@/components/WineCard';
-import { WineDataProps } from './MyWIneKebabDropDown ';
+import { WineDataProps } from '@/app/(with-header)/myprofile/_components/MyWIneKebabDropDown ';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Refresh from '@/components/Refresh';
+import { fetchMyWine } from '@/lib/fetchMyWine';
 
 export default function MyWineListContainer({ setDataCount }: { setDataCount: (value: number) => void }) {
   const [myWineData, setMyWineData] = useState<WineDetails[]>([]);
@@ -17,16 +17,9 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
 
   const getMyWine = useCallback(async () => {
     setError('');
+    setIsloading(true);
     try {
-      setIsloading(true);
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/wines?limit=30`);
-
-      if (!response?.ok || response === null) {
-        setError('와인 데이터를 불러오는데 실패했습니다.');
-        return;
-      }
-
-      const data: WineListResponse = await response.json();
+      const data = await fetchMyWine();
       setMyWineData(data.list);
       setDataCount(data.totalCount);
     } catch (error) {

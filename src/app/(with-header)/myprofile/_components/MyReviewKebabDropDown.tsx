@@ -6,10 +6,10 @@ import Dropdown from '@/components/Dropdown';
 import kebab from '@/assets/icons/menu.svg';
 import Modal from '@/components/modal/Modal';
 import DeleteWineForm from '@/components/modal/DeleteWineModal';
-import { fetchWithAuth } from '@/lib/auth';
 import PatchReviewForm from '@/components/modal/PatchReviewForm';
 import { MyReview } from '@/types/review-data';
-import { EditReviewData } from './MyReviewListContainer';
+import { fetchDeleteReview } from '@/lib/fetchMyReivew';
+import { EditReviewData } from '@/app/(with-header)/myprofile/_components/MyReviewListContainer';
 
 export default function MyReviewKebabDropDown({
   reviewInitialData,
@@ -24,6 +24,7 @@ export default function MyReviewKebabDropDown({
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState('');
 
   const openEditModal = () => {
     setIsEditModalOpen(true);
@@ -47,16 +48,9 @@ export default function MyReviewKebabDropDown({
   ];
 
   const handleDeleteWine = async () => {
+    setError('');
     try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response?.ok || response === null) {
-        throw new Error('리뷰 삭제에 실패했습니다');
-      }
-
-      const body = await response.json();
+      const body = await fetchDeleteReview(id);
       if (body) {
         if (deleteMyReview) {
           deleteMyReview(id);
@@ -64,7 +58,13 @@ export default function MyReviewKebabDropDown({
         closeDeleteModal();
       }
     } catch (error) {
-      console.error('리뷰 삭제 에러:', error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('알 수 없는 오류가 발생했습니다.');
+      }
+    } finally {
+      alert(error);
     }
   };
 

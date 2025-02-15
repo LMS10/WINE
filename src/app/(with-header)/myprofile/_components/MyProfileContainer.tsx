@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { fetchWithAuth } from '@/lib/auth';
-import { MyProfile, MyProfileData } from './MyProfile';
+import { MyProfile, MyProfileData } from '@/app/(with-header)/myprofile/_components/MyProfile';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Refresh from '@/components/Refresh';
+import { fetchUploadUser, fetchUser } from '@/lib/fetchUser';
+import { fetchImage } from '@/lib/fetchImage';
 
 export default function MyProfileContainer() {
   const [profileData, setProfileData] = useState<MyProfileData>();
@@ -13,16 +14,9 @@ export default function MyProfileContainer() {
 
   const getUserData = async () => {
     setError('');
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me`);
-
-      if (!response?.ok || response === null) {
-        setError('유저 데이터를 불러오는데 실패했습니다.');
-        return;
-      }
-
-      const data: MyProfileData = await response.json();
+      const data = await fetchUser();
       setProfileData(data);
     } catch (error) {
       if (error instanceof Error) {
@@ -38,18 +32,8 @@ export default function MyProfileContainer() {
   const upLoadImgFile = async (formData: FormData): Promise<string | undefined> => {
     setError('');
     try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/images/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response?.ok || response === null) {
-        setError('이미지를 업로드하는데 실패했습니다.');
-        return;
-      }
-
-      const data = await response.json();
-      return data.url as string;
+      const data = await fetchImage(formData);
+      return data;
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -62,24 +46,7 @@ export default function MyProfileContainer() {
   const upLoadUserData = async (image: string, nickname: string): Promise<string | undefined> => {
     setError('');
     try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ image: image, nickname: nickname }),
-      });
-
-      if (response?.status === 400) {
-        alert('동일한 닉네임이 있습니다.');
-      }
-
-      if (!response?.ok || response === null) {
-        setError('데이터를 업데이트 하는데 실패했습니다.');
-        return;
-      }
-
-      const result = await response.json();
+      const result = await fetchUploadUser(image, nickname);
       return result;
     } catch (error) {
       if (error instanceof Error) {

@@ -2,12 +2,12 @@
 
 import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
-import { fetchWithAuth } from '@/lib/auth';
 import emptyData from '@/assets/icons/empty_review.svg';
-import { MyReview, MyReviewResponse } from '@/types/review-data';
+import { MyReview } from '@/types/review-data';
 import { MyReviewItem } from '@/app/(with-header)/myprofile/_components/MyReviewItem';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Refresh from '@/components/Refresh';
+import { fetchMyReview } from '@/lib/fetchMyReivew';
 
 export interface EditReviewData {
   rating: number;
@@ -27,16 +27,9 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
 
   const getMyReview = useCallback(async () => {
     setError('');
+    setIsloading(true);
     try {
-      setIsloading(true);
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/reviews?limit=30`);
-
-      if (!response?.ok || response === null) {
-        setError('리뷰 데이터를 불러오는데 실패했습니다.');
-        return;
-      }
-
-      const data: MyReviewResponse = await response.json();
+      const data = await fetchMyReview();
       setMyReviewData(data.list);
       setDataCount(data.totalCount);
     } catch (error) {
@@ -84,7 +77,7 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
 
   if (myReviewData.length === 0)
     return (
-      <div className='h-[80vh] w-full flex-col items-center justify-center gap-[24px] pc:w-[800px] mobile:h-[40vh] mobile:gap-[12px]'>
+      <div className='felx h-[80vh] w-full flex-col items-center justify-center gap-[24px] pc:w-[800px] mobile:h-[40vh] mobile:gap-[12px]'>
         <Image className='h-[120px] w-[120px] mobile:h-[50px] mobile:w-[50px]' alt='데이터 없음' src={emptyData} priority />
         <p className='text-lg font-normal text-gray-500 mobile:text-md'>내가 등록한 후기가 없어요</p>
       </div>

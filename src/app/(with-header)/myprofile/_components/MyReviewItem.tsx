@@ -4,9 +4,9 @@ import elapsedTime from '@/utils/formatDate';
 import like from '@/assets/icons/star_hover.svg';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import MyReviewKebabDropDown from './MyReviewKebabDropDown';
+import MyReviewKebabDropDown from '@/app/(with-header)/myprofile/_components/MyReviewKebabDropDown';
 import { MyReview } from '@/types/review-data';
-import { EditReviewData } from './MyReviewListContainer';
+import { EditReviewData } from '@/app/(with-header)/myprofile/_components/MyReviewListContainer';
 
 export function MyReviewItem({
   reviewInitialData,

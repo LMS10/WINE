@@ -7,7 +7,7 @@ import kebab from '@/assets/icons/menu.svg';
 import Modal from '@/components/modal/Modal';
 import PatchWineForm from '@/components/modal/PatchWineForm';
 import DeleteWineForm from '@/components/modal/DeleteWineModal';
-import { fetchWithAuth } from '@/lib/auth';
+import { fetchDeleteWine } from '@/lib/fetchWines';
 
 export interface WineDataProps {
   name: string;
@@ -30,6 +30,7 @@ export default function MyWIneKebabDropDown({
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState('');
 
   const openEditModal = () => {
     setIsEditModalOpen(true);
@@ -53,20 +54,21 @@ export default function MyWIneKebabDropDown({
   ];
 
   const handleDeleteWine = async () => {
+    setError('');
     try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/wines/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response?.ok || response === null) return alert('와인 삭제에 실패했습니다');
-
-      const body = await response.json();
-      if (body) {
+      const data = await fetchDeleteWine(id);
+      if (data) {
         deleteMyWine(id);
         closeDeleteModal();
       }
     } catch (error) {
-      console.error('와인 삭제 에러:', error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('알 수 없는 오류가 발생했습니다.');
+      }
+    } finally {
+      alert(error);
     }
   };
 
