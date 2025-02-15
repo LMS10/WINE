@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthProvider';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function GoogleCallback() {
   const searchParams = useSearchParams();
@@ -59,5 +60,9 @@ export default function GoogleCallback() {
     fetchGoogleToken();
   }, [searchParams, router, login]);
 
-  return <p>🔄 구글 로그인 처리 중...</p>;
+  return (
+    <section className='flex h-screen items-center justify-center bg-gray-100'>
+      <LoadingSpinner></LoadingSpinner>
+    </section>
+  );
 }

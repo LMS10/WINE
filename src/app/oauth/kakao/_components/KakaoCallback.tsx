@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthProvider';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function KakaoCallback() {
   const searchParams = useSearchParams();
@@ -34,5 +35,9 @@ export default function KakaoCallback() {
     fetchKakaoToken();
   }, [searchParams, router, login]);
 
-  return <div>카카오 로그인 처리 중...</div>;
+  return (
+    <section className='flex h-screen items-center justify-center bg-gray-100'>
+      <LoadingSpinner></LoadingSpinner>
+    </section>
+  );
 }
