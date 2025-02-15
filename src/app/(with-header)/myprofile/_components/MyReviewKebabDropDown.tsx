@@ -16,11 +16,13 @@ export default function MyReviewKebabDropDown({
   id,
   editMyReview,
   deleteMyReview,
+  setDataCount,
 }: {
   reviewInitialData: MyReview;
   id: number;
   editMyReview: (id: number, editReviewData: EditReviewData, updatedAt: string) => void;
   deleteMyReview: (id: number) => void;
+  setDataCount: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -54,16 +56,16 @@ export default function MyReviewKebabDropDown({
       if (body) {
         if (deleteMyReview) {
           deleteMyReview(id);
+          setDataCount((pre) => pre - 1);
         }
         closeDeleteModal();
       }
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e.message);
       } else {
         setError('알 수 없는 오류가 발생했습니다.');
       }
-    } finally {
       alert(error);
     }
   };

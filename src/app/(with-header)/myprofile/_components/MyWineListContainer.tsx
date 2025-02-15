@@ -10,7 +10,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import Refresh from '@/components/Refresh';
 import { fetchMyWine } from '@/lib/fetchMyWine';
 
-export default function MyWineListContainer({ setDataCount }: { setDataCount: (value: number) => void }) {
+export default function MyWineListContainer({ setDataCount }: { setDataCount: React.Dispatch<React.SetStateAction<number>> }) {
   const [myWineData, setMyWineData] = useState<WineDetails[]>([]);
   const [isLoading, setIsloading] = useState(true);
   const [error, setError] = useState('');
@@ -89,6 +89,7 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: (v
           type={value.type}
           editMyWine={editMyWine}
           deleteMyWine={deleteMyWine}
+          setDataCount={setDataCount}
         />
       ))}
     </div>

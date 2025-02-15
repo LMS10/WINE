@@ -22,11 +22,13 @@ export default function MyWIneKebabDropDown({
   wineInitialData,
   editMyWine,
   deleteMyWine,
+  setDataCount,
 }: {
   id: number;
   wineInitialData: WineDataProps;
   editMyWine: (id: number, editWineData: WineDataProps) => void;
   deleteMyWine: (id: number) => void;
+  setDataCount: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -59,15 +61,15 @@ export default function MyWIneKebabDropDown({
       const data = await fetchDeleteWine(id);
       if (data) {
         deleteMyWine(id);
+        setDataCount((value) => value - 1);
         closeDeleteModal();
       }
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e.message);
       } else {
         setError('알 수 없는 오류가 발생했습니다.');
       }
-    } finally {
       alert(error);
     }
   };

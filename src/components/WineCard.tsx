@@ -16,9 +16,10 @@ export interface WineCardProps {
   type?: 'RED' | 'WHITE' | 'SPARKLING';
   editMyWine?: (id: number, editWineData: WineDataProps) => void;
   deleteMyWine?: (id: number) => void;
+  setDataCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function WineCard({ id, name, region, image, price, isKebab = false, size = 'large', onClick = false, type = 'RED', editMyWine, deleteMyWine }: WineCardProps) {
+export default function WineCard({ id, name, region, image, price, isKebab = false, size = 'large', onClick = false, type = 'RED', editMyWine, deleteMyWine, setDataCount }: WineCardProps) {
   const router = useRouter();
 
   const cardWrapperStyle =
@@ -54,7 +55,13 @@ export default function WineCard({ id, name, region, image, price, isKebab = fal
           <p className={`line-clamp-1 text-lg font-normal text-gray-500 mobile:text-md ${wineClamp}`}>{region}</p>
         </div>
         {isKebab && editMyWine && deleteMyWine && (
-          <MyWIneKebabDropDown id={id} wineInitialData={{ name: name, price: price, region: region, type: type, image: image }} editMyWine={editMyWine} deleteMyWine={deleteMyWine} />
+          <MyWIneKebabDropDown
+            id={id}
+            wineInitialData={{ name: name, price: price, region: region, type: type, image: image }}
+            editMyWine={editMyWine}
+            deleteMyWine={deleteMyWine}
+            setDataCount={setDataCount}
+          />
         )}
         <span className='w-fit rounded-[12px] bg-purple-10 px-[15px] py-[5.5px] text-[18px] font-bold text-purple-100 mobile:px-[10px] mobile:py-[6px] mobile:text-md'>
           ₩ {Number(price).toLocaleString()}

@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { MyProfile, MyProfileData } from '@/app/(with-header)/myprofile/_components/MyProfile';
-import LoadingSpinner from '@/components/LoadingSpinner';
 import Refresh from '@/components/Refresh';
 import { fetchUploadUser, fetchUser } from '@/lib/fetchUser';
 import { fetchImage } from '@/lib/fetchImage';
+import MyProfileSkeleton from './skeleton/MyProfileSkeleton';
 
 export default function MyProfileContainer() {
   const [profileData, setProfileData] = useState<MyProfileData>();
@@ -61,7 +61,7 @@ export default function MyProfileContainer() {
     getUserData();
   }, []);
 
-  if (isLoading) return <LoadingSpinner className='h-[530px] w-[280px] rounded-[16px] border border-gray-300 shadow-drop tablet:h-[247px] tablet:w-full mobile:h-[241px]' />;
+  if (isLoading) return <MyProfileSkeleton />;
 
   if (!profileData || error)
     return (

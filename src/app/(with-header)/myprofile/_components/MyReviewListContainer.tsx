@@ -5,9 +5,9 @@ import { useCallback, useEffect, useState } from 'react';
 import emptyData from '@/assets/icons/empty_review.svg';
 import { MyReview } from '@/types/review-data';
 import { MyReviewItem } from '@/app/(with-header)/myprofile/_components/MyReviewItem';
-import LoadingSpinner from '@/components/LoadingSpinner';
 import Refresh from '@/components/Refresh';
 import { fetchMyReview } from '@/lib/fetchMyReivew';
+import MyReviewItemSkeleton from './skeleton/MyReviewItemSkeleton';
 
 export interface EditReviewData {
   rating: number;
@@ -20,7 +20,7 @@ export interface EditReviewData {
   wineId: number;
 }
 
-export default function MyReviewListContainer({ setDataCount }: { setDataCount: (value: number) => void }) {
+export default function MyReviewListContainer({ setDataCount }: { setDataCount: React.Dispatch<React.SetStateAction<number>> }) {
   const [myReviewData, setMyReviewData] = useState<MyReview[]>([]);
   const [isLoading, setIsloading] = useState(true);
   const [error, setError] = useState('');
@@ -62,7 +62,14 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
     getMyReview();
   }, [getMyReview]);
 
-  if (isLoading) return <LoadingSpinner className='flex h-[228px] w-[800px] rounded-[16px] border border-gray-300 tablet:w-full mobile:w-full' />;
+  if (isLoading)
+    return (
+      <>
+        {[...Array(3)].map((_, index) => (
+          <MyReviewItemSkeleton key={index} />
+        ))}
+      </>
+    );
 
   if (error)
     return (
@@ -86,7 +93,7 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
   return (
     <div className='flex flex-col gap-[8px] tablet:gap-[16px] mobile:gap-[16px]'>
       {myReviewData.map((value) => (
-        <MyReviewItem key={value.id} reviewInitialData={value} editMyReview={editMyReview} deleteMyReview={deleteMyReview} />
+        <MyReviewItem key={value.id} reviewInitialData={value} editMyReview={editMyReview} deleteMyReview={deleteMyReview} setDataCount={setDataCount} />
       ))}
     </div>
   );

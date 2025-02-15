@@ -12,10 +12,12 @@ export function MyReviewItem({
   reviewInitialData,
   editMyReview,
   deleteMyReview,
+  setDataCount,
 }: {
   reviewInitialData: MyReview;
   editMyReview: (id: number, editReviewData: EditReviewData, updatedAt: string) => void;
   deleteMyReview: (id: number) => void;
+  setDataCount: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const router = useRouter();
   const reviewElapsedTime = elapsedTime(reviewInitialData.updatedAt);
@@ -36,7 +38,7 @@ export function MyReviewItem({
             <Image className='w-[20px] mobile:w-[16px]' src={like} alt='별점 아이콘' />
             <span className='text-2lg font-bold text-purple-100 mobile:text-md'>{reviewInitialData.rating.toFixed(1)}</span>
           </div>
-          <MyReviewKebabDropDown id={reviewInitialData.id} reviewInitialData={reviewInitialData} editMyReview={editMyReview} deleteMyReview={deleteMyReview} />
+          <MyReviewKebabDropDown id={reviewInitialData.id} reviewInitialData={reviewInitialData} editMyReview={editMyReview} deleteMyReview={deleteMyReview} setDataCount={setDataCount} />
           <span className='flex items-center justify-center text-lg text-gray-500 mobile:text-md'>{reviewElapsedTime}</span>
         </div>
         <div className='flex flex-col gap-[10px]'>
