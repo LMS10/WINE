@@ -16,7 +16,7 @@ const FilterTypes = ({ selectedType, onTypeChange }: FilterTypesProps) => {
         {['Red', 'White', 'Sparkling'].map((type) => (
           <button
             key={type}
-            className={`rounded-[100px] px-[18px] py-[10px] text-lg font-medium ${selectedType === type ? 'border border-purple-100 bg-purple-100 text-white' : 'border border-gray-300 bg-white text-gray-800'}`}
+            className={`rounded-[100px] border px-[18px] py-[10px] text-lg font-medium ${selectedType === type ? 'border border-purple-100 bg-purple-100 text-white' : 'border border-gray-300 bg-white text-gray-800 hover:border-purple-100 hover:bg-purple-100 hover:bg-opacity-10'}`}
             onClick={() => handleTypeClick(type)}
           >
             {type}
