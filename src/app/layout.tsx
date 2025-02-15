@@ -1,6 +1,7 @@
 import localFont from 'next/font/local';
 import { AuthProvider } from '@/contexts/AuthProvider';
 import './globals.css';
+import { ToastContainer } from 'react-toastify';
 
 const pretendard = localFont({
   src: '../fonts/PretendardVariable.woff2',
@@ -19,6 +20,8 @@ export default function RootLayout({
         <AuthProvider>
           {children}
           <div id='modal-root'></div>
+
+          <ToastContainer toastStyle={{ minHeight: 'unset' }} autoClose={2000} closeButton={false} hideProgressBar position='bottom-center' />
         </AuthProvider>
       </body>
     </html>
