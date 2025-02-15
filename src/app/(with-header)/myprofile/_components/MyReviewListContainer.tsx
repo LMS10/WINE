@@ -1,13 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import emptyData from '@/assets/icons/empty_review.svg';
 import { MyReview } from '@/types/review-data';
 import { MyReviewItem } from '@/app/(with-header)/myprofile/_components/MyReviewItem';
 import Refresh from '@/components/Refresh';
 import { fetchMyReview } from '@/lib/fetchMyReivew';
 import MyReviewItemSkeleton from './skeleton/MyReviewItemSkeleton';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export interface EditReviewData {
   rating: number;
@@ -24,14 +25,18 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
   const [myReviewData, setMyReviewData] = useState<MyReview[]>([]);
   const [isLoading, setIsloading] = useState(true);
   const [error, setError] = useState('');
+  const [nextCursor, setNextCursor] = useState<number | null>(null);
+  const [isMoreLoading, setIsMoreLoading] = useState(false);
+  const lastReviewRef = useRef<HTMLDivElement | null>(null);
 
   const getMyReview = useCallback(async () => {
     setError('');
     setIsloading(true);
     try {
-      const data = await fetchMyReview();
+      const data = await fetchMyReview(5);
       setMyReviewData(data.list);
       setDataCount(data.totalCount);
+      setNextCursor(data.nextCursor);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -42,6 +47,26 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
       setIsloading(false);
     }
   }, [setDataCount]);
+
+  const getMoreMyReview = useCallback(async () => {
+    if (nextCursor === null) return;
+    setError('');
+    setIsMoreLoading(true);
+    try {
+      const data = await fetchMyReview(5, nextCursor || undefined);
+      setMyReviewData((prev) => [...prev, ...data.list]);
+      setDataCount(data.totalCount);
+      setNextCursor(data.nextCursor);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('알 수 없는 오류가 발생했습니다.');
+      }
+    } finally {
+      setIsMoreLoading(false);
+    }
+  }, [setDataCount, nextCursor]);
 
   const deleteMyReview = (id: number) => {
     const updatedReviewList = myReviewData.filter((value) => value.id !== id);
@@ -61,6 +86,23 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
   useEffect(() => {
     getMyReview();
   }, [getMyReview]);
+
+  useEffect(() => {
+    if (!lastReviewRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          getMoreMyReview();
+        }
+      },
+      {
+        root: null,
+        threshold: 0.5,
+      },
+    );
+    observer.observe(lastReviewRef.current);
+    return () => observer.disconnect();
+  }, [getMoreMyReview]);
 
   if (isLoading)
     return (
@@ -95,6 +137,8 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
       {myReviewData.map((value) => (
         <MyReviewItem key={value.id} reviewInitialData={value} editMyReview={editMyReview} deleteMyReview={deleteMyReview} setDataCount={setDataCount} />
       ))}
+      <div ref={lastReviewRef}></div>
+      {isMoreLoading && <LoadingSpinner />}
     </div>
   );
 }

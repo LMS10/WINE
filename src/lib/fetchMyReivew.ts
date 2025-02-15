@@ -1,9 +1,13 @@
 import { MyReviewResponse } from '@/types/review-data';
 import { fetchWithAuth } from './auth';
 
-export async function fetchMyReview(): Promise<MyReviewResponse> {
+export async function fetchMyReview(limit: number, cursor?: number): Promise<MyReviewResponse> {
+  const params = new URLSearchParams();
+  params.append('limit', limit.toString());
+  if (cursor) params.append('cursor', cursor.toString());
+
   try {
-    const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/reviews?limit=30`);
+    const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/reviews?${params.toString()}`);
 
     if (!response?.ok || response === null) {
       throw new Error('리뷰 데이터를 불러오는 데 실패했습니다.');

@@ -10,7 +10,11 @@ import wineIcon from '@/assets/icons/wine.svg';
 import InteractiveRating from '../InteractiveRating';
 import ControlBar from '../ControlBar';
 import { MyReview } from '@/types/review-data';
+<<<<<<< HEAD
 import { toast } from 'react-toastify';
+=======
+import { useRouter } from 'next/navigation';
+>>>>>>> 94c7c02 (✨ feat : 후기 리스트 무한 스크롤 구현)
 
 export interface EditReviewData {
   rating: number;
@@ -70,6 +74,7 @@ interface postReviewPorp {
 }
 
 export default function PatchReviewForm({ name, id, onClose, reviewInitialData, editMyReview }: postReviewPorp) {
+  const router = useRouter();
   const [selectedAroma, setSelectedAroma] = useState<string[]>(reviewInitialData?.aroma || []);
 
   const { register, handleSubmit, setValue, watch } = useForm<FormValues>({
@@ -114,6 +119,12 @@ export default function PatchReviewForm({ name, id, onClose, reviewInitialData, 
 
       if (!response?.ok || response === null) {
         throw new Error('리뷰 수정에 실패했습니다.');
+      }
+
+      if (response?.status === 401) {
+        alert('로그인 상태가 아닙니다.');
+        router.push('/signin');
+        return;
       }
 
       const body = await response.json();

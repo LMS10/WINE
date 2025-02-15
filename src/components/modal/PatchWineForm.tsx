@@ -51,6 +51,12 @@ export default function PatchWineForm({ onClose, id, wineInitialData, editMyWine
 
       if (!response?.ok || response === null) return alert('와인 수정에 실패했습니다');
 
+      if (response?.status === 401) {
+        alert('로그인 상태가 아닙니다.');
+        router.push('/signin');
+        return;
+      }
+
       const body = await response.json();
       editMyWine(body.id, { ...data, type: data.type as 'RED' | 'WHITE' | 'SPARKLING' });
       router.push(`/wines/${body.id}`);
