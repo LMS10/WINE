@@ -5,9 +5,10 @@ const MAX_PRICE = 2000000;
 type FilterPriceProps = {
   priceRange: [number, number];
   onPriceChange: (values: number[]) => void;
+  onFinalChange: (values: number[]) => void;
 };
 
-const FilterPrice = ({ priceRange, onPriceChange }: FilterPriceProps) => {
+const FilterPrice = ({ priceRange, onPriceChange, onFinalChange }: FilterPriceProps) => {
   return (
     <div>
       <div className='mb-5 text-xl font-bold text-gray-800'>PRICE</div>
@@ -23,6 +24,7 @@ const FilterPrice = ({ priceRange, onPriceChange }: FilterPriceProps) => {
           max={MAX_PRICE}
           values={priceRange}
           onChange={onPriceChange}
+          onFinalChange={onFinalChange}
           renderTrack={({ props, children }) => (
             <div {...props} className='relative h-[6px] w-full rounded-full bg-gray-100'>
               <div
@@ -35,7 +37,15 @@ const FilterPrice = ({ priceRange, onPriceChange }: FilterPriceProps) => {
               {children}
             </div>
           )}
-          renderThumb={({ props, index }) => <div {...props} key={index} className='absolute h-5 w-5 -translate-y-1/2 rounded-full border border-gray-300 bg-white' />}
+          renderThumb={({ props, index }) => {
+            return (
+              <div {...props} key={index} className='relative z-10 h-5 w-5 -translate-y-1/2 rounded-full border border-gray-300 bg-white shadow-md focus:outline-none'>
+                <div
+                  className={`absolute inset-[-9px] -z-10 rounded-full bg-purple-100 opacity-0 transition-transform duration-300 ease-out hover:scale-100 hover:opacity-10 focus-visible:scale-100 focus-visible:opacity-10`}
+                />
+              </div>
+            );
+          }}
         />
       </div>
     </div>
