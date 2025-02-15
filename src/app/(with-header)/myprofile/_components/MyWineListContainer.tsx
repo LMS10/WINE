@@ -6,9 +6,9 @@ import { WineDetails } from '@/types/wine';
 import emptyData from '@/assets/icons/empty_review.svg';
 import WineCard from '@/components/WineCard';
 import { WineDataProps } from '@/app/(with-header)/myprofile/_components/MyWIneKebabDropDown ';
-import LoadingSpinner from '@/components/LoadingSpinner';
 import Refresh from '@/components/Refresh';
 import { fetchMyWine } from '@/lib/fetchMyWine';
+import MyWineItemSkeleton from './skeleton/MyWineItemSkeleton';
 
 export default function MyWineListContainer({ setDataCount }: { setDataCount: React.Dispatch<React.SetStateAction<number>> }) {
   const [myWineData, setMyWineData] = useState<WineDetails[]>([]);
@@ -52,7 +52,14 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: Re
     getMyWine();
   }, [getMyWine]);
 
-  if (isLoading) return <LoadingSpinner className='flex h-[228px] w-[800px] rounded-[16px] border border-gray-300 tablet:w-full mobile:w-full' />;
+  if (isLoading)
+    return (
+      <div className='flex flex-col gap-[8px] tablet:gap-[16px] mobile:gap-[16px]'>
+        {[...Array(3)].map((_, index) => (
+          <MyWineItemSkeleton key={index} />
+        ))}
+      </div>
+    );
 
   if (error)
     return (

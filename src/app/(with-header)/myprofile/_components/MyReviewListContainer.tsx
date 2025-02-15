@@ -64,11 +64,11 @@ export default function MyReviewListContainer({ setDataCount }: { setDataCount: 
 
   if (isLoading)
     return (
-      <>
+      <div className='flex flex-col gap-[8px] tablet:gap-[16px] mobile:gap-[16px]'>
         {[...Array(3)].map((_, index) => (
           <MyReviewItemSkeleton key={index} />
         ))}
-      </>
+      </div>
     );
 
   if (error)
