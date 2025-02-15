@@ -8,6 +8,7 @@ import { fetchWithAuth } from '@/lib/auth';
 import Modal from '@/components/modal/Modal';
 import Dropdown from '../Dropdown';
 import Button from '../Button';
+import { toast } from 'react-toastify';
 import camera from '@/assets/icons/photo.svg';
 
 interface FormValues {
@@ -25,7 +26,12 @@ export default function PostWineModal() {
   const [preview, setPreview] = useState<string | null>(null);
   const router = useRouter();
 
-  const { register, handleSubmit, setValue } = useForm<FormValues>();
+  const { register, handleSubmit, setValue, watch, reset } = useForm<FormValues>();
+  const name = watch('name');
+  const region = watch('region');
+  const image = watch('image');
+  const price = watch('price');
+  const type = watch('type');
 
   const options = [
     { value: () => setValue('type', 'RED'), label: 'Red' },
@@ -38,33 +44,31 @@ export default function PostWineModal() {
   };
 
   const closeModal = () => {
+    reset();
+    setValue('type', '');
+    setPreview(null);
     setIsOpen(false);
   };
 
   const handlePostWine: SubmitHandler<FormValues> = async (data) => {
-    const { name, region, image, price, type } = data;
-
-    if (!name || !region || !image || !price || !type) {
-      alert('모든 정보를 입력해 주세요.');
-      return;
-    }
-
     try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/wines`, {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/wine`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, region, image, price: Number(price), type }),
+        body: JSON.stringify({ ...data, price: Number(data.price) }),
       });
 
-      if (!response?.ok || response === null) {
+      if (!response?.ok) {
         throw new Error('와인 등록에 실패했습니다');
       }
 
       const body = await response.json();
+      toast.success('와인이 등록되었습니다.');
       router.push(`/wines/${body.id}`);
     } catch (error) {
-      console.error('와인 등록 에러:', error);
-      console.log(data);
+      console.error('와인 등록 실패:', error);
+      toast.error('와인 등록에 실패했습니다.');
+      closeModal();
     }
   };
 
@@ -72,26 +76,33 @@ export default function PostWineModal() {
     const { image } = data;
     const formData = new FormData();
     formData.append('image', image[0]);
-    try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/images/upload`, { method: 'POST', body: formData });
 
-      if (!response?.ok || response === null) {
-        throw new Error('Failed to upload image');
+    try {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/images/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response?.ok) {
+        throw new Error('이미지 업로드에 실패했습니다');
       }
 
       const uploadResult = await response.json();
       return uploadResult.url;
     } catch (error) {
-      console.log(error);
+      console.error('이미지 업로드 실패:', error);
     }
   }
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const image = event.target.files;
-    if (!image) return;
-    const imageUrl = await postImageApi({ image });
-    setValue('image', `${imageUrl}`);
-    setPreview(imageUrl);
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    const imageUrl = await postImageApi({ image: files });
+    if (imageUrl) {
+      setValue('image', imageUrl);
+      setPreview(imageUrl);
+    }
   };
 
   return (
@@ -155,14 +166,7 @@ export default function PostWineModal() {
                 <label htmlFor='type' className='text-lg font-bold text-gray-800 mobile:text-md'>
                   타입
                 </label>
-                <Dropdown
-                  options={options}
-                  onSelect={(option) => {
-                    option.value?.();
-                  }}
-                  placeholder='Red'
-                  changeButton
-                />
+                <Dropdown options={options} onSelect={(option) => option.value?.()} placeholder='Red' changeButton />
               </div>
 
               <div className='-my-[5px] flex flex-col gap-3 mobile:gap-[12px]'>
@@ -174,7 +178,7 @@ export default function PostWineModal() {
                   className='relative flex h-[140px] w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-gray-300 mobile:h-[120px] mobile:w-[120px]'
                 >
                   {preview ? (
-                    <Image src={preview} alt='preview' fill sizes='10vw' className='h-[140px] w-[140px] object-contain mobile:h-[120px] mobile:w-[120px]' />
+                    <Image src={preview} alt='preview' fill sizes='10vw' className='object-contain' />
                   ) : (
                     <Image src={camera} alt='camera' width={32} height={32} className='h-[32px] w-[32px]' />
                   )}
@@ -185,7 +189,13 @@ export default function PostWineModal() {
 
             <div className='mt-10 flex gap-[10px] mobile:gap-2'>
               <Button text='취소' variant='lightPurple' onClick={closeModal} />
-              <Button text='와인 등록하기' type='submit' variant='primary' className='w-[294px] rounded-xl py-[16px] text-lg mobile:flex-1' />
+              <Button
+                text='와인 등록하기'
+                type='submit'
+                variant='primary'
+                disabled={!name || !region || !image || !price || !type}
+                className='w-[294px] rounded-xl py-[16px] text-lg disabled:bg-gray-400 mobile:flex-1'
+              />
             </div>
           </form>
         </div>
