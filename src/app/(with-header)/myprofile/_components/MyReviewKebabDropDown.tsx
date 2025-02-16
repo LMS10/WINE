@@ -2,25 +2,28 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 import Dropdown from '@/components/Dropdown';
 import kebab from '@/assets/icons/menu.svg';
 import Modal from '@/components/modal/Modal';
 import DeleteWineForm from '@/components/modal/DeleteWineModal';
-import { fetchWithAuth } from '@/lib/auth';
 import PatchReviewForm from '@/components/modal/PatchReviewForm';
 import { MyReview } from '@/types/review-data';
-import { EditReviewData } from './MyReviewListContainer';
+import { fetchDeleteReview } from '@/lib/fetchMyReivew';
+import { EditReviewData } from '@/app/(with-header)/myprofile/_components/MyReviewListContainer';
 
 export default function MyReviewKebabDropDown({
   reviewInitialData,
   id,
   editMyReview,
   deleteMyReview,
+  setDataCount,
 }: {
   reviewInitialData: MyReview;
   id: number;
   editMyReview: (id: number, editReviewData: EditReviewData, updatedAt: string) => void;
   deleteMyReview: (id: number) => void;
+  setDataCount: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -48,23 +51,20 @@ export default function MyReviewKebabDropDown({
 
   const handleDeleteWine = async () => {
     try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response?.ok || response === null) {
-        throw new Error('리뷰 삭제에 실패했습니다');
-      }
-
-      const body = await response.json();
+      const body = await fetchDeleteReview(id);
       if (body) {
         if (deleteMyReview) {
           deleteMyReview(id);
+          toast.success('리뷰 삭제에 성공했습니다.');
+          setDataCount((pre) => pre - 1);
         }
         closeDeleteModal();
       }
-    } catch (error) {
-      console.error('리뷰 삭제 에러:', error);
+    } catch (e) {
+      if (e) {
+        toast.error('리뷰 삭제에 실패했습니다.');
+        closeDeleteModal();
+      }
     }
   };
 

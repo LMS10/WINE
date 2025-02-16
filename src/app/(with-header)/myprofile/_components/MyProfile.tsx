@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { ChangeEvent, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 import photoIcon from '@/assets/icons/photo.svg';
 import ProfileImg from '@/components/ProfileImg';
 import Button from '@/components/Button';
@@ -45,7 +46,11 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
 
   const onClickUploadButton = async () => {
     if (nickNameValue === '') {
-      alert('닉네임을 입력해 주세요.');
+      toast.error('닉네임을 입력해 주세요.');
+      return;
+    }
+    if (nickNameValue.length > 30) {
+      toast.error('닉네임은 최대 30글자입니다.');
       return;
     }
     if (!fileInput && nickNameValue === preNickName) {
@@ -93,7 +98,7 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
           </label>
         )}
         <div className='flex flex-col gap-[16px] tablet:gap-[8px] mobile:gap-[4px]'>
-          <h1 className='flex justify-center text-2xl font-bold text-gray-800 tablet:justify-start mobile:text-xl'>{preNickName}</h1>
+          <h1 className='overflow-hidden text-ellipsis whitespace-nowrap text-center text-2xl font-bold text-gray-800 pc:w-[200px] tablet:justify-start mobile:text-xl'>{preNickName}</h1>
         </div>
       </div>
       <div className='flex w-full flex-col justify-center gap-[8px] tablet:flex-row tablet:gap-[24px] mobile:flex-col mobile:gap-[6px]'>
@@ -122,7 +127,7 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
               text='적용하기'
               onClick={onClickUploadButton}
               disabled={nickNameValue === ''}
-              className={`rounded-[12px] px-[20px] py-[8px] text-lg tablet:px-[30px] tablet:py-[11px] mobile:px-[20px] mobile:py-[9px] mobile:text-md ${nickNameValue === '' ? 'bg-gray-400' : ''}`}
+              className={`rounded-[12px] px-[20px] py-[8px] text-lg disabled:bg-gray-400 tablet:px-[30px] tablet:py-[11px] mobile:px-[20px] mobile:py-[9px] mobile:text-md`}
             />
           )}
         </div>

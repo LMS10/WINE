@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { fetchWithAuth } from '@/lib/auth';
 import Button from '@/components/Button';
 import close from '@/assets/icons/close.svg';
@@ -10,7 +11,6 @@ import wineIcon from '@/assets/icons/wine.svg';
 import InteractiveRating from '../InteractiveRating';
 import ControlBar from '../ControlBar';
 import { MyReview } from '@/types/review-data';
-import { toast } from 'react-toastify';
 
 export interface EditReviewData {
   rating: number;
@@ -126,9 +126,10 @@ export default function PatchReviewForm({ name, id, onClose, reviewInitialData, 
         onClose();
       }
     } catch (error) {
-      onClose();
-      toast.error('리뷰 수정에 실패했습니다.');
-      console.error('리뷰 수정 에러:', error);
+      if (error) {
+        onClose();
+        toast.error('리뷰 수정에 실패했습니다.');
+      }
     }
   };
 

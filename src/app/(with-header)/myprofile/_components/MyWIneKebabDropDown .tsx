@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 import Dropdown from '@/components/Dropdown';
 import kebab from '@/assets/icons/menu.svg';
 import Modal from '@/components/modal/Modal';
 import PatchWineForm from '@/components/modal/PatchWineForm';
 import DeleteWineForm from '@/components/modal/DeleteWineModal';
-import { fetchWithAuth } from '@/lib/auth';
+import { fetchDeleteWine } from '@/lib/fetchWines';
 
 export interface WineDataProps {
   name: string;
@@ -22,11 +23,13 @@ export default function MyWIneKebabDropDown({
   wineInitialData,
   editMyWine,
   deleteMyWine,
+  setDataCount,
 }: {
   id: number;
   wineInitialData: WineDataProps;
   editMyWine: (id: number, editWineData: WineDataProps) => void;
   deleteMyWine: (id: number) => void;
+  setDataCount?: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -54,19 +57,18 @@ export default function MyWIneKebabDropDown({
 
   const handleDeleteWine = async () => {
     try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/wines/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response?.ok || response === null) return alert('와인 삭제에 실패했습니다');
-
-      const body = await response.json();
-      if (body) {
+      const data = await fetchDeleteWine(id);
+      if (data && setDataCount) {
         deleteMyWine(id);
+        toast.success('와인 삭제에 성공했습니다.');
+        setDataCount((value) => value - 1);
         closeDeleteModal();
       }
-    } catch (error) {
-      console.error('와인 삭제 에러:', error);
+    } catch (e) {
+      if (e) {
+        toast.error('와인 삭제에 실패했습니다.');
+        closeDeleteModal();
+      }
     }
   };
 
