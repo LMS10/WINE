@@ -37,7 +37,7 @@ export default function SignupForm() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.replace('/');
+      router.replace('/wines');
     }
   }, [isLoggedIn, router]);
 
@@ -61,13 +61,17 @@ export default function SignupForm() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log(errorData);
-        if (errorData.details?.email?.message) {
-          setError('email', { type: 'server', message: errorData.details.email.message });
-        }
 
-        if (errorData.details?.nickname?.message) {
-          setError('nickname', { type: 'server', message: errorData.details.nickname.message });
+        if (response.status === 500) {
+          setError('nickname', { type: 'server', message: '이미 사용중인 닉네임입니다.' });
+        } else {
+          if (errorData.details?.email?.message) {
+            setError('email', { type: 'server', message: errorData.details.email.message });
+          }
+
+          if (errorData.details?.nickname?.message) {
+            setError('nickname', { type: 'server', message: '이미 사용중인 닉네임입니다.' });
+          }
         }
 
         return;

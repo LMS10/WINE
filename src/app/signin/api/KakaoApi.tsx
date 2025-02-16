@@ -17,7 +17,6 @@ export default async function KakaoApi() {
     }
 
     const data = await response.json();
-    console.log('카카오 앱 등록 성공 :', data);
     return data;
   } catch (error) {
     console.error('카카오 앱 등록 오류 :', error);
