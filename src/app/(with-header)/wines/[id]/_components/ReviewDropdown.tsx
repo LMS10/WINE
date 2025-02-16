@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { fetchWithAuth } from '@/lib/auth';
 import { MyReview } from '@/types/review-data';
 import { EditReviewData } from '@/types/review-data';
+import { toast } from 'react-toastify';
 import Dropdown from '@/components/Dropdown';
 import Modal from '@/components/modal/Modal';
 import PatchReviewForm from '@/components/modal/PatchReviewForm';
@@ -54,7 +55,7 @@ export default function ReviewDropdown({
       });
 
       if (!response?.ok || response === null) {
-        throw new Error('리뷰 삭제에 실패했습니다');
+        throw new Error('리뷰 삭제에 실패했습니다.');
       }
 
       const body = await response.json();
@@ -65,7 +66,9 @@ export default function ReviewDropdown({
         closeDeleteModal();
       }
     } catch (error) {
-      console.error('리뷰 삭제 에러:', error);
+      closeDeleteModal();
+      toast.error('리뷰 삭제에 실패했습니다.');
+      console.error('리뷰 삭제 에러', error);
     }
   };
 

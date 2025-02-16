@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { fetchWithAuth } from '@/lib/auth';
@@ -76,7 +75,6 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
   const [selectedAroma, setSelectedAroma] = useState<string[]>([]);
   const [resetTrigger, setResetTrigger] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
-  const router = useRouter();
 
   const { register, handleSubmit, setValue, watch, reset } = useForm<FormValues>({
     defaultValues: {
@@ -140,8 +138,7 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
       });
 
       if (!response?.ok || response === null) {
-        alert('리뷰 등록에 실패했습니다.');
-        throw new Error('리뷰 등록에 실패했습니다');
+        throw new Error('리뷰 등록에 실패했습니다.');
       }
 
       const body = await response.json();
@@ -180,9 +177,9 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
         toast.success('리뷰 등록에 성공했습니다.');
       }
     } catch (error) {
-      alert('로그인이 만료되었습니다. 로그인 후, 다시 시도해 주세요.');
+      setIsOpen(false);
+      toast.error('리뷰 등록에 실패했습니다.');
       console.error('리뷰 등록 에러:', error);
-      router.push('/signin');
     }
   };
 

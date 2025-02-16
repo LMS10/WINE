@@ -56,6 +56,16 @@ export default function ReviewItem({ review, wineName, reviewInitialData, editMy
         method: liked ? 'DELETE' : 'POST',
       });
 
+      if (response?.status === 401) {
+        toast.error('로그인 세션이 만료되었습니다. 다시 로그인해 주세요.');
+        return;
+      }
+
+      if (!response?.ok) {
+        toast.error('좋아요를 누를 수 없습니다.');
+        return;
+      }
+
       if (response?.ok) {
         const newLikedState = !liked;
         setLiked(newLikedState);
@@ -63,7 +73,6 @@ export default function ReviewItem({ review, wineName, reviewInitialData, editMy
       }
     } catch (error) {
       console.error('좋아요 에러', error);
-      toast.error('좋아요를 누를 수 없습니다.');
     } finally {
       setLoading(false);
     }

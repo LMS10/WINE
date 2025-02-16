@@ -112,7 +112,9 @@ export default function PatchReviewForm({ name, id, onClose, reviewInitialData, 
         body: JSON.stringify({ rating, lightBold, smoothTannic, drySweet, softAcidic, aroma, content, wineId }),
       });
 
-      if (!response?.ok || response === null) return alert('리뷰 수정에 실패했습니다');
+      if (!response?.ok || response === null) {
+        throw new Error('리뷰 수정에 실패했습니다.');
+      }
 
       const body = await response.json();
       if (body) {
@@ -124,8 +126,9 @@ export default function PatchReviewForm({ name, id, onClose, reviewInitialData, 
         onClose();
       }
     } catch (error) {
+      onClose();
+      toast.error('리뷰 수정에 실패했습니다.');
       console.error('리뷰 수정 에러:', error);
-      console.log(data);
     }
   };
 
