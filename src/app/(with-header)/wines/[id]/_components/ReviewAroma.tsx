@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import { aromaTraslations } from '@/constants/aromaTranslation';
 
-interface ReviewAromaProps {
+type ReviewAromaProps = {
   selectedAroma: string[];
   count: number;
-}
+};
 
 export default function ReviewAroma({ selectedAroma, count }: ReviewAromaProps) {
   return (

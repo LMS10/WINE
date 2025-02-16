@@ -40,7 +40,7 @@ export default function ReviewItem({ review, wineName, reviewInitialData, editMy
           setIsMyReview(userData.id === review.user.id);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('사용자 정보 불러오기 에러', error);
         setIsMyReview(false);
       }
     };
@@ -62,7 +62,8 @@ export default function ReviewItem({ review, wineName, reviewInitialData, editMy
         toast.success(newLikedState ? '좋아요를 눌렀습니다.' : '좋아요를 취소했습니다.');
       }
     } catch (error) {
-      console.error(error);
+      console.error('좋아요 에러', error);
+      toast.error('좋아요를 누를 수 없습니다.');
     } finally {
       setLoading(false);
     }

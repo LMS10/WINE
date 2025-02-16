@@ -1,15 +1,13 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { fetchWineDetail } from '@/lib/fetchWineDetail';
 import { ReviewData } from '@/types/review-data';
-import ReviewContainer from './_components/ReviewContainer';
 import WineContainer from './_components/WineContainer';
+import ReviewContainer from './_components/ReviewContainer';
+import WineDetailSkeleton from './_components/skeleton/WineDetailSkeleton';
 import NotFound from '@/app/not-found';
 import Refresh from '@/components/Refresh';
-import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
-import WineDetailSkeleton from './_components/skeleton/WineDetailSkeleton';
 
 export default function Page() {
   const { id } = useParams();
@@ -34,7 +32,7 @@ export default function Page() {
           if (err.message === 'NOT_FOUND') {
             setNotFound(true);
           } else if (err.message === 'UNAUTHORIZED') {
-            alert('로그인 후, 이용해 주세요.');
+            alert('로그인 후 이용 가능합니다.');
             router.push('/signin');
           } else {
             setError(true);
