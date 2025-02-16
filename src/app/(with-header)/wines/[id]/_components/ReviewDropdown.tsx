@@ -67,6 +67,7 @@ export default function ReviewDropdown({
       }
     } catch (error) {
       closeDeleteModal();
+      console.log(status);
       toast.error('리뷰 삭제에 실패했습니다.');
       console.error('리뷰 삭제 에러', error);
     }
