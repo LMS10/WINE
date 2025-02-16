@@ -7,8 +7,8 @@ import { MyReview, EditReviewData } from '@/types/review-data';
 import { toast } from 'react-toastify';
 import Dropdown from '@/components/Dropdown';
 import Modal from '@/components/modal/Modal';
-import PatchReviewForm from '@/components/modal/PatchReviewForm';
-import DeleteWineForm from '@/components/modal/DeleteWineModal';
+import PatchReviewModal from '@/components/modal/PatchReviewModal';
+import DeleteModal from '@/components/modal/DeleteModal';
 import menu from '@/assets/icons/menu.svg';
 
 export default function ReviewDropdown({
@@ -91,11 +91,11 @@ export default function ReviewDropdown({
         }`}
       >
         <div className='custom-scrollbar max-h-[90vh] overflow-y-auto'>
-          <PatchReviewForm name={wineName} id={id} onClose={closeEditModal} reviewInitialData={reviewInitialData} editMyReview={editMyReview} />
+          <PatchReviewModal name={wineName} id={id} onClose={closeEditModal} reviewInitialData={reviewInitialData} editMyReview={editMyReview} />
         </div>
       </Modal>
       <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:w-[353px]'>
-        <DeleteWineForm onClose={closeDeleteModal} onDelete={handleDeleteWine} />
+        <DeleteModal onClose={closeDeleteModal} onDelete={handleDeleteWine} />
       </Modal>
     </div>
   );

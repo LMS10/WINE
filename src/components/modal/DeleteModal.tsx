@@ -5,7 +5,7 @@ interface DeleteWinePorps {
   onDelete: () => void;
 }
 
-export default function DeleteWineForm({ onClose, onDelete }: DeleteWinePorps) {
+export default function DeleteModal({ onClose, onDelete }: DeleteWinePorps) {
   return (
     <div>
       <div className='flex h-[182px] w-[353px] flex-col justify-between px-4 pb-6 pt-8 mobile:mx-auto mobile:h-[172px]'>

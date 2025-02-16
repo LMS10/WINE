@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { toast } from 'react-toastify';
 import Dropdown from '@/components/Dropdown';
 import Modal from '@/components/modal/Modal';
-import PatchReviewForm from '@/components/modal/PatchReviewForm';
-import DeleteWineForm from '@/components/modal/DeleteWineModal';
+import PatchReviewModal from '@/components/modal/PatchReviewModal';
+import DeleteModal from '@/components/modal/DeleteModal';
 import { MyReview } from '@/types/review-data';
 import { fetchDeleteReview } from '@/lib/fetchMyReivew';
 import { EditReviewData } from '@/app/(with-header)/myprofile/_components/MyReviewListContainer';
@@ -86,11 +86,11 @@ export default function MyReviewKebabDropDown({
         }`}
       >
         <div className='custom-scrollbar max-h-[90vh] overflow-y-auto'>
-          <PatchReviewForm name={reviewInitialData.wine.name} id={id} onClose={closeEditModal} reviewInitialData={reviewInitialData} editMyReview={editMyReview} />
+          <PatchReviewModal name={reviewInitialData.wine.name} id={id} onClose={closeEditModal} reviewInitialData={reviewInitialData} editMyReview={editMyReview} />
         </div>
       </Modal>
       <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:max-w-[353px]'>
-        <DeleteWineForm onClose={closeDeleteModal} onDelete={handleDeleteWine} />
+        <DeleteModal onClose={closeDeleteModal} onDelete={handleDeleteWine} />
       </Modal>
     </div>
   );
