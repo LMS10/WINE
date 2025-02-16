@@ -24,9 +24,27 @@ export default function WineFilterModal({ isOpen, onClose, onApply, onFilterChan
   const [selectedRating, setSelectedRating] = useState<number | null>(initialFilters.rating);
 
   const handlePriceChange = (values: number[]) => {
-    if (values.length !== 2) return;
     setPriceRange([values[0], values[1]]);
   };
+
+  const handleFinalPriceChange = (values: number[]) => {
+    setPriceRange([values[0], values[1]]);
+  };
+
+  const handleFilterApply = () => {
+    onApply({ type: selectedType, minPrice: priceRange[0], maxPrice: priceRange[1], rating: selectedRating });
+    onClose();
+  };
+
+  const handleReset = () => {
+    setSelectedType(null);
+    setPriceRange([0, MAX_PRICE]);
+    setSelectedRating(null);
+  };
+
+  useEffect(() => {
+    onFilterChange({ type: selectedType, minPrice: priceRange[0], maxPrice: priceRange[1], rating: selectedRating });
+  }, [selectedType, priceRange, selectedRating, onFilterChange]);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : 'auto';
@@ -51,21 +69,6 @@ export default function WineFilterModal({ isOpen, onClose, onApply, onFilterChan
     };
   }, [handleKeyDown]);
 
-  const handleFilterApply = () => {
-    onApply({ type: selectedType, minPrice: priceRange[0], maxPrice: priceRange[1], rating: selectedRating });
-    onClose();
-  };
-
-  const handleReset = () => {
-    setSelectedType(null);
-    setPriceRange([0, MAX_PRICE]);
-    setSelectedRating(null);
-  };
-
-  useEffect(() => {
-    onFilterChange({ type: selectedType, minPrice: priceRange[0], maxPrice: priceRange[1], rating: selectedRating });
-  }, [selectedType, priceRange, selectedRating, onFilterChange]);
-
   if (!isOpen) return null;
 
   return (
@@ -83,7 +86,7 @@ export default function WineFilterModal({ isOpen, onClose, onApply, onFilterChan
 
         <div className='flex flex-col gap-[56px]'>
           <FilterTypes selectedType={selectedType} onTypeChange={setSelectedType} />
-          <FilterPrice priceRange={priceRange} onPriceChange={handlePriceChange} />
+          <FilterPrice priceRange={priceRange} onPriceChange={handlePriceChange} onFinalChange={handleFinalPriceChange} />
           <FilterRating selectedRating={selectedRating} onRatingChange={setSelectedRating} />
         </div>
 

@@ -14,7 +14,7 @@ export default function Signup() {
           </Link>
           <SignupForm></SignupForm>
           <div className='flex gap-[14px]'>
-            <p className='font-normal text-gray-500 mobile:text-[14px]'>계정이 없으신가요?</p>
+            <p className='font-normal text-gray-500 mobile:text-[14px]'>계정이 이미 있으신가요?</p>
             <Link href='/signin' className='font-medium text-purple-100 underline mobile:text-[14px]'>
               로그인하기
             </Link>

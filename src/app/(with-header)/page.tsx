@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { Metadata } from 'next';
 import Button from '@/components/Button';
 import bannerDesktop from '@/assets/images/banner_desktop.png';
 import bannerTablet from '@/assets/images/banner_tablet.png';
@@ -10,17 +9,6 @@ import section2Large from '@/assets/images/section2_lg.png';
 import section2Small from '@/assets/images/section2_sm.png';
 import section3Large from '@/assets/images/section3_lg.png';
 import section3Small from '@/assets/images/section3_sm.png';
-
-export const metadata: Metadata = {
-  metadataBase: new URL('https://wine-lab.vercel.app/'),
-  title: 'WINE - 나만의 와인 창고',
-  description: '한 곳에서 관리하는 나만의 와인 창고',
-  openGraph: {
-    title: 'WINE - 나만의 와인 창고',
-    description: '한 곳에서 관리하는 나만의 와인 창고',
-    images: ['/thumbnail.png'],
-  },
-};
 
 export default function Home() {
   return (

@@ -10,7 +10,8 @@ import WineFilter from './WineFilter';
 import WineFilterModal from './WineFilterModal';
 import WineCard from './WineCard';
 import PostWineModal from '@/components/modal/PostWineModal';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import Refresh from '@/components/Refresh';
+import WineListSkeleton from './skeleton/WineListSkeleton';
 import filterIcon from '@/assets/icons/filter.svg';
 
 const MAX_PRICE = 2000000;
@@ -28,6 +29,7 @@ export default function WineListContainer() {
   const [isFilterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [pendingFilters, setPendingFilters] = useState(filters);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const [nextCursor, setNextCursor] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const lastWineRef = useRef<HTMLDivElement | null>(null);
@@ -48,7 +50,9 @@ export default function WineListContainer() {
       setWines((prev) => [...prev, ...response.list]);
       setNextCursor(response.nextCursor);
       setHasMore(response.nextCursor !== null);
+      setHasError(false);
     } catch (error) {
+      setHasError(true);
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -146,10 +150,20 @@ export default function WineListContainer() {
       <WineFilterModal isOpen={isFilterModalOpen} onClose={() => setFilterModalOpen(false)} onApply={applyFilters} initialFilters={pendingFilters} onFilterChange={setPendingFilters} />
       <div className='flex min-h-0 flex-col'>
         <div className='scrollbar-hidden flex h-[650px] max-h-screen flex-col gap-[62px] tablet:h-[550px]'>
+          {hasError && (
+            <div className='pc:mt-28 tablet:mt-20 mobile:mt-10'>
+              <Refresh
+                handleLoad={loadMoreWines}
+                buttonStyle='px-[20px] py-[8px] mobile:px-[16px] mobile:py-[6px] mobile:text-md mobile:font-semibold'
+                iconSize='w-[100px] h-[100px] mobile:w-[60px] mobile:h-[60px]'
+                iconTextGap='gap-[10px]'
+              />
+            </div>
+          )}
           {wines.map((wine, index) => (
             <WineCard key={`${wine.id}-${index}`} ref={index === wines.length - 1 ? lastWineRef : null} wine={wine} />
           ))}
-          {isLoading && <LoadingSpinner />}
+          {isLoading && <WineListSkeleton count={2} />}
         </div>
       </div>
     </div>

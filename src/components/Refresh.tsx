@@ -24,7 +24,7 @@ export default function Refresh({ handleLoad, buttonStyle = 'px-[30px] py-[10px]
           <p className='text-center text-lg text-gray-500 mobile:text-md'>실패했습니다.</p>
         </div>
       </div>
-      <Button onClick={onClickRefreshBtn} text='새로고침' className={`rounded-[100px] ${buttonStyle}`} />
+      <Button onClick={onClickRefreshBtn} text='새로고침' className={`rounded-[100px] font-semibold ${buttonStyle}`} />
     </div>
   );
 }

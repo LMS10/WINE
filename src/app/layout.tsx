@@ -1,13 +1,25 @@
 import localFont from 'next/font/local';
+import { Metadata } from 'next';
 import { AuthProvider } from '@/contexts/AuthProvider';
-import './globals.css';
 import { ToastContainer, Slide } from 'react-toastify';
+import './globals.css';
 
 const pretendard = localFont({
   src: '../fonts/PretendardVariable.woff2',
   display: 'swap',
   variable: '--font-pretendard',
 });
+
+export const metadata: Metadata = {
+  metadataBase: new URL('https://wine-lab.vercel.app/'),
+  title: 'WINE - 나만의 와인 창고',
+  description: '한 곳에서 관리하는 나만의 와인 창고',
+  openGraph: {
+    title: 'WINE - 나만의 와인 창고',
+    description: '한 곳에서 관리하는 나만의 와인 창고',
+    images: ['/thumbnail.png'],
+  },
+};
 
 export default function RootLayout({
   children,

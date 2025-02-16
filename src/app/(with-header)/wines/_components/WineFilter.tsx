@@ -24,6 +24,11 @@ export default function WineFilter({ onChangeFilter }: WineFilterProps) {
   const handlePriceChange = (values: number[]) => {
     const [minPrice, maxPrice] = values;
     setPriceRange([minPrice, maxPrice]);
+  };
+
+  const handleFinalPriceChange = (values: number[]) => {
+    const [minPrice, maxPrice] = values;
+    setPriceRange([minPrice, maxPrice]);
     onChangeFilter({ type: selectedType, minPrice, maxPrice, rating: selectedRating });
   };
 
@@ -35,7 +40,7 @@ export default function WineFilter({ onChangeFilter }: WineFilterProps) {
   return (
     <div className='flex flex-col gap-[56px]'>
       <FilterTypes selectedType={selectedType} onTypeChange={handleTypeChange} />
-      <FilterPrice priceRange={priceRange} onPriceChange={handlePriceChange} />
+      <FilterPrice priceRange={priceRange} onPriceChange={handlePriceChange} onFinalChange={handleFinalPriceChange} />
       <FilterRating selectedRating={selectedRating} onRatingChange={handleRatingChange} />
     </div>
   );

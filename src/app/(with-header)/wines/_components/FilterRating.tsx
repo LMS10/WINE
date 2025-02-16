@@ -20,7 +20,7 @@ const FilterRating = ({ selectedRating, onRatingChange }: FilterRatingProps) => 
               <input type='radio' name='rating' className='peer hidden' checked={selectedRating === item.value} onChange={() => onRatingChange(item.value)} />
               <div className='hidden h-[10px] w-[10px] rounded-[3px] bg-purple-100 peer-checked:block'></div>
             </div>
-            <span className={selectedRating === item.value ? 'text-purple-100' : ''}>{item.label}</span>
+            <span className={`${selectedRating === item.value ? 'text-purple-100' : ''} hover:text-purple-100`}>{item.label}</span>
           </label>
         ))}
       </div>
