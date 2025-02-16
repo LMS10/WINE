@@ -1,20 +1,19 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { fetchWithAuth } from '@/lib/auth';
+import { MyReview, EditReviewData, ReviewData } from '@/types/review-data';
+import { aromaTraslations } from '@/constants/aromaTranslation';
+import elapsedTime from '@/utils/formatDate';
+import ProfileImg from '@/components/ProfileImg';
 import profileDefault from '@/assets/icons/profile_default.svg';
 import likeIcon from '@/assets/icons/like.svg';
 import likeFilledIcon from '@/assets/icons/like_filled.svg';
 import starIcon from '@/assets/icons/star_hover.svg';
 import lessIcon from '@/assets/icons/less.svg';
 import moreIcon from '@/assets/icons/more.svg';
-import { fetchWithAuth } from '@/lib/auth';
-import { MyReview, ReviewData } from '@/types/review-data';
-import { aromaTraslations } from '@/constants/aromaTranslation';
-import elapsedTime from '@/utils/formatDate';
-import ProfileImg from '@/components/ProfileImg';
 import ReviewTasteItem from './ReviewTasteItem';
 import ReviewDropdown from './ReviewDropdown';
-import { EditReviewData } from '@/types/review-data';
-import { toast } from 'react-toastify';
 
 type ReviewItemProps = {
   review: ReviewData['reviews'][0];
@@ -58,7 +57,9 @@ export default function ReviewItem({ review, wineName, reviewInitialData, editMy
       });
 
       if (response?.ok) {
-        setLiked((prevLiked) => !prevLiked);
+        const newLikedState = !liked;
+        setLiked(newLikedState);
+        toast.success(newLikedState ? '좋아요를 눌렀습니다.' : '좋아요를 취소했습니다.');
       }
     } catch (error) {
       console.error(error);

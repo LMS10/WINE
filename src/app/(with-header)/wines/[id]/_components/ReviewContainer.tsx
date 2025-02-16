@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { calculateTasteAverage, getTopThreeAromas, calculateRatingCount } from '@/utils/ReviewUtils';
 import { ReviewData } from '@/types/review-data';
 import { EditReviewData } from '@/types/review-data';
@@ -32,35 +32,25 @@ function ReviewList({
 }
 
 export default function ReviewContainer({ data }: { data: ReviewData }) {
-  const { reviews, avgRating } = data;
-  const [localReviews, setLocalReviews] = useState(reviews);
-  const [averageRating, setAverageRating] = useState(avgRating);
+  const [localReviews, setLocalReviews] = useState(data.reviews);
+  const [averageRating, setAverageRating] = useState(data.avgRating);
 
-  useEffect(() => {
-    setAverageRating(data.avgRating);
-  }, [data.avgRating]);
+  const recalculateAverageRating = (reviews: ReviewData['reviews']) => (reviews.length ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 0);
 
-  const recalculateAverageRating = (reviews: ReviewData['reviews']) => {
-    if (reviews.length === 0) return 0;
-
-    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-    return totalRating / reviews.length;
+  const updateReviews = (updater: (prev: ReviewData['reviews']) => ReviewData['reviews']) => {
+    setLocalReviews((prev) => {
+      const updatedReviews = updater(prev);
+      setAverageRating(recalculateAverageRating(updatedReviews));
+      return updatedReviews;
+    });
   };
 
   const deleteMyReview = (id: number) => {
-    setLocalReviews((prevReviews) => {
-      const updatedReviews = prevReviews.filter((review) => review.id !== id);
-      setAverageRating(recalculateAverageRating(updatedReviews));
-      return updatedReviews;
-    });
+    updateReviews((prev) => prev.filter((review) => review.id !== id));
   };
 
   const editMyReview = (id: number, editReviewData: EditReviewData, updatedAt: string) => {
-    setLocalReviews((prevReviews) => {
-      const updatedReviews = prevReviews.map((review) => (review.id === id ? { ...review, ...editReviewData, updatedAt } : review));
-      setAverageRating(recalculateAverageRating(updatedReviews));
-      return updatedReviews;
-    });
+    updateReviews((prev) => prev.map((review) => (review.id === id ? { ...review, ...editReviewData, updatedAt } : review)));
   };
 
   const addReview = (newReview: AddReviewData) => {
@@ -73,11 +63,7 @@ export default function ReviewContainer({ data }: { data: ReviewData }) {
       isLiked: false,
     };
 
-    setLocalReviews((prevReviews) => {
-      const updatedReviews = [formattedReview, ...prevReviews];
-      setAverageRating(recalculateAverageRating(updatedReviews));
-      return updatedReviews;
-    });
+    updateReviews((prev) => [formattedReview, ...prev]);
   };
 
   const averages = calculateTasteAverage(localReviews);
