@@ -17,7 +17,7 @@ export interface WineCardProps {
   type?: 'RED' | 'WHITE' | 'SPARKLING';
   editMyWine?: (id: number, editWineData: WineDataProps) => void;
   deleteMyWine?: (id: number) => void;
-  setDataCount: React.Dispatch<React.SetStateAction<number>>;
+  setDataCount?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const WineCard = forwardRef<HTMLDivElement, WineCardProps>(

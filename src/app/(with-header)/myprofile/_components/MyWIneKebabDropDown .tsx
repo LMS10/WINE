@@ -29,7 +29,7 @@ export default function MyWIneKebabDropDown({
   wineInitialData: WineDataProps;
   editMyWine: (id: number, editWineData: WineDataProps) => void;
   deleteMyWine: (id: number) => void;
-  setDataCount: React.Dispatch<React.SetStateAction<number>>;
+  setDataCount?: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -58,7 +58,7 @@ export default function MyWIneKebabDropDown({
   const handleDeleteWine = async () => {
     try {
       const data = await fetchDeleteWine(id);
-      if (data) {
+      if (data && setDataCount) {
         deleteMyWine(id);
         toast.success('와인 삭제에 성공했습니다.');
         setDataCount((value) => value - 1);
