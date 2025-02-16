@@ -37,8 +37,7 @@ export async function fetchDeleteWine(id: number): Promise<number | undefined> {
     });
 
     if (!response?.ok || response === null) {
-      alert('와인 삭제에 실패했습니다');
-      return;
+      throw new Error('와인 삭제에 실패했습니다');
     }
 
     const body = await response.json();

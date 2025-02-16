@@ -6,6 +6,7 @@ import MyProfileContainer from './_components/MyProfileContainer';
 import MyReviewListContainer from './_components/MyReviewListContainer';
 import MyWineListContainer from './_components/MyWineListContainer';
 import { getAccessToken } from '@/lib/auth';
+import { toast } from 'react-toastify';
 
 export default function Page() {
   const [category, setCategory] = useState('내가 쓴 후기');
@@ -24,8 +25,8 @@ export default function Page() {
   useEffect(() => {
     const token = getAccessToken();
     if (!token) {
+      toast.error('로그인 후 이용 가능합니다.');
       router.push('/signin');
-      alert('로그인 후 이용 가능합니다.');
       return;
     }
   }, [router]);
