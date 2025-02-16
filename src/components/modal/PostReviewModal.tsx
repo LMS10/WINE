@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { fetchWithAuth } from '@/lib/auth';
@@ -12,6 +11,7 @@ import wineIcon from '@/assets/icons/wine.svg';
 import InteractiveRating from '../InteractiveRating';
 import ControlBar from '../ControlBar';
 import { AddReviewData } from '@/types/review-data';
+import { toast } from 'react-toastify';
 
 interface FormValues {
   rating: number;
@@ -73,8 +73,8 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [wineData, setWineData] = useState<wineDataValues>(INICIALVALUES);
   const [selectedAroma, setSelectedAroma] = useState<string[]>([]);
+  const [resetTrigger, setResetTrigger] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
-  const router = useRouter();
 
   const { register, handleSubmit, setValue, watch, reset } = useForm<FormValues>({
     defaultValues: {
@@ -96,6 +96,7 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
 
   const closeModal = () => {
     setSelectedAroma([]);
+    setResetTrigger((prev) => !prev);
     reset({
       rating: 0,
       lightBold: 0,
@@ -137,8 +138,7 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
       });
 
       if (!response?.ok || response === null) {
-        alert('리뷰 등록에 실패했습니다.');
-        throw new Error('리뷰 등록에 실패했습니다');
+        throw new Error('리뷰 등록에 실패했습니다.');
       }
 
       const body = await response.json();
@@ -161,6 +161,7 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
           wineName: wineData.name,
         };
         addReview(newReview);
+        setResetTrigger((prev) => !prev);
         reset({
           rating: 0,
           lightBold: 0,
@@ -172,18 +173,13 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
           wineId: wineData.id,
         });
         setSelectedAroma([]);
-        setValue('rating', -1);
-        setValue('lightBold', -1);
-        setValue('smoothTannic', -1);
-        setValue('drySweet', -1);
-        setValue('softAcidic', -1);
-        setValue('aroma', []);
         setIsOpen(false);
+        toast.success('리뷰 등록에 성공했습니다.');
       }
     } catch (error) {
-      alert('로그인이 만료되었습니다. 로그인 후, 다시 시도해 주세요.');
+      setIsOpen(false);
+      toast.error('리뷰 등록에 실패했습니다.');
       console.error('리뷰 등록 에러:', error);
-      router.push('/signin');
     }
   };
 
@@ -235,7 +231,7 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
                   <Image src={wineIcon} alt='와인 이미지' className='h-[68px] w-[68px] rounded-lg bg-gray-100 p-[7px] mobile:h-[67px] mobile:w-[67px]' />
                   <div className='flex flex-col gap-2'>
                     <p className='text-2lg font-semibold text-gray-800 mobile:text-lg'>{wineData.name}</p>
-                    <InteractiveRating initialValue={0} size='large' onChange={(rate) => setValue('rating', rate)} />
+                    <InteractiveRating resetTrigger={resetTrigger} initialValue={0} size='large' onChange={(rate) => setValue('rating', rate)} />
                   </div>
                 </div>
                 <textarea
@@ -247,10 +243,10 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
               <div className='flex h-[212px] flex-col gap-6 mobile:h-[194px]'>
                 <h4 className='text-xl font-bold text-gray-800 mobile:text-2lg'>와인의 맛은 어땠나요?</h4>
                 <div>
-                  <ControlBar label='바디감' minLabel={'가벼워요'} maxLabel={'진해요'} value={0} onChange={handleLightBoldChange} name='바디감' isDraggable={true} size='small' />
-                  <ControlBar label='타닌' minLabel={'부드러워요'} maxLabel={'떫어요'} value={0} onChange={handleSmoothTannicChange} name='타닌' isDraggable={true} size='small' />
-                  <ControlBar label='당도' minLabel={'드라이해요'} maxLabel={'달아요'} value={0} onChange={handleDrySweetChange} name='당도' isDraggable={true} size='small' />
-                  <ControlBar label='산미' minLabel={'안셔요'} maxLabel={'많이셔요'} value={0} onChange={handleSoftAcidicChange} name='산미' isDraggable={true} size='small' />
+                  <ControlBar label='바디감' minLabel={'가벼워요'} maxLabel={'진해요'} value={0} onChange={handleLightBoldChange} name='바디감' isDraggable={true} size='small' reset={resetTrigger} />
+                  <ControlBar label='타닌' minLabel={'부드러워요'} maxLabel={'떫어요'} value={0} onChange={handleSmoothTannicChange} name='타닌' isDraggable={true} size='small' reset={resetTrigger} />
+                  <ControlBar label='당도' minLabel={'드라이해요'} maxLabel={'달아요'} value={0} onChange={handleDrySweetChange} name='당도' isDraggable={true} size='small' reset={resetTrigger} />
+                  <ControlBar label='산미' minLabel={'안셔요'} maxLabel={'많이셔요'} value={0} onChange={handleSoftAcidicChange} name='산미' isDraggable={true} size='small' reset={resetTrigger} />
                 </div>
               </div>
               <div className='flex flex-col gap-6'>

@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 type ControlBarProps = {
+  reset?: boolean;
   label: string;
   minLabel: string;
   maxLabel: string;
@@ -12,7 +13,7 @@ type ControlBarProps = {
   onChange: (value: number) => void;
 };
 
-export default function ControlBar({ label, minLabel, maxLabel, value, isDraggable, size = 'large', onChange, name }: ControlBarProps) {
+export default function ControlBar({ reset = false, label, minLabel, maxLabel, value, isDraggable, size = 'large', onChange, name }: ControlBarProps) {
   const controlBarStyle =
     size === 'large'
       ? 'max-w-[720px] h-[28px] tablet:max-w-[880px] tablet:h-[26px]  mobile:max-w-[600px] mobile:h-[30px]'
@@ -29,6 +30,12 @@ export default function ControlBar({ label, minLabel, maxLabel, value, isDraggab
   useEffect(() => {
     setDragValue(value);
   }, [value]);
+
+  useEffect(() => {
+    if (value === 0) {
+      setDragValue(0);
+    }
+  }, [reset, value]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!isDraggable || !controlBarRef.current) return;
@@ -47,7 +54,7 @@ export default function ControlBar({ label, minLabel, maxLabel, value, isDraggab
       const controlBarWidth = controlBarRef.current!.offsetWidth;
 
       let newValue = initialValue.current + (deltaX / controlBarWidth) * 10;
-      newValue = Math.min(Math.max(Math.round(newValue), 1), 10);
+      newValue = Math.min(Math.max(Math.round(newValue), 0), 10);
       setDragValue(newValue);
       onChange(newValue);
     };
@@ -74,9 +81,9 @@ export default function ControlBar({ label, minLabel, maxLabel, value, isDraggab
           {label}
         </label>
         <span className='mr-[16px] w-[70px] flex-none whitespace-nowrap text-lg font-medium text-gray-800 mobile:mr-0 mobile:text-md'>{minLabel}</span>
-        <div className='relative h-[6px] w-full cursor-pointer rounded-full border-[1px] border-solid border-gray-300 bg-gray-100' ref={controlBarRef} onMouseDown={handleMouseDown}>
+        <div className='relative h-[6px] w-full cursor-default rounded-full border-[1px] border-solid border-gray-300 bg-gray-100' ref={controlBarRef} onMouseDown={handleMouseDown}>
           <div
-            className='absolute left-0 top-1/2 h-[16px] w-[16px] -translate-y-1/2 transform cursor-pointer rounded-full bg-purple-100 mobile:h-[12px] mobile:w-[12px]'
+            className={`absolute left-0 top-1/2 h-[16px] w-[16px] -translate-y-1/2 transform rounded-full bg-purple-100 mobile:h-[12px] mobile:w-[12px] ${isDraggable ? 'cursor-pointer' : 'cursor-default'}`}
             style={{ left: `${(dragValue / 10) * 100}%` }}
             onMouseDown={handleMouseDown}
           />

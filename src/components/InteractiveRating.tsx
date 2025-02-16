@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Rating } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 
@@ -7,10 +7,17 @@ interface InteractiveRatingProps {
   onChange: (newValue: number) => void;
   size?: 'small' | 'medium' | 'large';
   className?: string;
+  resetTrigger?: boolean;
 }
 
-export default function InteractiveRating({ initialValue = 0, onChange, size = 'large', className = '' }: InteractiveRatingProps) {
+export default function InteractiveRating({ initialValue = 0, onChange, size = 'large', className = '', resetTrigger = false }: InteractiveRatingProps) {
   const [value, setValue] = useState<number | null>(initialValue);
+
+  useEffect(() => {
+    if (!initialValue) {
+      setValue(0);
+    }
+  }, [resetTrigger, initialValue]);
 
   return (
     <Rating

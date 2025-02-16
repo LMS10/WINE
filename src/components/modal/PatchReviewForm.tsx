@@ -10,6 +10,7 @@ import wineIcon from '@/assets/icons/wine.svg';
 import InteractiveRating from '../InteractiveRating';
 import ControlBar from '../ControlBar';
 import { MyReview } from '@/types/review-data';
+import { toast } from 'react-toastify';
 
 export interface EditReviewData {
   rating: number;
@@ -111,19 +112,23 @@ export default function PatchReviewForm({ name, id, onClose, reviewInitialData, 
         body: JSON.stringify({ rating, lightBold, smoothTannic, drySweet, softAcidic, aroma, content, wineId }),
       });
 
-      if (!response?.ok || response === null) return alert('리뷰 수정에 실패했습니다');
+      if (!response?.ok || response === null) {
+        throw new Error('리뷰 수정에 실패했습니다.');
+      }
 
       const body = await response.json();
       if (body) {
         if (editMyReview) {
           const now: string = new Date().toISOString();
           editMyReview(id, data, now);
+          toast.success('리뷰 수정에 성공했습니다.');
         }
         onClose();
       }
     } catch (error) {
+      onClose();
+      toast.error('리뷰 수정에 실패했습니다.');
       console.error('리뷰 수정 에러:', error);
-      console.log(data);
     }
   };
 

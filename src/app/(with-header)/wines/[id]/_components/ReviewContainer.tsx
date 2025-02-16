@@ -32,15 +32,25 @@ function ReviewList({
 }
 
 export default function ReviewContainer({ data }: { data: ReviewData }) {
-  const { reviews, avgRating } = data;
-  const [localReviews, setLocalReviews] = useState(reviews);
+  const [localReviews, setLocalReviews] = useState(data.reviews);
+  const [averageRating, setAverageRating] = useState(data.avgRating);
+
+  const recalculateAverageRating = (reviews: ReviewData['reviews']) => (reviews.length ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 0);
+
+  const updateReviews = (updater: (prev: ReviewData['reviews']) => ReviewData['reviews']) => {
+    setLocalReviews((prev) => {
+      const updatedReviews = updater(prev);
+      setAverageRating(recalculateAverageRating(updatedReviews));
+      return updatedReviews;
+    });
+  };
 
   const deleteMyReview = (id: number) => {
-    setLocalReviews((prevReviews) => prevReviews.filter((review) => review.id !== id));
+    updateReviews((prev) => prev.filter((review) => review.id !== id));
   };
 
   const editMyReview = (id: number, editReviewData: EditReviewData, updatedAt: string) => {
-    setLocalReviews((prevReviews) => prevReviews.map((review) => (review.id === id ? { ...review, ...editReviewData, updatedAt } : review)));
+    updateReviews((prev) => prev.map((review) => (review.id === id ? { ...review, ...editReviewData, updatedAt } : review)));
   };
 
   const addReview = (newReview: AddReviewData) => {
@@ -53,27 +63,28 @@ export default function ReviewContainer({ data }: { data: ReviewData }) {
       isLiked: false,
     };
 
-    setLocalReviews((prevReviews) => [formattedReview, ...prevReviews]);
+    updateReviews((prev) => [formattedReview, ...prev]);
   };
 
-  const averages = calculateTasteAverage(reviews);
-  const topThreeAromas = getTopThreeAromas(reviews);
-  const ratingPercentages = calculateRatingCount(reviews);
+  const averages = calculateTasteAverage(localReviews);
+  const topThreeAromas = getTopThreeAromas(localReviews);
+  const ratingPercentages = calculateRatingCount(localReviews);
+
   return (
     <div>
-      {reviews.length > 0 ? (
+      {localReviews.length > 0 ? (
         <div className='mb-[100px] mt-[60px] w-full'>
           <div className='mx-auto w-full max-w-[1140px] transition-all duration-300 ease-in-out tablet:max-w-[1000px] mobile:max-w-[700px]'>
             <div className='grid grid-cols-2 gap-8 tablet:grid-cols-1 tablet:px-6 mobile:grid-cols-1 mobile:px-6'>
               <ReviewTasteAverage
-                count={reviews.length}
+                count={localReviews.length}
                 lightBold={averages.lightBold}
                 smoothTannic={averages.smoothTannic}
                 drySweet={averages.drySweet}
                 softAcidic={averages.softAcidic}
                 isDraggable={false}
               />
-              <ReviewAroma selectedAroma={topThreeAromas} count={reviews.length} />
+              <ReviewAroma selectedAroma={topThreeAromas} count={localReviews.length} />
             </div>
 
             <div className='mt-[60px] flex justify-between gap-[60px] tablet:flex-col-reverse tablet:px-6'>
@@ -82,7 +93,7 @@ export default function ReviewContainer({ data }: { data: ReviewData }) {
               </div>
               <div className='relative'>
                 <div className='sticky top-28'>
-                  <ReviewRating avgRating={avgRating} count={reviews.length} ratingPercentages={ratingPercentages} addReview={addReview} />
+                  <ReviewRating avgRating={averageRating} count={localReviews.length} ratingPercentages={ratingPercentages} addReview={addReview} />
                 </div>
               </div>
             </div>

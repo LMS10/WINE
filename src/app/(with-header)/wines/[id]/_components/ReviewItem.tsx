@@ -1,19 +1,19 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { fetchWithAuth } from '@/lib/auth';
+import { MyReview, EditReviewData, ReviewData } from '@/types/review-data';
+import { aromaTraslations } from '@/constants/aromaTranslation';
+import elapsedTime from '@/utils/formatDate';
+import ProfileImg from '@/components/ProfileImg';
 import profileDefault from '@/assets/icons/profile_default.svg';
 import likeIcon from '@/assets/icons/like.svg';
 import likeFilledIcon from '@/assets/icons/like_filled.svg';
 import starIcon from '@/assets/icons/star_hover.svg';
 import lessIcon from '@/assets/icons/less.svg';
 import moreIcon from '@/assets/icons/more.svg';
-import { fetchWithAuth } from '@/lib/auth';
-import { MyReview, ReviewData } from '@/types/review-data';
-import { aromaTraslations } from '@/constants/aromaTranslation';
-import elapsedTime from '@/utils/formatDate';
-import ProfileImg from '@/components/ProfileImg';
 import ReviewTasteItem from './ReviewTasteItem';
 import ReviewDropdown from './ReviewDropdown';
-import { EditReviewData } from '@/types/review-data';
 
 type ReviewItemProps = {
   review: ReviewData['reviews'][0];
@@ -40,7 +40,7 @@ export default function ReviewItem({ review, wineName, reviewInitialData, editMy
           setIsMyReview(userData.id === review.user.id);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('사용자 정보 불러오기 에러', error);
         setIsMyReview(false);
       }
     };
@@ -56,11 +56,23 @@ export default function ReviewItem({ review, wineName, reviewInitialData, editMy
         method: liked ? 'DELETE' : 'POST',
       });
 
+      if (response?.status === 401) {
+        toast.error('로그인 세션이 만료되었습니다. 다시 로그인해 주세요.');
+        return;
+      }
+
+      if (!response?.ok) {
+        toast.error('좋아요를 누를 수 없습니다.');
+        return;
+      }
+
       if (response?.ok) {
-        setLiked((prevLiked) => !prevLiked);
+        const newLikedState = !liked;
+        setLiked(newLikedState);
+        toast.success(newLikedState ? '좋아요를 눌렀습니다.' : '좋아요를 취소했습니다.');
       }
     } catch (error) {
-      console.error(error);
+      console.error('좋아요 에러', error);
     } finally {
       setLoading(false);
     }
@@ -78,6 +90,7 @@ export default function ReviewItem({ review, wineName, reviewInitialData, editMy
 
   const handleDelete = () => {
     deleteMyReview(reviewData.id);
+    toast.success('리뷰 삭제에 성공했습니다.');
   };
 
   return (

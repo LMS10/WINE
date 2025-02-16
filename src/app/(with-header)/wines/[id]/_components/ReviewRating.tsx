@@ -1,7 +1,7 @@
 'use client';
+import { AddReviewData } from '@/types/review-data';
 import StaticRating from '@/components/StaticRating';
 import PostReviewModal from '@/components/modal/PostReviewModal';
-import { AddReviewData } from '@/types/review-data';
 
 type ReviewRatingProps = {
   count: number;
