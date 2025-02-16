@@ -6,6 +6,7 @@ import FilterTypes from './FilterTypes';
 import FilterPrice from './FilterPrice';
 import FilterRating from './FilterRating';
 import Button from '@/components/Button';
+import { useScrollLock } from '@/hooks/useScrollLock';
 import closeIcon from '@/assets/icons/close.svg';
 
 const MAX_PRICE = 2000000;
@@ -46,12 +47,7 @@ export default function WineFilterModal({ isOpen, onClose, onApply, onFilterChan
     onFilterChange({ type: selectedType, minPrice: priceRange[0], maxPrice: priceRange[1], rating: selectedRating });
   }, [selectedType, priceRange, selectedRating, onFilterChange]);
 
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : 'auto';
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isOpen]);
+  useScrollLock(isOpen);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {

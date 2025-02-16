@@ -1,9 +1,9 @@
 'use client';
-import Image from 'next/image';
+
 import { useState } from 'react';
+import Image from 'next/image';
 import { fetchWithAuth } from '@/lib/auth';
-import { MyReview } from '@/types/review-data';
-import { EditReviewData } from '@/types/review-data';
+import { MyReview, EditReviewData } from '@/types/review-data';
 import { toast } from 'react-toastify';
 import Dropdown from '@/components/Dropdown';
 import Modal from '@/components/modal/Modal';
@@ -86,11 +86,13 @@ export default function ReviewDropdown({
       <Modal
         isOpen={isEditModalOpen}
         setIsOpen={setIsEditModalOpen}
-        className={`overflow-x-hidden rounded-2xl mobile:mb-0 mobile:h-[930px] mobile:rounded-b-none ${
+        className={`min-w-[375px] rounded-2xl transition-transform mobile:fixed mobile:bottom-0 mobile:left-0 mobile:mb-0 mobile:w-full mobile:rounded-b-none ${
           isEditModalOpen ? 'mobile:translate-y-0 mobile:animate-slide-up' : 'mobile:animate-slide-down mobile:translate-y-full'
         }`}
       >
-        <PatchReviewForm name={wineName} id={id} onClose={closeEditModal} reviewInitialData={reviewInitialData} editMyReview={editMyReview} />
+        <div className='custom-scrollbar max-h-[90vh] overflow-y-auto'>
+          <PatchReviewForm name={wineName} id={id} onClose={closeEditModal} reviewInitialData={reviewInitialData} editMyReview={editMyReview} />
+        </div>
       </Modal>
       <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:w-[353px]'>
         <DeleteWineForm onClose={closeDeleteModal} onDelete={handleDeleteWine} />

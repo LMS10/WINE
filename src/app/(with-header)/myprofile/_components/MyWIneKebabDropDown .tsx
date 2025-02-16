@@ -4,11 +4,11 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import Dropdown from '@/components/Dropdown';
-import kebab from '@/assets/icons/menu.svg';
 import Modal from '@/components/modal/Modal';
 import PatchWineForm from '@/components/modal/PatchWineForm';
 import DeleteWineForm from '@/components/modal/DeleteWineModal';
 import { fetchDeleteWine } from '@/lib/fetchWines';
+import kebab from '@/assets/icons/menu.svg';
 
 export interface WineDataProps {
   name: string;
@@ -89,7 +89,9 @@ export default function MyWIneKebabDropDown({
           isEditModalOpen ? 'mobile:translate-y-0 mobile:animate-slide-up' : 'mobile:animate-slide-down mobile:translate-y-full'
         }`}
       >
-        <PatchWineForm onClose={closeEditModal} id={`${id}`} wineInitialData={wineInitialData} editMyWine={editMyWine} />
+        <div className='custom-scrollbar max-h-[90vh] overflow-y-auto'>
+          <PatchWineForm onClose={closeEditModal} id={`${id}`} wineInitialData={wineInitialData} editMyWine={editMyWine} />
+        </div>
       </Modal>
       <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:max-w-[353px]'>
         <DeleteWineForm onClose={closeDeleteModal} onDelete={handleDeleteWine} />
