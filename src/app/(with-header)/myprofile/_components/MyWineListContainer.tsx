@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { WineDetails } from '@/types/wine';
 import emptyData from '@/assets/icons/empty_review.svg';
@@ -9,19 +9,24 @@ import { WineDataProps } from '@/app/(with-header)/myprofile/_components/MyWIneK
 import Refresh from '@/components/Refresh';
 import { fetchMyWine } from '@/lib/fetchMyWine';
 import MyWineItemSkeleton from './skeleton/MyWineItemSkeleton';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function MyWineListContainer({ setDataCount }: { setDataCount: React.Dispatch<React.SetStateAction<number>> }) {
   const [myWineData, setMyWineData] = useState<WineDetails[]>([]);
   const [isLoading, setIsloading] = useState(true);
   const [error, setError] = useState('');
+  const [nextCursor, setNextCursor] = useState<number | null>(null);
+  const [isMoreLoading, setIsMoreLoading] = useState(false);
+  const lastWineRef = useRef<HTMLDivElement | null>(null);
 
   const getMyWine = useCallback(async () => {
     setError('');
     setIsloading(true);
     try {
-      const data = await fetchMyWine();
+      const data = await fetchMyWine(5);
       setMyWineData(data.list);
       setDataCount(data.totalCount);
+      setNextCursor(data.nextCursor);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -32,6 +37,26 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: Re
       setIsloading(false);
     }
   }, [setDataCount]);
+
+  const getMoreMyWine = useCallback(async () => {
+    if (nextCursor === null) return;
+    setError('');
+    setIsMoreLoading(true);
+    try {
+      const data = await fetchMyWine(5, nextCursor || undefined);
+      setMyWineData((prev) => [...prev, ...data.list]);
+      setDataCount(data.totalCount);
+      setNextCursor(data.nextCursor);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('알 수 없는 오류가 발생했습니다.');
+      }
+    } finally {
+      setIsMoreLoading(false);
+    }
+  }, [setDataCount, nextCursor]);
 
   const deleteMyWine = (id: number) => {
     const updatedWineList = myWineData.filter((value) => value.id !== id);
@@ -51,6 +76,23 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: Re
   useEffect(() => {
     getMyWine();
   }, [getMyWine]);
+
+  useEffect(() => {
+    if (!lastWineRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          getMoreMyWine();
+        }
+      },
+      {
+        root: null,
+        threshold: 0.5,
+      },
+    );
+    observer.observe(lastWineRef.current);
+    return () => observer.disconnect();
+  }, [getMoreMyWine]);
 
   if (isLoading)
     return (
@@ -81,8 +123,8 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: Re
     );
 
   return (
-    <div className='flex flex-col gap-[8px] tablet:gap-[16px] mobile:gap-[16px]'>
-      {myWineData.map((value) => (
+    <div className='scrollbar-hidden flex h-[800px] flex-col gap-[8px] overflow-x-hidden overflow-y-scroll tablet:gap-[16px] mobile:gap-[16px]'>
+      {myWineData.map((value, index) => (
         <WineCard
           key={value.id}
           id={value.id}
@@ -97,8 +139,10 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: Re
           editMyWine={editMyWine}
           deleteMyWine={deleteMyWine}
           setDataCount={setDataCount}
+          ref={index === myWineData.length - 1 ? lastWineRef : null}
         />
       ))}
+      {isMoreLoading && <LoadingSpinner />}
     </div>
   );
 }

@@ -7,18 +7,16 @@ import { useRouter } from 'next/navigation';
 import MyReviewKebabDropDown from '@/app/(with-header)/myprofile/_components/MyReviewKebabDropDown';
 import { MyReview } from '@/types/review-data';
 import { EditReviewData } from '@/app/(with-header)/myprofile/_components/MyReviewListContainer';
+import { forwardRef } from 'react';
 
-export function MyReviewItem({
-  reviewInitialData,
-  editMyReview,
-  deleteMyReview,
-  setDataCount,
-}: {
+interface MyReviewItemProps {
   reviewInitialData: MyReview;
   editMyReview: (id: number, editReviewData: EditReviewData, updatedAt: string) => void;
   deleteMyReview: (id: number) => void;
   setDataCount: React.Dispatch<React.SetStateAction<number>>;
-}) {
+}
+
+const MyReviewItem = forwardRef<HTMLDivElement, MyReviewItemProps>(({ reviewInitialData, editMyReview, deleteMyReview, setDataCount }, ref) => {
   const router = useRouter();
   const reviewElapsedTime = elapsedTime(reviewInitialData.updatedAt);
 
@@ -31,7 +29,7 @@ export function MyReviewItem({
   };
 
   return (
-    <div className='flex w-[800px] cursor-pointer rounded-[16px] border border-gray-300 px-10 py-7 hover:shadow-lg tablet:w-full mobile:w-full' onClick={onClickReviewItem}>
+    <div ref={ref} className='flex w-[800px] cursor-pointer rounded-[16px] border border-gray-300 px-10 py-7 hover:shadow-lg tablet:w-full mobile:w-full' onClick={onClickReviewItem}>
       <div className='flex flex-grow flex-col gap-[20px]'>
         <div className='relative flex gap-[15px]'>
           <div className='flex h-[42px] w-[80px] items-center justify-center gap-[4px] rounded-[12px] bg-purple-10 tablet:h-[38px] mobile:h-[32px] mobile:w-[60px]'>
@@ -48,4 +46,8 @@ export function MyReviewItem({
       </div>
     </div>
   );
-}
+});
+
+MyReviewItem.displayName = 'MyReviewItem';
+
+export default MyReviewItem;

@@ -1,9 +1,12 @@
 import { WineListResponse } from '@/types/wine';
 import { fetchWithAuth } from './auth';
 
-export async function fetchMyWine(): Promise<WineListResponse> {
+export async function fetchMyWine(limit: number, cursor?: number): Promise<WineListResponse> {
+  const params = new URLSearchParams();
+  params.append('limit', limit.toString());
+  if (cursor) params.append('cursor', cursor.toString());
   try {
-    const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/wines?limit=30`);
+    const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/users/me/wines?${params.toString()}`);
 
     if (!response?.ok || response === null) {
       throw new Error('와인 데이터를 불러오는 데 실패했습니다.');
