@@ -48,6 +48,10 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
       alert('닉네임을 입력해 주세요.');
       return;
     }
+    if (nickNameValue.length > 30) {
+      alert('닉네임은 최대 30글자입니다.');
+      return;
+    }
     if (!fileInput && nickNameValue === preNickName) {
       setIsDisableProfile(true);
       return;
@@ -93,7 +97,7 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
           </label>
         )}
         <div className='flex flex-col gap-[16px] tablet:gap-[8px] mobile:gap-[4px]'>
-          <h1 className='flex justify-center text-2xl font-bold text-gray-800 tablet:justify-start mobile:text-xl'>{preNickName}</h1>
+          <h1 className='overflow-hidden text-ellipsis whitespace-nowrap text-center text-2xl font-bold text-gray-800 pc:w-[200px] tablet:justify-start mobile:text-xl'>{preNickName}</h1>
         </div>
       </div>
       <div className='flex w-full flex-col justify-center gap-[8px] tablet:flex-row tablet:gap-[24px] mobile:flex-col mobile:gap-[6px]'>
