@@ -52,7 +52,7 @@ export default function PostWineModal() {
 
   const handlePostWine: SubmitHandler<FormValues> = async (data) => {
     try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/wine`, {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/wines`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, price: Number(data.price) }),
