@@ -65,7 +65,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit(handleLogin)}>
       <div className='flex flex-col pb-[28px] mobile:pb-4'>
         <label htmlFor='email' className='pb-[10px] font-medium leading-[26px] text-gray-800 mobile:text-[14px]'>
           이메일
@@ -92,7 +92,7 @@ export default function LoginForm() {
       </div>
 
       <div className='flex w-full flex-col gap-[15px] pb-8 pt-14 mobile:pb-6 mobile:pt-10'>
-        <Button type='button' onClick={handleSubmit(handleLogin)} text='로그인' className='h-[50px] rounded-2xl border mobile:text-[14px]'></Button>
+        <Button type='submit' onClick={handleSubmit(handleLogin)} text='로그인' className='h-[50px] rounded-2xl border mobile:text-[14px]'></Button>
         <button type='button' onClick={handleGoogleLogin} className='flex h-[50px] items-center justify-center gap-3 rounded-2xl border border-gray-300 bg-white'>
           <Image src={googleIcon} alt='구글아이콘' />
           <p className='font-medium mobile:text-[14px]'>Google로 시작하기</p>
