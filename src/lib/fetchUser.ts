@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { MyProfileData } from '@/app/(with-header)/myprofile/_components/MyProfile';
 import { fetchWithAuth } from './auth';
 
@@ -30,8 +31,8 @@ export async function fetchUploadUser(image: string, nickname: string): Promise<
     });
 
     if (response?.status === 400) {
-      alert('동일한 닉네임이 있습니다.');
-      return;
+      toast.error('동일한 닉네임이 있습니다.');
+      return undefined;
     }
 
     if (!response?.ok || response === null) {

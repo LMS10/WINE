@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { MyProfile, MyProfileData } from '@/app/(with-header)/myprofile/_components/MyProfile';
 import Refresh from '@/components/Refresh';
 import { fetchUploadUser, fetchUser } from '@/lib/fetchUser';
@@ -18,9 +19,9 @@ export default function MyProfileContainer() {
     try {
       const data = await fetchUser();
       setProfileData(data);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e.message);
       } else {
         setError('알 수 없는 오류가 발생했습니다.');
       }
@@ -30,29 +31,25 @@ export default function MyProfileContainer() {
   };
 
   const upLoadImgFile = async (formData: FormData): Promise<string | undefined> => {
-    setError('');
     try {
       const data = await fetchImage(formData);
       return data;
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError('알 수 없는 오류가 발생했습니다.');
+    } catch (e) {
+      if (e) {
+        toast.error('이미지 업로드에 실패했습니다.');
       }
     }
   };
 
   const upLoadUserData = async (image: string, nickname: string): Promise<string | undefined> => {
-    setError('');
     try {
       const result = await fetchUploadUser(image, nickname);
+      if (!result) return;
+      toast.success('프로필 수정에 성공했습니다.');
       return result;
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError('알 수 없는 오류가 발생했습니다.');
+    } catch (e) {
+      if (e) {
+        toast.error('프로필 수정에 실패했습니다.');
       }
     }
   };

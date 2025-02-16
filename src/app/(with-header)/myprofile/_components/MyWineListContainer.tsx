@@ -123,7 +123,7 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: Re
     );
 
   return (
-    <div className='scrollbar-hidden flex h-[800px] flex-col gap-[8px] overflow-x-hidden overflow-y-scroll tablet:gap-[16px] mobile:gap-[16px]'>
+    <div className='scrollbar-hidden flex h-[75vh] flex-col gap-[8px] overflow-x-hidden overflow-y-scroll tablet:gap-[16px] mobile:gap-[16px]'>
       {myWineData.map((value, index) => (
         <WineCard
           key={value.id}

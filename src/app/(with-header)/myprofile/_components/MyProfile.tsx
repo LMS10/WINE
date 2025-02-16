@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { ChangeEvent, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 import photoIcon from '@/assets/icons/photo.svg';
 import ProfileImg from '@/components/ProfileImg';
 import Button from '@/components/Button';
@@ -45,11 +46,11 @@ export function MyProfile({ profileData, upLoadImgFile, upLoadUserData }: MuProf
 
   const onClickUploadButton = async () => {
     if (nickNameValue === '') {
-      alert('닉네임을 입력해 주세요.');
+      toast.error('닉네임을 입력해 주세요.');
       return;
     }
     if (nickNameValue.length > 30) {
-      alert('닉네임은 최대 30글자입니다.');
+      toast.error('닉네임은 최대 30글자입니다.');
       return;
     }
     if (!fileInput && nickNameValue === preNickName) {

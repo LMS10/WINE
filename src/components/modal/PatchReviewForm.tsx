@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { fetchWithAuth } from '@/lib/auth';
 import Button from '@/components/Button';
 import close from '@/assets/icons/close.svg';
@@ -10,11 +11,6 @@ import wineIcon from '@/assets/icons/wine.svg';
 import InteractiveRating from '../InteractiveRating';
 import ControlBar from '../ControlBar';
 import { MyReview } from '@/types/review-data';
-<<<<<<< HEAD
-import { toast } from 'react-toastify';
-=======
-import { useRouter } from 'next/navigation';
->>>>>>> 94c7c02 (✨ feat : 후기 리스트 무한 스크롤 구현)
 
 export interface EditReviewData {
   rating: number;
@@ -74,7 +70,6 @@ interface postReviewPorp {
 }
 
 export default function PatchReviewForm({ name, id, onClose, reviewInitialData, editMyReview }: postReviewPorp) {
-  const router = useRouter();
   const [selectedAroma, setSelectedAroma] = useState<string[]>(reviewInitialData?.aroma || []);
 
   const { register, handleSubmit, setValue, watch } = useForm<FormValues>({
@@ -121,12 +116,6 @@ export default function PatchReviewForm({ name, id, onClose, reviewInitialData, 
         throw new Error('리뷰 수정에 실패했습니다.');
       }
 
-      if (response?.status === 401) {
-        alert('로그인 상태가 아닙니다.');
-        router.push('/signin');
-        return;
-      }
-
       const body = await response.json();
       if (body) {
         if (editMyReview) {
@@ -137,9 +126,10 @@ export default function PatchReviewForm({ name, id, onClose, reviewInitialData, 
         onClose();
       }
     } catch (error) {
-      onClose();
-      toast.error('리뷰 수정에 실패했습니다.');
-      console.error('리뷰 수정 에러:', error);
+      if (error) {
+        onClose();
+        toast.error('리뷰 수정에 실패했습니다.');
+      }
     }
   };
 

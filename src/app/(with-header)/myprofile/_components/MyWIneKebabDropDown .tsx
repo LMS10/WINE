@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 import Dropdown from '@/components/Dropdown';
 import kebab from '@/assets/icons/menu.svg';
 import Modal from '@/components/modal/Modal';
@@ -32,7 +33,6 @@ export default function MyWIneKebabDropDown({
 }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const [error, setError] = useState('');
 
   const openEditModal = () => {
     setIsEditModalOpen(true);
@@ -56,21 +56,19 @@ export default function MyWIneKebabDropDown({
   ];
 
   const handleDeleteWine = async () => {
-    setError('');
     try {
       const data = await fetchDeleteWine(id);
       if (data) {
         deleteMyWine(id);
+        toast.success('와인 삭제에 성공했습니다.');
         setDataCount((value) => value - 1);
         closeDeleteModal();
       }
     } catch (e) {
-      if (e instanceof Error) {
-        setError(e.message);
-      } else {
-        setError('알 수 없는 오류가 발생했습니다.');
+      if (e) {
+        toast.error('와인 삭제에 실패했습니다.');
+        closeDeleteModal();
       }
-      alert(error);
     }
   };
 

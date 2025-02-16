@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { fetchWithAuth } from '@/lib/auth';
 import Dropdown from '../Dropdown';
 import Button from '../Button';
@@ -49,20 +50,19 @@ export default function PatchWineForm({ onClose, id, wineInitialData, editMyWine
         body: JSON.stringify({ name, region, image, price: Number(price), type }),
       });
 
-      if (!response?.ok || response === null) return alert('와인 수정에 실패했습니다');
-
-      if (response?.status === 401) {
-        alert('로그인 상태가 아닙니다.');
-        router.push('/signin');
-        return;
+      if (!response?.ok || response === null) {
+        throw new Error('와인 수정에 실패했습니다.');
       }
 
       const body = await response.json();
       editMyWine(body.id, { ...data, type: data.type as 'RED' | 'WHITE' | 'SPARKLING' });
+      toast.success('와인 수정에 성공했습니다.');
       router.push(`/wines/${body.id}`);
     } catch (error) {
-      console.error('와인 수정 에러:', error);
-      console.log(data);
+      if (error) {
+        onClose();
+        toast.error('와인 수정에 실패했습니다.');
+      }
     }
   };
 

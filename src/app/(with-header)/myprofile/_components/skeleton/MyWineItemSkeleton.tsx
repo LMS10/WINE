@@ -1,7 +1,7 @@
 export default function MyWineItemSkeleton() {
   return (
     <div>
-      <div className='flex h-[228px] gap-[40px] overflow-hidden rounded-[16px] border border-gray-300 bg-gray-100 py-[30px] pl-[60px] pr-[40px] pc:w-[800px] tablet:w-full mobile:h-[164px] mobile:w-full mobile:gap-[40px] mobile:px-[20px] mobile:pb-[16.5px] mobile:pl-[40px] mobile:pt-[20px]'>
+      <div className='flex h-[228px] animate-pulse gap-[40px] overflow-hidden rounded-[16px] border border-gray-300 bg-gray-100 py-[30px] pl-[60px] pr-[40px] pc:w-[800px] tablet:w-full mobile:h-[164px] mobile:w-full mobile:gap-[40px] mobile:px-[20px] mobile:pb-[16.5px] mobile:pl-[40px] mobile:pt-[20px]'>
         <div className='relative h-[198px] w-[60px] flex-shrink-0 mobile:h-[144px] mobile:w-[50px]'>
           <div className='h-[210px] w-full rounded bg-gray-200 mobile:h-[154px]'></div>
         </div>
