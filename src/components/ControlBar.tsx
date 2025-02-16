@@ -54,7 +54,7 @@ export default function ControlBar({ reset = false, label, minLabel, maxLabel, v
       const controlBarWidth = controlBarRef.current!.offsetWidth;
 
       let newValue = initialValue.current + (deltaX / controlBarWidth) * 10;
-      newValue = Math.min(Math.max(Math.round(newValue), 1), 10);
+      newValue = Math.min(Math.max(Math.round(newValue), 0), 10);
       setDragValue(newValue);
       onChange(newValue);
     };
