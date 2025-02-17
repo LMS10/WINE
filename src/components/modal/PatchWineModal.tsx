@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -15,7 +15,7 @@ interface FormValues {
   name: string;
   region: string;
   image: string;
-  price: number;
+  price: number | null;
   type: string;
 }
 
@@ -28,7 +28,8 @@ interface postWinePorps {
   editMyWine: (id: number, editWineData: WineDataProps) => void;
 }
 
-export default function PatchWineForm({ onClose, id, wineInitialData, editMyWine }: postWinePorps) {
+export default function PatchWineModal({ onClose, id, wineInitialData, editMyWine }: postWinePorps) {
+  const [formattedPrice, setFormattedPrice] = useState<string>('');
   const [preview, setPreview] = useState<string | null>(wineInitialData.image);
   const router = useRouter();
 
@@ -39,6 +40,35 @@ export default function PatchWineForm({ onClose, id, wineInitialData, editMyWine
     { value: () => setValue('type', 'WHITE'), label: 'White' },
     { value: () => setValue('type', 'SPARKLING'), label: 'Sparkling' },
   ];
+
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = event.target.value.replaceAll(',', '');
+
+    if (rawValue === '') {
+      setFormattedPrice('');
+      setValue('price', null);
+      return;
+    }
+
+    if (!/^\d*$/.test(rawValue)) return;
+
+    const numericValue = Number(rawValue);
+
+    if (numericValue > 2000000) {
+      alert('가격은 200만원 이하로 입력해 주세요.');
+      return;
+    }
+
+    setFormattedPrice(numericValue.toLocaleString());
+    setValue('price', numericValue);
+  };
+
+  useEffect(() => {
+    if (wineInitialData.price !== null) {
+      setFormattedPrice(wineInitialData.price.toLocaleString());
+      setValue('price', wineInitialData.price);
+    }
+  }, [wineInitialData.price, setValue]);
 
   const handlePatchWine: SubmitHandler<FormValues> = async (data) => {
     const { name, region, image, price, type } = data;
@@ -114,12 +144,12 @@ export default function PatchWineForm({ onClose, id, wineInitialData, editMyWine
               가격
             </label>
             <input
-              type='number'
+              type='text'
               id='price'
               placeholder='가격 입력 (200만원 이하)'
-              defaultValue={wineInitialData.price}
+              value={formattedPrice}
+              onChange={handlePriceChange}
               className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
-              {...register('price')}
             />
           </div>
 

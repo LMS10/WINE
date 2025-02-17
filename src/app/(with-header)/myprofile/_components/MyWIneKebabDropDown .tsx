@@ -12,7 +12,7 @@ import kebab from '@/assets/icons/menu.svg';
 
 export interface WineDataProps {
   name: string;
-  price: number;
+  price: number | null;
   region: string;
   type: 'RED' | 'WHITE' | 'SPARKLING';
   image: string;
