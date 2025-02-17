@@ -8,7 +8,7 @@ import ProfileImgDropdown from './ProfileImgDropdown';
 
 function LoggedOutHeader() {
   return (
-    <div className='fixed top-[24px] z-50 flex w-full justify-center'>
+    <div className='fixed top-[24px] z-50 flex w-full justify-center' data-fixed='true'>
       <div className='mx-auto h-[70px] w-[1140px] rounded-xl bg-black tablet:mx-6 tablet:max-w-[1000px] mobile:mx-5 mobile:h-[50px] mobile:min-w-[343px] mobile:max-w-[700px]'>
         <header className='flex items-center justify-between px-[60px] py-[22.5px] mobile:px-[20px] mobile:py-[17.5px]'>
           <Link href='/'>
@@ -28,7 +28,7 @@ function LoggedInHeader() {
   const { profileImage } = useAuth();
 
   return (
-    <div className='fixed top-[24px] z-50 flex w-full justify-center'>
+    <div className='fixed top-[24px] z-50 flex w-full justify-center' data-fixed='true'>
       <div className='mx-auto h-[70px] w-[1140px] rounded-xl bg-black tablet:mx-6 tablet:max-w-[1000px] mobile:mx-5 mobile:h-[50px] mobile:min-w-[343px] mobile:max-w-[700px]'>
         <header className='flex h-[70px] items-center justify-between px-[60px] py-[12.5px] mobile:h-[50px] mobile:px-[20px] mobile:py-[12.5px]'>
           <Link href='/'>

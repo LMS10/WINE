@@ -69,7 +69,7 @@ interface postReviewPorp {
   editMyReview?: (id: number, editReviewData: EditReviewData, updatedAt: string) => void;
 }
 
-export default function PatchReviewForm({ name, id, onClose, reviewInitialData, editMyReview }: postReviewPorp) {
+export default function PatchReviewModal({ name, id, onClose, reviewInitialData, editMyReview }: postReviewPorp) {
   const [selectedAroma, setSelectedAroma] = useState<string[]>(reviewInitialData?.aroma || []);
 
   const { register, handleSubmit, setValue, watch } = useForm<FormValues>({

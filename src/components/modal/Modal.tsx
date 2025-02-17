@@ -2,6 +2,7 @@
 
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useScrollLock } from '@/hooks/useScrollLock';
 
 interface ModalProps {
   children: ReactNode;
@@ -13,6 +14,8 @@ interface ModalProps {
 export default function Modal({ children, isOpen, setIsOpen, className }: ModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [mounted, setMounted] = useState(false);
+
+  useScrollLock(isOpen);
 
   const escKeyModalClose = useCallback(
     (e: KeyboardEvent) => {

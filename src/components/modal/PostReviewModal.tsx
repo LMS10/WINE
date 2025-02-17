@@ -213,66 +213,88 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
       <Modal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        className={`overflow-x-hidden rounded-2xl mobile:mb-0 mobile:h-[930px] mobile:rounded-b-none ${
+        className={`min-w-[375px] rounded-2xl transition-transform mobile:fixed mobile:bottom-0 mobile:left-0 mobile:mb-0 mobile:w-full mobile:rounded-b-none ${
           isOpen ? 'mobile:translate-y-0 mobile:animate-slide-up' : 'mobile:animate-slide-down mobile:translate-y-full'
         }`}
       >
-        <div className='flex w-full flex-col gap-12 p-6 pc:w-[528px] tablet:w-[528px] mobile:h-[762px] mobile:w-full mobile:gap-10 mobile:py-8'>
-          <div className='flex items-center justify-between'>
-            <h1 className='text-2xl font-bold text-gray-800 mobile:text-xl'>리뷰 등록</h1>
-            <button type='button' onClick={closeModal}>
-              <Image src={close} width={34} height={34} className='mobile:h-[24px] mobile:w-[24px]' alt='창 닫기'></Image>
-            </button>
-          </div>
-          <form onSubmit={handleSubmit(handlePostReviewWine)}>
-            <div className='flex flex-col gap-10'>
-              <div className='flex flex-col gap-6'>
-                <div className='flex gap-4'>
-                  <Image src={wineIcon} alt='와인 이미지' className='h-[68px] w-[68px] rounded-lg bg-gray-100 p-[7px] mobile:h-[67px] mobile:w-[67px]' />
-                  <div className='flex flex-col gap-2'>
-                    <p className='text-2lg font-semibold text-gray-800 mobile:text-lg'>{wineData.name}</p>
-                    <InteractiveRating resetTrigger={resetTrigger} initialValue={0} size='large' onChange={(rate) => setValue('rating', rate)} />
+        <div className='custom-scrollbar max-h-[90vh] overflow-y-auto'>
+          <div className='flex w-full flex-col gap-12 p-6 pc:w-[528px] tablet:w-[528px] mobile:h-[762px] mobile:w-full mobile:gap-10 mobile:py-8'>
+            <div className='flex items-center justify-between'>
+              <h1 className='text-2xl font-bold text-gray-800 mobile:text-xl'>리뷰 등록</h1>
+              <button type='button' onClick={closeModal}>
+                <Image src={close} width={34} height={34} className='mobile:h-[24px] mobile:w-[24px]' alt='창 닫기'></Image>
+              </button>
+            </div>
+            <form onSubmit={handleSubmit(handlePostReviewWine)}>
+              <div className='flex flex-col gap-10'>
+                <div className='flex flex-col gap-6'>
+                  <div className='flex gap-4'>
+                    <Image src={wineIcon} alt='와인 이미지' className='h-[68px] w-[68px] rounded-lg bg-gray-100 p-[7px] mobile:h-[67px] mobile:w-[67px]' />
+                    <div className='flex flex-col gap-2'>
+                      <p className='text-2lg font-semibold text-gray-800 mobile:text-lg'>{wineData.name}</p>
+                      <InteractiveRating resetTrigger={resetTrigger} initialValue={0} size='large' onChange={(rate) => setValue('rating', rate)} />
+                    </div>
+                  </div>
+                  <textarea
+                    placeholder='후기를 작성해 주세요'
+                    className='h-[120px] resize-none rounded-2xl border border-gray-100 px-5 py-[14px] align-text-top placeholder:text-lg placeholder:font-normal placeholder:text-gray-500 focus:outline-purple-100 pc:h-[120px] pc:w-[480px] mobile:h-[100px] mobile:w-auto mobile:rounded-xl placeholder:mobile:text-md'
+                    {...register('content')}
+                  />
+                </div>
+                <div className='flex h-[212px] flex-col gap-6 mobile:h-[194px]'>
+                  <h4 className='text-xl font-bold text-gray-800 mobile:text-2lg'>와인의 맛은 어땠나요?</h4>
+                  <div>
+                    <ControlBar
+                      label='바디감'
+                      minLabel={'가벼워요'}
+                      maxLabel={'진해요'}
+                      value={0}
+                      onChange={handleLightBoldChange}
+                      name='바디감'
+                      isDraggable={true}
+                      size='small'
+                      reset={resetTrigger}
+                    />
+                    <ControlBar
+                      label='타닌'
+                      minLabel={'부드러워요'}
+                      maxLabel={'떫어요'}
+                      value={0}
+                      onChange={handleSmoothTannicChange}
+                      name='타닌'
+                      isDraggable={true}
+                      size='small'
+                      reset={resetTrigger}
+                    />
+                    <ControlBar label='당도' minLabel={'드라이해요'} maxLabel={'달아요'} value={0} onChange={handleDrySweetChange} name='당도' isDraggable={true} size='small' reset={resetTrigger} />
+                    <ControlBar label='산미' minLabel={'안셔요'} maxLabel={'많이셔요'} value={0} onChange={handleSoftAcidicChange} name='산미' isDraggable={true} size='small' reset={resetTrigger} />
                   </div>
                 </div>
-                <textarea
-                  placeholder='후기를 작성해 주세요'
-                  className='h-[120px] resize-none rounded-2xl border border-gray-100 px-5 py-[14px] align-text-top placeholder:text-lg placeholder:font-normal placeholder:text-gray-500 focus:outline-purple-100 pc:h-[120px] pc:w-[480px] mobile:h-[100px] mobile:w-auto mobile:rounded-xl placeholder:mobile:text-md'
-                  {...register('content')}
-                />
-              </div>
-              <div className='flex h-[212px] flex-col gap-6 mobile:h-[194px]'>
-                <h4 className='text-xl font-bold text-gray-800 mobile:text-2lg'>와인의 맛은 어땠나요?</h4>
-                <div>
-                  <ControlBar label='바디감' minLabel={'가벼워요'} maxLabel={'진해요'} value={0} onChange={handleLightBoldChange} name='바디감' isDraggable={true} size='small' reset={resetTrigger} />
-                  <ControlBar label='타닌' minLabel={'부드러워요'} maxLabel={'떫어요'} value={0} onChange={handleSmoothTannicChange} name='타닌' isDraggable={true} size='small' reset={resetTrigger} />
-                  <ControlBar label='당도' minLabel={'드라이해요'} maxLabel={'달아요'} value={0} onChange={handleDrySweetChange} name='당도' isDraggable={true} size='small' reset={resetTrigger} />
-                  <ControlBar label='산미' minLabel={'안셔요'} maxLabel={'많이셔요'} value={0} onChange={handleSoftAcidicChange} name='산미' isDraggable={true} size='small' reset={resetTrigger} />
+                <div className='flex flex-col gap-6'>
+                  <h4 className='text-xl font-bold text-gray-800 mobile:text-2lg'>기억에 남는 향이 있나요?</h4>
+                  <div className='flex flex-wrap gap-[10px]'>
+                    {aromas.map((aroma) => (
+                      <button
+                        key={aroma.key}
+                        type='button'
+                        onClick={() => handleAromaClick(aroma.key)}
+                        className={`rounded-full border border-gray-300 px-[18px] py-[10px] font-medium mobile:px-[10px] mobile:py-[6px] mobile:text-md ${selectedAroma.includes(aroma.key) ? 'border border-purple-100 bg-purple-100 text-white' : 'border border-gray-300 bg-white text-gray-800'}`}
+                      >
+                        {aroma.name}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className='flex flex-col gap-6'>
-                <h4 className='text-xl font-bold text-gray-800 mobile:text-2lg'>기억에 남는 향이 있나요?</h4>
-                <div className='flex flex-wrap gap-[10px]'>
-                  {aromas.map((aroma) => (
-                    <button
-                      key={aroma.key}
-                      type='button'
-                      onClick={() => handleAromaClick(aroma.key)}
-                      className={`rounded-full border border-gray-300 px-[18px] py-[10px] font-medium mobile:px-[10px] mobile:py-[6px] mobile:text-md ${selectedAroma.includes(aroma.key) ? 'border border-purple-100 bg-purple-100 text-white' : 'border border-gray-300 bg-white text-gray-800'}`}
-                    >
-                      {aroma.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <Button
-              text='리뷰 남기기'
-              type='submit'
-              variant='primary'
-              disabled={aromaValue.length === 0 || ratingValue === 0 || !textValue.trim()}
-              className='mt-12 h-[54px] w-auto whitespace-nowrap rounded-xl text-center text-lg disabled:bg-gray-400 pc:w-[480px] pc:px-[203.5px] pc:py-[14px] tablet:w-[480px] mobile:mb-8 mobile:w-full mobile:min-w-[300px]'
-            />
-          </form>
+              <Button
+                text='리뷰 남기기'
+                type='submit'
+                variant='primary'
+                disabled={aromaValue.length === 0 || ratingValue === 0 || !textValue.trim()}
+                className='mt-12 h-[54px] w-auto whitespace-nowrap rounded-xl text-center text-lg disabled:bg-gray-400 pc:w-[480px] pc:px-[203.5px] pc:py-[14px] tablet:w-[480px] mobile:mb-8 mobile:w-full mobile:min-w-[300px]'
+              />
+            </form>
+          </div>
         </div>
       </Modal>
     </div>
