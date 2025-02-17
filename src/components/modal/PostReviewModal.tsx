@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -94,9 +94,7 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
     setIsOpen(true);
   };
 
-  const closeModal = () => {
-    setSelectedAroma([]);
-    setResetTrigger((prev) => !prev);
+  const closeModal = useCallback(() => {
     reset({
       rating: 0,
       lightBold: 0,
@@ -107,8 +105,14 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
       content: '',
       wineId: wineData.id,
     });
+    setSelectedAroma([]);
+    setResetTrigger((prev) => !prev);
     setIsOpen(false);
-  };
+  }, [reset, wineData.id]);
+
+  useEffect(() => {
+    if (!isOpen) closeModal();
+  }, [isOpen, closeModal]);
 
   const handleAromaClick = (aroma: string) => {
     setSelectedAroma((prevSelectedAroma) => (prevSelectedAroma.includes(aroma) ? prevSelectedAroma.filter((a) => a !== aroma) : [...prevSelectedAroma, aroma]));
