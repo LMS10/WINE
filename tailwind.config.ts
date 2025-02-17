@@ -26,6 +26,7 @@ export default {
         purple: {
           10: '#F1EDFC',
           100: '#6A42DB',
+          200: '#5C37C2',
         },
       },
       screens: {

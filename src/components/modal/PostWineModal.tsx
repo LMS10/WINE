@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -15,7 +15,7 @@ interface FormValues {
   name: string;
   region: string;
   image: string;
-  price: number;
+  price: number | null;
   type: string;
 }
 
@@ -23,6 +23,7 @@ type ImageValues = { image: FileList };
 
 export default function PostWineModal() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [formattedPrice, setFormattedPrice] = useState<string>('');
   const [preview, setPreview] = useState<string | null>(null);
   const router = useRouter();
 
@@ -43,11 +44,39 @@ export default function PostWineModal() {
     setIsOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     reset();
     setValue('type', '');
+    setValue('price', null);
+    setFormattedPrice('');
     setPreview(null);
     setIsOpen(false);
+  }, [reset, setValue]);
+
+  useEffect(() => {
+    if (!isOpen) closeModal();
+  }, [isOpen, closeModal]);
+
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = event.target.value.replaceAll(',', '');
+
+    if (rawValue === '') {
+      setFormattedPrice('');
+      setValue('price', null);
+      return;
+    }
+
+    if (!/^\d*$/.test(rawValue)) return;
+
+    const numericValue = Number(rawValue);
+
+    if (numericValue > 2000000) {
+      alert('가격은 200만원 이하로 입력해 주세요.');
+      return;
+    }
+
+    setFormattedPrice(numericValue.toLocaleString());
+    setValue('price', numericValue);
   };
 
   const handlePostWine: SubmitHandler<FormValues> = async (data) => {
@@ -142,11 +171,12 @@ export default function PostWineModal() {
                     가격
                   </label>
                   <input
-                    type='number'
+                    type='text'
                     id='price'
                     placeholder='가격 입력 (200만원 이하)'
+                    value={formattedPrice}
+                    onChange={handlePriceChange}
                     className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
-                    {...register('price')}
                   />
                 </div>
 

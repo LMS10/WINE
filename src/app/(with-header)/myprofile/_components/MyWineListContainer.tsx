@@ -131,7 +131,7 @@ export default function MyWineListContainer({ setDataCount }: { setDataCount: Re
           name={value.name}
           region={value.region}
           image={value.image}
-          price={value.price}
+          price={value.price ?? 0}
           size='midium'
           isKebab
           onClick

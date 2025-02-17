@@ -36,7 +36,7 @@ const WineCard = forwardRef<HTMLDivElement, WineCardProps>(({ wine }, ref) => {
               <p className='line-clamp-2 text-ellipsis text-3xl font-semibold text-gray-800 pc:w-[390px] tablet:max-w-[600px] mobile:w-auto mobile:text-xl'>{wine.name}</p>
               <p className='mb-4 mt-5 text-lg text-gray-500 mobile:mb-2 mobile:mt-0 mobile:text-md'>{wine.region}</p>
               <span className='rounded-xl bg-purple-10 px-[15px] py-2 text-2lg font-bold text-purple-100 mobile:rounded-[10px] mobile:px-[10px] mobile:py-[6px] mobile:text-md'>
-                ₩ {wine.price.toLocaleString()}
+                ₩ {wine.price?.toLocaleString() ?? '가격 미제공'}
               </span>
             </div>
             <div className='flex flex-col justify-between gap-1 mobile:mr-2 mobile:flex-row mobile:items-center mobile:gap-0'>

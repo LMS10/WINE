@@ -11,7 +11,7 @@ export interface WineDetails {
   name: string;
   region: string;
   image: string;
-  price: number;
+  price: number | null;
   type: 'RED' | 'WHITE' | 'SPARKLING';
   avgRating: number;
   reviewCount: number;

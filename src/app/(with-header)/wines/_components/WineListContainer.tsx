@@ -12,6 +12,7 @@ import WineCard from './WineCard';
 import PostWineModal from '@/components/modal/PostWineModal';
 import Refresh from '@/components/Refresh';
 import WineListSkeleton from './skeleton/WineListSkeleton';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import filterIcon from '@/assets/icons/filter.svg';
 
 const MAX_PRICE = 2000000;
@@ -32,6 +33,7 @@ export default function WineListContainer() {
   const [hasError, setHasError] = useState(false);
   const [nextCursor, setNextCursor] = useState<number | null>(null);
   const [hasMore, setHasMore] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const lastWineRef = useRef<HTMLDivElement | null>(null);
 
   const loadMoreWines = useCallback(async () => {
@@ -56,8 +58,22 @@ export default function WineListContainer() {
       console.error(error);
     } finally {
       setIsLoading(false);
+      setIsInitialLoading(false);
     }
   }, [isLoading, hasMore, nextCursor, filters, searchQuery]);
+
+  useEffect(() => {
+    setWines([]);
+    setNextCursor(null);
+    setHasMore(true);
+    setIsInitialLoading(true);
+  }, [filters, searchQuery]);
+
+  useEffect(() => {
+    if (isInitialLoading) {
+      loadMoreWines();
+    }
+  }, [isInitialLoading, loadMoreWines]);
 
   useEffect(() => {
     if (!hasMore || !lastWineRef.current) return;
@@ -160,10 +176,16 @@ export default function WineListContainer() {
               />
             </div>
           )}
-          {wines.map((wine, index) => (
-            <WineCard key={`${wine.id}-${index}`} ref={index === wines.length - 1 ? lastWineRef : null} wine={wine} />
-          ))}
-          {isLoading && <WineListSkeleton count={2} />}
+          {isInitialLoading ? (
+            <WineListSkeleton count={2} />
+          ) : (
+            <>
+              {wines.map((wine, index) => (
+                <WineCard key={`${wine.id}-${index}`} ref={index === wines.length - 1 ? lastWineRef : null} wine={wine} />
+              ))}
+              {isLoading && <LoadingSpinner className='mt-[-30px]' />}
+            </>
+          )}
         </div>
       </div>
     </div>
