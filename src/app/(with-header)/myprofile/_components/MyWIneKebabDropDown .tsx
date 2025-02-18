@@ -90,7 +90,7 @@ export default function MyWIneKebabDropDown({
         }`}
       >
         <div className='custom-scrollbar max-h-[90vh] overflow-y-auto'>
-          <PatchWineModal onClose={closeEditModal} id={`${id}`} wineInitialData={wineInitialData} editMyWine={editMyWine} />
+          <PatchWineModal onClose={closeEditModal} id={`${id}`} wineInitialData={wineInitialData} editMyWine={editMyWine} isOpen={isEditModalOpen} />
         </div>
       </Modal>
       <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:max-w-[353px]'>

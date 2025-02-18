@@ -29,7 +29,7 @@ export default function ControlBar({ reset = false, label, minLabel, maxLabel, v
 
   useEffect(() => {
     setDragValue(value);
-  }, [value]);
+  }, [reset, value]);
 
   useEffect(() => {
     if (value === 0) {

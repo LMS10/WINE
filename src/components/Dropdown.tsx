@@ -19,9 +19,10 @@ interface DropdownProps {
   ulClassName?: string;
   liClassName?: string;
   defaultValue?: DropdownOption | null;
+  reset?: boolean;
 }
 
-function Dropdown({ options, onSelect, placeholder, changeButton = false, children, buttonClassName, ulClassName, liClassName, defaultValue = null }: DropdownProps) {
+function Dropdown({ options, onSelect, placeholder, changeButton = false, children, buttonClassName, ulClassName, liClassName, defaultValue = null, reset = false }: DropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<DropdownOption | null>(defaultValue);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -46,6 +47,10 @@ function Dropdown({ options, onSelect, placeholder, changeButton = false, childr
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    setSelected(defaultValue);
+  }, [reset, defaultValue]);
 
   return (
     <div ref={dropdownRef} className='relative'>

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -24,7 +24,7 @@ interface FormValues {
   wineId: number;
 }
 
-interface wineDataValues {
+interface WineDataValues {
   id: number;
   name: string;
   region: string;
@@ -33,12 +33,12 @@ interface wineDataValues {
   type: string;
 }
 
-type aroma = {
+type Aroma = {
   key: string;
   name: string;
 };
 
-const aromas: aroma[] = [
+const AROMAS: Aroma[] = [
   { key: 'CHERRY', name: '체리' },
   { key: 'BERRY', name: '베리' },
   { key: 'OAK', name: '오크' },
@@ -71,7 +71,7 @@ const INICIALVALUES = {
 
 export default function PostReviewModal({ addReview }: { addReview: (newReview: AddReviewData) => void }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [wineData, setWineData] = useState<wineDataValues>(INICIALVALUES);
+  const [wineData, setWineData] = useState<WineDataValues>(INICIALVALUES);
   const [selectedAroma, setSelectedAroma] = useState<string[]>([]);
   const [resetTrigger, setResetTrigger] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
@@ -94,7 +94,9 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
     setIsOpen(true);
   };
 
-  const closeModal = useCallback(() => {
+  const closeModal = () => {
+    setSelectedAroma([]);
+    setResetTrigger((prev) => !prev);
     reset({
       rating: 0,
       lightBold: 0,
@@ -105,14 +107,8 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
       content: '',
       wineId: wineData.id,
     });
-    setSelectedAroma([]);
-    setResetTrigger((prev) => !prev);
     setIsOpen(false);
-  }, [reset, wineData.id]);
-
-  useEffect(() => {
-    if (!isOpen) closeModal();
-  }, [isOpen, closeModal]);
+  };
 
   const handleAromaClick = (aroma: string) => {
     setSelectedAroma((prevSelectedAroma) => (prevSelectedAroma.includes(aroma) ? prevSelectedAroma.filter((a) => a !== aroma) : [...prevSelectedAroma, aroma]));
@@ -277,7 +273,7 @@ export default function PostReviewModal({ addReview }: { addReview: (newReview: 
                 <div className='flex flex-col gap-6'>
                   <h4 className='text-xl font-bold text-gray-800 mobile:text-2lg'>기억에 남는 향이 있나요?</h4>
                   <div className='flex flex-wrap gap-[10px]'>
-                    {aromas.map((aroma) => (
+                    {AROMAS.map((aroma) => (
                       <button
                         key={aroma.key}
                         type='button'
