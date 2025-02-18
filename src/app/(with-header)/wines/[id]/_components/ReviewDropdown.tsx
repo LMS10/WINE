@@ -91,7 +91,7 @@ export default function ReviewDropdown({
         }`}
       >
         <div className='custom-scrollbar max-h-[90vh] overflow-y-auto'>
-          <PatchReviewModal name={wineName} id={id} onClose={closeEditModal} reviewInitialData={reviewInitialData} editMyReview={editMyReview} />
+          <PatchReviewModal isOpen={isEditModalOpen} name={wineName} id={id} onClose={closeEditModal} reviewInitialData={reviewInitialData} editMyReview={editMyReview} />
         </div>
       </Modal>
       <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:w-[353px]'>
