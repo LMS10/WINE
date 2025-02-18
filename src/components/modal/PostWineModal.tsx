@@ -1,15 +1,16 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { fetchWithAuth } from '@/lib/auth';
 import Modal from '@/components/modal/Modal';
 import Dropdown from '../Dropdown';
 import Button from '../Button';
 import { toast } from 'react-toastify';
 import camera from '@/assets/icons/photo.svg';
+import FormInput from './ModalFormInput';
 
 interface FormValues {
   name: string;
@@ -23,11 +24,13 @@ type ImageValues = { image: FileList };
 
 export default function PostWineModal() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [formattedPrice, setFormattedPrice] = useState<string>('');
+  const [dropdownReset, setDropdownReset] = useState<boolean>(false);
   const [preview, setPreview] = useState<string | null>(null);
   const router = useRouter();
 
-  const { register, handleSubmit, setValue, watch, reset } = useForm<FormValues>();
+  const { handleSubmit, setValue, watch, reset, control } = useForm<FormValues>({
+    defaultValues: { name: '', region: '', price: null, type: '' },
+  });
   const name = watch('name');
   const region = watch('region');
   const image = watch('image');
@@ -44,39 +47,8 @@ export default function PostWineModal() {
     setIsOpen(true);
   };
 
-  const closeModal = useCallback(() => {
-    reset();
-    setValue('type', '');
-    setValue('price', null);
-    setFormattedPrice('');
-    setPreview(null);
+  const closeModal = () => {
     setIsOpen(false);
-  }, [reset, setValue]);
-
-  useEffect(() => {
-    if (!isOpen) closeModal();
-  }, [isOpen, closeModal]);
-
-  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = event.target.value.replaceAll(',', '');
-
-    if (rawValue === '') {
-      setFormattedPrice('');
-      setValue('price', null);
-      return;
-    }
-
-    if (!/^\d*$/.test(rawValue)) return;
-
-    const numericValue = Number(rawValue);
-
-    if (numericValue > 2000000) {
-      alert('가격은 200만원 이하로 입력해 주세요.');
-      return;
-    }
-
-    setFormattedPrice(numericValue.toLocaleString());
-    setValue('price', numericValue);
   };
 
   const handlePostWine: SubmitHandler<FormValues> = async (data) => {
@@ -134,6 +106,14 @@ export default function PostWineModal() {
     }
   };
 
+  useEffect(() => {
+    if (!isOpen) {
+      reset();
+      setDropdownReset((prev) => !prev);
+      setPreview(null);
+    }
+  }, [isOpen, reset]);
+
   return (
     <div>
       <Button
@@ -153,51 +133,57 @@ export default function PostWineModal() {
             <p className='text-2xl font-bold text-gray-800 mobile:text-xl'>와인 등록</p>
             <form onSubmit={handleSubmit(handlePostWine)}>
               <div className='flex flex-col gap-6 mobile:gap-4'>
-                <div className='flex flex-col gap-3 mobile:gap-[12px]'>
-                  <label htmlFor='wineName' className='text-lg font-bold text-gray-800 mobile:text-md'>
-                    와인 이름
-                  </label>
-                  <input
-                    type='text'
-                    id='wineName'
-                    placeholder='와인 이름 입력'
-                    className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
-                    {...register('name')}
-                  />
-                </div>
+                <Controller
+                  name='name'
+                  control={control}
+                  render={({ field }) => <FormInput {...field} label='와인 이름' placeholder='와인 이름 입력' type='text' inputId='wineName' value={field.value || ''} />}
+                />
 
-                <div className='flex flex-col gap-3 mobile:gap-[12px]'>
-                  <label htmlFor='price' className='text-lg font-bold text-gray-800 mobile:text-md'>
-                    가격
-                  </label>
-                  <input
-                    type='text'
-                    id='price'
-                    placeholder='가격 입력 (200만원 이하)'
-                    value={formattedPrice}
-                    onChange={handlePriceChange}
-                    className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
-                  />
-                </div>
+                <Controller
+                  name='price'
+                  control={control}
+                  render={({ field }) => (
+                    <FormInput
+                      {...field}
+                      label='가격'
+                      placeholder='가격 입력 (200만원 이하)'
+                      type='text'
+                      inputId='price'
+                      value={field.value?.toLocaleString() || ''}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replaceAll(',', '');
 
-                <div className='flex flex-col gap-3 mobile:gap-[12px]'>
-                  <label htmlFor='origin' className='text-lg font-bold text-gray-800 mobile:text-md'>
-                    원산지
-                  </label>
-                  <input
-                    type='text'
-                    id='origin'
-                    placeholder='원산지 입력'
-                    className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
-                    {...register('region')}
-                  />
-                </div>
+                        if (rawValue === '') {
+                          field.onChange(null);
+                          return;
+                        }
+
+                        if (!/^\d*$/.test(rawValue)) return;
+
+                        const numericValue = Number(rawValue);
+
+                        if (numericValue > 2000000) {
+                          alert('가격은 200만원 이하로 입력해 주세요.');
+                          return;
+                        }
+
+                        field.onChange(numericValue);
+                      }}
+                    />
+                  )}
+                />
+
+                <Controller
+                  name='region'
+                  control={control}
+                  render={({ field }) => <FormInput {...field} label='원산지' placeholder='원산지 입력' type='text' inputId='origin' value={field.value || ''} />}
+                />
 
                 <div className='flex flex-col gap-3 mobile:gap-[12px]'>
                   <label htmlFor='type' className='text-lg font-bold text-gray-800 mobile:text-md'>
                     타입
                   </label>
-                  <Dropdown options={options} onSelect={(option) => option.value?.()} placeholder='Red' changeButton />
+                  <Dropdown options={options} onSelect={(option) => option.value?.()} placeholder='Red' changeButton reset={dropdownReset} />
                 </div>
 
                 <div className='-my-[5px] flex flex-col gap-3 mobile:gap-[12px]'>

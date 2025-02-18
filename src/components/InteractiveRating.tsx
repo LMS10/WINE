@@ -19,6 +19,10 @@ export default function InteractiveRating({ initialValue = 0, onChange, size = '
     }
   }, [resetTrigger, initialValue]);
 
+  useEffect(() => {
+    setValue(initialValue);
+  }, [resetTrigger, initialValue]);
+
   return (
     <Rating
       value={value}

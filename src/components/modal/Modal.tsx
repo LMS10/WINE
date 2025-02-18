@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useScrollLock } from '@/hooks/useScrollLock';
 
@@ -13,7 +13,6 @@ interface ModalProps {
 
 export default function Modal({ children, isOpen, setIsOpen, className }: ModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [mounted, setMounted] = useState(false);
 
   useScrollLock(isOpen);
 
@@ -45,11 +44,7 @@ export default function Modal({ children, isOpen, setIsOpen, className }: ModalP
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [handleClickOutside]);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  if (typeof document === 'undefined') return null;
 
   if (isOpen) {
     dialogRef.current?.showModal();

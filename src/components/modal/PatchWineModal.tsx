@@ -1,15 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { fetchWithAuth } from '@/lib/auth';
 import Dropdown from '../Dropdown';
 import Button from '../Button';
 import camera from '@/assets/icons/photo.svg';
 import { WineDataProps } from '@/app/(with-header)/myprofile/_components/MyWIneKebabDropDown ';
+import ModalFormInput from './ModalFormInput';
 
 interface FormValues {
   name: string;
@@ -22,18 +23,21 @@ interface FormValues {
 type ImageValues = { image: FileList };
 
 interface postWinePorps {
+  isOpen: boolean;
   onClose: () => void;
   id: string;
   wineInitialData: WineDataProps;
   editMyWine: (id: number, editWineData: WineDataProps) => void;
 }
 
-export default function PatchWineModal({ onClose, id, wineInitialData, editMyWine }: postWinePorps) {
-  const [formattedPrice, setFormattedPrice] = useState<string>('');
+export default function PatchWineModal({ isOpen, onClose, id, wineInitialData, editMyWine }: postWinePorps) {
   const [preview, setPreview] = useState<string | null>(wineInitialData.image);
+  const [dropdownReset, setDropdownReset] = useState<boolean>(false);
   const router = useRouter();
 
-  const { register, handleSubmit, setValue } = useForm<FormValues>();
+  const { handleSubmit, setValue, control, reset } = useForm<FormValues>({
+    defaultValues: { name: wineInitialData.name, region: wineInitialData.region, image: wineInitialData.image, price: wineInitialData.price, type: wineInitialData.type },
+  });
 
   const options = [
     { value: () => setValue('type', 'RED'), label: 'Red' },
@@ -41,34 +45,12 @@ export default function PatchWineModal({ onClose, id, wineInitialData, editMyWin
     { value: () => setValue('type', 'SPARKLING'), label: 'Sparkling' },
   ];
 
-  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = event.target.value.replaceAll(',', '');
-
-    if (rawValue === '') {
-      setFormattedPrice('');
-      setValue('price', null);
-      return;
-    }
-
-    if (!/^\d*$/.test(rawValue)) return;
-
-    const numericValue = Number(rawValue);
-
-    if (numericValue > 2000000) {
-      alert('가격은 200만원 이하로 입력해 주세요.');
-      return;
-    }
-
-    setFormattedPrice(numericValue.toLocaleString());
-    setValue('price', numericValue);
-  };
-
   useEffect(() => {
-    if (wineInitialData.price !== null) {
-      setFormattedPrice(wineInitialData.price.toLocaleString());
-      setValue('price', wineInitialData.price);
+    if (!isOpen) {
+      reset();
+      setDropdownReset((prev) => !prev);
     }
-  }, [wineInitialData.price, setValue]);
+  }, [isOpen, reset]);
 
   const handlePatchWine: SubmitHandler<FormValues> = async (data) => {
     const { name, region, image, price, type } = data;
@@ -125,47 +107,51 @@ export default function PatchWineModal({ onClose, id, wineInitialData, editMyWin
       <p className='text-2xl font-bold text-gray-800 mobile:text-xl'>내가 등록한 와인</p>
       <form onSubmit={handleSubmit(handlePatchWine)}>
         <div className='flex flex-col gap-6 mobile:gap-4'>
-          <div className='flex flex-col gap-3 mobile:gap-[12px]'>
-            <label htmlFor='wineName' className='text-lg font-bold text-gray-800 mobile:text-md'>
-              와인 이름
-            </label>
-            <input
-              type='text'
-              id='wineName'
-              placeholder='와인 이름 입력'
-              defaultValue={wineInitialData.name}
-              className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
-              {...register('name')}
-            />
-          </div>
+          <Controller
+            name='name'
+            control={control}
+            render={({ field }) => <ModalFormInput {...field} label='와인 이름' placeholder='와인 이름 입력' type='text' inputId='wineName' value={field.value || ''} />}
+          />
 
-          <div className='flex flex-col gap-3 mobile:gap-[12px]'>
-            <label htmlFor='price' className='text-lg font-bold text-gray-800 mobile:text-md'>
-              가격
-            </label>
-            <input
-              type='text'
-              id='price'
-              placeholder='가격 입력 (200만원 이하)'
-              value={formattedPrice}
-              onChange={handlePriceChange}
-              className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
-            />
-          </div>
+          <Controller
+            name='price'
+            control={control}
+            render={({ field }) => (
+              <ModalFormInput
+                {...field}
+                label='가격'
+                placeholder='가격 입력 (200만원 이하)'
+                type='text'
+                inputId='price'
+                value={field.value?.toLocaleString() || ''}
+                onChange={(e) => {
+                  const rawValue = e.target.value.replaceAll(',', '');
 
-          <div className='flex flex-col gap-3 mobile:gap-[12px]'>
-            <label htmlFor='origin' className='text-lg font-bold text-gray-800 mobile:text-md'>
-              원산지
-            </label>
-            <input
-              type='text'
-              id='origin'
-              placeholder='원산지 입력'
-              defaultValue={wineInitialData.region}
-              className='h-[48px] rounded-2xl border border-gray-300 bg-white px-5 py-[14px] text-lg focus:outline-purple-100 mobile:h-[42px] mobile:rounded-xl'
-              {...register('region')}
-            />
-          </div>
+                  if (rawValue === '') {
+                    field.onChange(null);
+                    return;
+                  }
+
+                  if (!/^\d*$/.test(rawValue)) return;
+
+                  const numericValue = Number(rawValue);
+
+                  if (numericValue > 2000000) {
+                    alert('가격은 200만원 이하로 입력해 주세요.');
+                    return;
+                  }
+
+                  field.onChange(numericValue);
+                }}
+              />
+            )}
+          />
+
+          <Controller
+            name='region'
+            control={control}
+            render={({ field }) => <ModalFormInput {...field} label='원산지' placeholder='원산지 입력' type='text' inputId='origin' value={field.value || ''} />}
+          />
 
           <div className='flex flex-col gap-3 mobile:gap-[12px]'>
             <label htmlFor='type' className='text-lg font-bold text-gray-800 mobile:text-md'>
@@ -179,6 +165,7 @@ export default function PatchWineModal({ onClose, id, wineInitialData, editMyWin
               placeholder='Red'
               changeButton
               defaultValue={{ label: wineInitialData.type, value: () => {} }}
+              reset={dropdownReset}
             />
           </div>
 

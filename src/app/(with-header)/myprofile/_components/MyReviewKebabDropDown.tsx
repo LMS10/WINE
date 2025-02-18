@@ -86,7 +86,7 @@ export default function MyReviewKebabDropDown({
         }`}
       >
         <div className='custom-scrollbar max-h-[90vh] overflow-y-auto'>
-          <PatchReviewModal name={reviewInitialData.wine.name} id={id} onClose={closeEditModal} reviewInitialData={reviewInitialData} editMyReview={editMyReview} />
+          <PatchReviewModal name={reviewInitialData.wine.name} id={id} onClose={closeEditModal} reviewInitialData={reviewInitialData} editMyReview={editMyReview} isOpen={isEditModalOpen} />
         </div>
       </Modal>
       <Modal isOpen={isDeleteModalOpen} setIsOpen={setIsDeleteModalOpen} className='rounded-2xl mobile:mx-auto mobile:h-[172px] mobile:max-w-[353px]'>

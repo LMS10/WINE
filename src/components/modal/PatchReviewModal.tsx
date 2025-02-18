@@ -34,12 +34,12 @@ interface FormValues {
   wineId: number;
 }
 
-type aroma = {
+type Aroma = {
   key: string;
   name: string;
 };
 
-const aromas: aroma[] = [
+const AROMAS: Aroma[] = [
   { key: 'CHERRY', name: '체리' },
   { key: 'BERRY', name: '베리' },
   { key: 'OAK', name: '오크' },
@@ -62,6 +62,7 @@ const aromas: aroma[] = [
 ];
 
 interface postReviewPorp {
+  isOpen: boolean;
   name: string;
   id: number;
   onClose: () => void;
@@ -69,21 +70,25 @@ interface postReviewPorp {
   editMyReview?: (id: number, editReviewData: EditReviewData, updatedAt: string) => void;
 }
 
-export default function PatchReviewModal({ name, id, onClose, reviewInitialData, editMyReview }: postReviewPorp) {
+export default function PatchReviewModal({ isOpen, name, id, onClose, reviewInitialData, editMyReview }: postReviewPorp) {
+  const [resetTrigger, setResetTrigger] = useState<boolean>(false);
   const [selectedAroma, setSelectedAroma] = useState<string[]>(reviewInitialData?.aroma || []);
 
-  const { register, handleSubmit, setValue, watch } = useForm<FormValues>({
+  const { register, handleSubmit, setValue, watch, reset } = useForm<FormValues>({
     defaultValues: {
+      rating: reviewInitialData?.rating || 0,
       lightBold: reviewInitialData?.lightBold || 0,
       smoothTannic: reviewInitialData?.smoothTannic || 0,
       drySweet: reviewInitialData?.drySweet || 0,
       softAcidic: reviewInitialData?.softAcidic || 0,
+      aroma: reviewInitialData?.aroma || [],
+      content: reviewInitialData?.content || '',
     },
   });
 
-  const aromaValue = watch('aroma', reviewInitialData?.aroma || []);
-  const ratingValue = watch('rating', reviewInitialData?.rating || 0);
-  const textValue = watch('content', reviewInitialData?.content || '');
+  const aromaValue = watch('aroma');
+  const ratingValue = watch('rating');
+  const textValue = watch('content');
 
   const handleAromaClick = (aroma: string) => {
     setSelectedAroma((prevSelectedAroma) => (prevSelectedAroma.includes(aroma) ? prevSelectedAroma.filter((a) => a !== aroma) : [...prevSelectedAroma, aroma]));
@@ -103,13 +108,13 @@ export default function PatchReviewModal({ name, id, onClose, reviewInitialData,
   };
 
   const handlePatchReviewWine: SubmitHandler<FormValues> = async (data) => {
-    const { rating, lightBold, smoothTannic, drySweet, softAcidic, aroma, content, wineId } = data;
+    const { rating, lightBold, smoothTannic, drySweet, softAcidic, aroma, content } = data;
 
     try {
       const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_BASE_URL}/reviews/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rating, lightBold, smoothTannic, drySweet, softAcidic, aroma, content, wineId }),
+        body: JSON.stringify({ rating, lightBold, smoothTannic, drySweet, softAcidic, aroma, content }),
       });
 
       if (!response?.ok || response === null) {
@@ -137,6 +142,14 @@ export default function PatchReviewModal({ name, id, onClose, reviewInitialData,
     setValue('aroma', selectedAroma);
   }, [selectedAroma, setValue]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      reset();
+      setResetTrigger((prev) => !prev);
+      setSelectedAroma(reviewInitialData?.aroma || []);
+    }
+  }, [isOpen, reset, reviewInitialData?.aroma]);
+
   return (
     <div className='flex w-full flex-col gap-12 p-6 pc:w-[528px] tablet:w-[528px] mobile:h-[762px] mobile:w-full mobile:gap-10 mobile:py-8'>
       <div className='flex items-center justify-between'>
@@ -152,7 +165,7 @@ export default function PatchReviewModal({ name, id, onClose, reviewInitialData,
               <Image src={wineIcon} alt='와인 이미지' className='h-[68px] w-[68px] rounded-lg bg-gray-100 p-[7px] mobile:h-[67px] mobile:w-[67px]' />
               <div className='flex flex-col gap-2'>
                 <p className='text-2lg font-semibold text-gray-800 mobile:text-lg'>{name}</p>
-                <InteractiveRating initialValue={reviewInitialData?.rating || 0} size='large' onChange={(rate) => setValue('rating', rate)} />
+                <InteractiveRating initialValue={reviewInitialData?.rating || 0} size='large' onChange={(rate) => setValue('rating', rate)} resetTrigger={resetTrigger} />
               </div>
             </div>
             <textarea
@@ -174,6 +187,7 @@ export default function PatchReviewModal({ name, id, onClose, reviewInitialData,
                 name='바디감'
                 isDraggable={true}
                 size='small'
+                reset={resetTrigger}
               />
               <ControlBar
                 label='타닌'
@@ -184,6 +198,7 @@ export default function PatchReviewModal({ name, id, onClose, reviewInitialData,
                 name='타닌'
                 isDraggable={true}
                 size='small'
+                reset={resetTrigger}
               />
               <ControlBar
                 label='당도'
@@ -194,6 +209,7 @@ export default function PatchReviewModal({ name, id, onClose, reviewInitialData,
                 name='당도'
                 isDraggable={true}
                 size='small'
+                reset={resetTrigger}
               />
               <ControlBar
                 label='산미'
@@ -204,13 +220,14 @@ export default function PatchReviewModal({ name, id, onClose, reviewInitialData,
                 name='산미'
                 isDraggable={true}
                 size='small'
+                reset={resetTrigger}
               />
             </div>
           </div>
           <div className='flex flex-col gap-6'>
             <h4 className='text-xl font-bold text-gray-800 mobile:text-2lg'>기억에 남는 향이 있나요?</h4>
             <div className='flex flex-wrap gap-[10px]'>
-              {aromas.map((aroma) => (
+              {AROMAS.map((aroma) => (
                 <button
                   key={aroma.key}
                   type='button'
