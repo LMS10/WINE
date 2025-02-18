@@ -54,9 +54,10 @@ export default function PatchWineModal({ isOpen, onClose, id, wineInitialData, e
   useEffect(() => {
     if (!isOpen) {
       reset();
+      setPreview(wineInitialData.image);
       setDropdownReset((prev) => !prev);
     }
-  }, [isOpen, reset]);
+  }, [isOpen, reset, wineInitialData.image]);
 
   const handlePatchWine: SubmitHandler<FormValues> = async (data) => {
     const { name, region, image, price, type } = data;
