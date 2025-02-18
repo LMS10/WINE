@@ -35,9 +35,15 @@ export default function PatchWineModal({ isOpen, onClose, id, wineInitialData, e
   const [dropdownReset, setDropdownReset] = useState<boolean>(false);
   const router = useRouter();
 
-  const { handleSubmit, setValue, control, reset } = useForm<FormValues>({
+  const { handleSubmit, setValue, control, reset, watch } = useForm<FormValues>({
     defaultValues: { name: wineInitialData.name, region: wineInitialData.region, image: wineInitialData.image, price: wineInitialData.price, type: wineInitialData.type },
   });
+
+  const name = watch('name');
+  const region = watch('region');
+  const image = watch('image');
+  const price = watch('price');
+  const type = watch('type');
 
   const options = [
     { value: () => setValue('type', 'RED'), label: 'Red' },
@@ -189,7 +195,13 @@ export default function PatchWineModal({ isOpen, onClose, id, wineInitialData, e
 
         <div className='mt-10 flex gap-[10px] mobile:gap-2'>
           <Button text='취소' variant='lightPurple' onClick={onClose} />
-          <Button text='수정하기' type='submit' variant='primary' className='w-[294px] rounded-xl py-[16px] text-lg mobile:flex-1' />
+          <Button
+            text='수정하기'
+            type='submit'
+            variant='primary'
+            disabled={!name || !region || !image || !price || !type}
+            className='w-[294px] rounded-xl py-[16px] text-lg disabled:bg-gray-400 mobile:flex-1'
+          />
         </div>
       </form>
     </div>
